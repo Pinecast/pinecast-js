@@ -1,0 +1,22 @@
+{
+  "name": "pinecast-js",
+  "version": "1.0.0",
+  "description": "Pinecast JavaScript monorepo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pinecast/pinecast-js.git"
+  },
+  "author": "Matt Basta <me@mattbasta.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Pinecast/pinecast-js/issues"
+  },
+  "homepage": "https://github.com/Pinecast/pinecast-js#readme",
+  "dependencies": {
+    "lerna": "2.0.0-beta.32"
+  }
+}

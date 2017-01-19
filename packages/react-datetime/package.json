@@ -1,0 +1,28 @@
+{
+  "name": "pinecast-react-datetime",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/DateTime.js",
+  "scripts": {
+    "build": "webpack --config=webpack.config.js --progress",
+    "dev": "webpack --config=webpack.config.js --progress --watch --colors",
+    "prepublish": "rm -rf dist/* && npm run transpile",
+    "transpile": "babel src --out-dir dist --source-maps"
+  },
+  "author": "Matt Basta <me@mattbasta.com>",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^15.4.1",
+    "react-datepicker": "^0.34.0",
+    "react-dom": "^15.4.1",
+    "time-input": "^1.3.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-loader": "^6.2.8",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-2": "^6.18.0",
+    "webpack": "^1.13.3"
+  }
+}

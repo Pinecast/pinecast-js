@@ -1,0 +1,30 @@
+.spinner-layer {
+    transform-origin: center center;
+}
+
+.spinner-layer1 {
+    animation: 2s linear 0s infinite spinner-inner;
+    fill: url(#inner-grad);
+    mix-blend-mode: color-dodge;
+}
+.spinner-layer2 {
+    animation: 3s linear 0s infinite spinner-outer;
+    fill: url(#outer-grad);
+}
+
+@keyframes spinner-inner {
+    from {
+        transform: translate(-20px, -20px) rotate(0);
+    }
+    to {
+        transform: translate(-20px, -20px) rotate(360deg);
+    }
+}
+@keyframes spinner-outer {
+    from {
+        transform: translate(-20px, -20px) rotate(0);
+    }
+    to {
+        transform: translate(-20px, -20px) rotate(-360deg);
+    }
+}

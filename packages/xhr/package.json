@@ -1,0 +1,27 @@
+{
+  "name": "pinecast-xhr",
+  "version": "1.0.3",
+  "description": "A wrapper around the XHR library for making secure requests to Pinecast",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pinecast/pinecast-xhr.git"
+  },
+  "keywords": [
+    "pinecast",
+    "xhr",
+    "ajax"
+  ],
+  "author": "Matt Basta <me@mattbasta.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Pinecast/pinecast-xhr/issues"
+  },
+  "homepage": "https://github.com/Pinecast/pinecast-xhr#readme",
+  "dependencies": {
+    "xhr": "^2.2.0"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "pinecast-uploader",
+  "version": "1.0.8",
+  "description": "",
+  "main": "dist/Uploader.js",
+  "scripts": {
+    "build": "webpack --config=webpack.config.js --progress",
+    "dev": "webpack --config=webpack.config.js --progress --watch --colors",
+    "prepublish": "rm -rf dist/* && npm run transpile",
+    "transpile": "babel src --out-dir dist --source-maps"
+  },
+  "author": "Matt Basta <me@mattbasta.com>",
+  "license": "MIT",
+  "dependencies": {
+    "blob-to-buffer": "^1.2.6",
+    "exif": "^0.6.0",
+    "pinecast-image-size": "^0.5.1",
+    "pinecast-xhr": "^1.0.3",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-loader": "^6.2.8",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-2": "^6.18.0",
+    "css-loader": "^0.26.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.3"
+  }
+}

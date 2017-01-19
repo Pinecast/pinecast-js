@@ -1,0 +1,34 @@
+{
+  "name": "pinecast-analytics-dash",
+  "version": "1.2.0",
+  "description": "",
+  "main": "dist/AnalyticsDash.js",
+  "scripts": {
+    "build": "webpack --config=webpack.config.js --progress",
+    "dev": "webpack --config=webpack.config.js --progress --watch --colors",
+    "prepublish": "rm -rf dist/* && npm run transpile",
+    "transpile": "babel src --out-dir dist --source-maps"
+  },
+  "author": "Matt Basta <me@mattbasta.com>",
+  "license": "MIT",
+  "dependencies": {
+    "d3": "^4.4.0",
+    "labella": "^1.1.2",
+    "pinecast-spinner": "1.1.2",
+    "pinecast-xhr": "^1.0.3",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "react-google-charts": "^1.2.1",
+    "react-select": "^1.0.0-rc.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-loader": "^6.2.8",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-2": "^6.18.0",
+    "css-loader": "^0.26.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.3"
+  }
+}
