@@ -1,6 +1,7 @@
 import React from 'react';
 
 import BaseChart from './BaseChart';
+import ChartEmptyState from './ChartEmptyState';
 import * as constants from '../constants';
 
 
@@ -10,20 +11,27 @@ export default class Table extends BaseChart {
 
         return <div>
             {this.renderTimeframeSelector()}
-            <table>
-                <thead>
-                    <tr>
-                        {data[0].map((header, i) => <th key={i}>{header}</th>)}
-                    </tr>
-                </thead>
-                <thead>
-                    {data.slice(1).map((row, i) =>
-                        <tr key={i}>
-                            {row.map((value, i) => <td key={i}>{this.renderCell(value)}</td>)}
-                        </tr>)}
-                </thead>
-            </table>
+            {this.renderTable(data)}
         </div>;
+    }
+
+    renderTable(data) {
+        if (!data || data.length < 2) {
+            return <ChartEmptyState />;
+        }
+        return <table>
+            <thead>
+                <tr>
+                    {data[0].map((header, i) => <th key={i}>{header}</th>)}
+                </tr>
+            </thead>
+            <thead>
+                {data.slice(1).map((row, i) =>
+                    <tr key={i}>
+                        {row.map((value, i) => <td key={i}>{this.renderCell(value)}</td>)}
+                    </tr>)}
+            </thead>
+        </table>;
     }
 
     renderCell(value) {

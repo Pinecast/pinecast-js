@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 
 import AnalyticsDash from 'pinecast-analytics-dash';
 import BankForm from 'pinecast-bank-form';
-import Chart from 'pinecast-react-analytics';
 import Importer from 'pinecast-importer';
 import Uploader from 'pinecast-uploader';
 
@@ -16,7 +15,6 @@ const components = [
     AnalyticsDash,
     BankForm,
     Categories,
-    Chart,
     DateTime,
     Importer,
     Uploader,

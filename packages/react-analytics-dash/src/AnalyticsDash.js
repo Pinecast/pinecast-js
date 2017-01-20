@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 
-import Chart from 'pinecast-react-analytics';
+// import Chart from 'pinecast-react-analytics';
 
 import * as constants from './constants';
 import GeoChart from './charts/GeoChart';
+import LineChart from './charts/LineChart';
+import PieChart from './charts/PieChart';
 import Table from './charts/Table';
 import TypePicker from './TypePicker';
 import VisibilityWrapper from './VisibilityWrapper';
@@ -30,7 +32,13 @@ export default class AnalyticsDash extends Component {
     }
 
     get typeType() {
-        return this.props.episode ? 'episode' : 'podcast';
+        if (this.props.network) {
+            return 'network';
+        }
+        if (this.props.episode) {
+            return 'episode';
+        }
+        return 'podcast';
     }
 
     renderChartControl(commonProps) {
@@ -38,14 +46,20 @@ export default class AnalyticsDash extends Component {
         switch (chartType) {
             case 'geo':
                 return <GeoChart {...commonProps} />;
+            case 'line':
+                return <LineChart {...commonProps} />;
+            case 'pie':
+                return <PieChart {...commonProps} />;
             case 'table':
                 return <Table {...commonProps} />;
+            default:
+                return <b>Invalid Chart Type</b>;
         }
     }
 
     renderBody() {
         const {
-            props: {episode, isOwner, isPro, isStarter, podcast, upgradeURL},
+            props: {episode, isOwner, isPro, isStarter, network, podcast, upgradeURL},
             state: {type},
         } = this;
 
@@ -57,6 +71,7 @@ export default class AnalyticsDash extends Component {
             episode,
             isOwner,
             meetsRequirement,
+            network,
             podcast: this.props.podcast,
             requirement: requires,
             type,
@@ -70,16 +85,6 @@ export default class AnalyticsDash extends Component {
 
         return <VisibilityWrapper {...commonProps}>
             {this.renderChartControl(commonProps)}
-        </VisibilityWrapper>;
-
-        return <VisibilityWrapper {...commonProps}>
-            <Chart {...commonProps}
-                chartType={chartType}
-                extra={constants.TYPES_EXTRA[type] || null}
-                hasLegend={false}
-                hideTimeframe={false}
-                type={commonProps.endpoint}
-            />
         </VisibilityWrapper>;
     }
 

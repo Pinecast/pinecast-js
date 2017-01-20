@@ -15,6 +15,10 @@ export const TYPES = {
         // TYPE_BY_OS,
         TYPE_GEO_LISTENS,
     ],
+    network: [
+        TYPE_LISTENS,
+        TYPE_SUBS,
+    ],
     podcast: [
         TYPE_LISTENS,
         TYPE_SUBS,
@@ -42,16 +46,18 @@ export const TYPES_ENDPOINTS = {
     episode: {
         [TYPE_LISTENS]: 'episode-listen-history',
         [TYPE_BY_SOURCE]: 'episode-listen-breakdown',
-        [TYPE_BY_AGENT]: 'episode-listen-platform-breakdown',
-        [TYPE_BY_OS]: 'episode-listen-platform-breakdown',
         [TYPE_GEO_LISTENS]: 'episode-listener-locations',
+    },
+    network: {
+        [TYPE_LISTENS]: 'network-listen-history',
+        [TYPE_SUBS]: 'network-subscriber-history',
     },
     podcast: {
         [TYPE_LISTENS]: 'podcast-listen-history',
         [TYPE_SUBS]: 'podcast-subscriber-history',
         [TYPE_BY_SOURCE]: 'podcast-listen-breakdown',
         [TYPE_BY_AGENT]: 'podcast-listen-platform-breakdown',
-        [TYPE_BY_OS]: 'podcast-listen-platform-breakdown',
+        [TYPE_BY_OS]: 'podcast-listen-os-breakdown',
         [TYPE_GEO_SUBS]: 'podcast-subscriber-locations',
         [TYPE_GEO_LISTENS]: 'podcast-listener-locations',
         [TYPE_TOP_EPISODES]: 'podcast-top-episodes',
@@ -86,7 +92,7 @@ export const TYPES_EXTRA = {
 };
 
 
-const DEFAULT_TIMEFRAMES = {
+export const DEFAULT_TIMEFRAMES = {
     // 'all': gettext('All'),
     'year': gettext('Year'),
     'sixmonth': gettext('6MO'),
@@ -94,21 +100,27 @@ const DEFAULT_TIMEFRAMES = {
     'week': gettext('Week'),
     'day': gettext('Day'),
 };
-const DEFAULT_GRANULARITIES = {
-    // 'all': gettext('All'),
-    'year': gettext('Year'),
-    'sixmonth': gettext('6MO'),
-    'month': gettext('1MO'),
-    'week': gettext('Week'),
-    'day': gettext('Day'),
-};
+export const DEFAULT_TIMEFRAME = 'month';
 
-export const TABLE_TIMEFRAMES = {
-    [TYPE_TOP_EPISODES]: {
-        'all': gettext('All'),
-        'month': gettext('Month'),
-        'week': gettext('Week'),
-        'day': gettext('Day'),
+const DEFAULT_GRANULARITIES = {
+    'monthly': gettext('Month'),
+    'weekly': gettext('Week'),
+    'daily': gettext('Day'),
+    'hourly': gettext('Hour'),
+};
+export const DEFAULT_GRANULARITY = 'daily';
+
+export const TYPE_TIMEFRAMES = {
+    [TYPE_SUBS]: {
+        'year': gettext('Year'),
+        'sixmonth': gettext('6MO'),
+        'month': gettext('1MO'),
     },
-    [TYPE_GEO_LISTENS]: DEFAULT_TIMEFRAMES,
+    [TYPE_LISTENS]: {
+        'all': gettext('All'),
+        ...DEFAULT_TIMEFRAMES,
+    },
+};
+export const TYPE_GRANULARITIES = {
+    [TYPE_LISTENS]: DEFAULT_GRANULARITIES,
 };

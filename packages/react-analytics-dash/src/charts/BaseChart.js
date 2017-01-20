@@ -35,20 +35,69 @@ export default class BaseChart extends Component {
             () => this.startLoadingData()
         );
     }
+    componentWillUnmount() {
+        if (this.state.xhr) {
+            this.state.xhr.abort();
+        }
+    }
 
-    getLoadURL(timeframe) {
+    getBaseLoadURL() {
+        return `/analytics/${this.props.endpoint}`;
+    }
+    getLoadURL(timeframe, granularity) {
         const {
-            props: {endpoint, episode, podcast},
+            props: {episode, network, podcast},
         } = this;
 
-        return `/analytics/${endpoint}?podcast=${encodeURIComponent(podcast)}` +
-                (timeframe ? `&timeframe=${encodeURIComponent(timeframe)}` : '') +
-                (episode ? `&episode=${encodeURIComponent(episode)}` : '');
+        return `${this.getBaseLoadURL()}?` +
+            (episode ? `episode=${encodeURIComponent(episode)}` : '') +
+            (granularity ? `interval=${encodeURIComponent(granularity)}&` : '') +
+            (network ? `network_id=${encodeURIComponent(network)}&` : '') +
+            (podcast ? `podcast=${encodeURIComponent(podcast)}&` : '') +
+            (timeframe ? `timeframe=${encodeURIComponent(timeframe)}&` : '');
     }
 
     getCurrentTimeframe() {
-        const timeframes = constants.TABLE_TIMEFRAMES[this.props.type];
-        return this.state.currentTimeframe || timeframes && Object.keys(timeframes)[0] || null;
+        if (this.state.timeframe) {
+            return this.state.timeframe;
+        }
+        const timeframes = this.getTimeframes();
+        if (!timeframes) {
+            return null;
+        }
+
+        const keys = Object.keys(timeframes);
+        if (!keys.length) {
+            return null;
+        }
+
+        if (keys.indexOf(constants.DEFAULT_TIMEFRAME) !== -1) {
+            return constants.DEFAULT_TIMEFRAME;
+        }
+
+        return keys[keys.length - 1];
+    }
+
+
+    getCurrentGranularity() {
+        if (this.state.granularity) {
+            return this.state.granularity;
+        }
+        const granularities = this.getGranularities();
+        if (!granularities) {
+            return null;
+        }
+
+        const keys = Object.keys(granularities);
+        if (!keys.length) {
+            return null;
+        }
+
+        if (keys.indexOf(constants.DEFAULT_GRANULARITY) !== -1) {
+            return constants.DEFAULT_GRANULARITY;
+        }
+
+        return keys[keys.length - 1];
     }
 
     startLoadingData() {
@@ -57,14 +106,16 @@ export default class BaseChart extends Component {
         }
 
         const timeframe = this.getCurrentTimeframe();
+        const granularity = this.getCurrentGranularity();
 
         const req = xhr({
             method: 'get',
-            url: this.getLoadURL(timeframe),
+            url: this.getLoadURL(timeframe, granularity),
         }, (err, res, body) => {
             const data = JSON.parse(body);
             this.setState({
                 data,
+                granularity,
                 timeframe,
                 xhr: null,
             });
@@ -72,16 +123,25 @@ export default class BaseChart extends Component {
         this.setState({xhr: req});
     }
 
+    getTimeframes() {
+        const {type} = this.props;
+        return constants.TYPE_TIMEFRAMES[type] || constants.DEFAULT_TIMEFRAMES;
+    }
+
+    getGranularities() {
+        const {type} = this.props;
+        return constants.TYPE_GRANULARITIES[type];
+    }
+
     renderTimeframeSelector() {
-        const {
-            props: {type},
-            state: {granularity, timeframe},
-        } = this;
+        const timeframes = this.getTimeframes();
+        const granularities = this.getGranularities();
 
-        const timeframes = constants.TABLE_TIMEFRAMES[type];
-        const granularities = constants.TABLE_GRANULARITIES[type];
+        const {granularity, timeframe} = this.state;
 
-        return (timeframes || granularities) &&
+        const extra = this.renderTimeframeSelectorExtra();
+
+        return (timeframes || granularities || extra) &&
             <div style={{marginTop: 30, textAlign: 'center'}}>
                 {timeframes &&
                     <ChartOptionSelector
@@ -105,7 +165,12 @@ export default class BaseChart extends Component {
                         }}
                         options={granularities}
                     />}
+                {Boolean(extra) && extra}
             </div>;
+    }
+
+    renderTimeframeSelectorExtra() {
+        return null;
     }
 
     render() {

@@ -14,16 +14,16 @@ module.exports = {
         filename: '/ui-ad.js',
     },
     plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {
-                'NODE_ENV': '"production"',
-            },
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {warnings: false},
-            mangle: {},
-            sourceMap: false,
-        }),
+        // new webpack.DefinePlugin({
+        //     'process.env': {
+        //         'NODE_ENV': '"production"',
+        //     },
+        // }),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: {warnings: false},
+        //     mangle: {},
+        //     sourceMap: false,
+        // }),
         new webpack.optimize.DedupePlugin(),
     ],
     module: {

@@ -12,6 +12,7 @@ if (elem) {
             isOwner={elem.getAttribute('data-is-podcast-owner') == 'true'}
             isPro={elem.getAttribute('data-is-pro') == 'true'}
             isStarter={elem.getAttribute('data-is-starter') == 'true'}
+            network={elem.getAttribute('data-network')}
             podcast={elem.getAttribute('data-podcast')}
             upgradeURL={elem.getAttribute('data-upgrade-url')}
         />,

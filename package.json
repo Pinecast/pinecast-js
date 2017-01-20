@@ -4,7 +4,8 @@
   "description": "Pinecast JavaScript monorepo",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "lerna run build",
+    "cp": "npm run build && cp packages/omnibus/build/ui-omnibus.js /opt/pinecast/static/js/"
   },
   "repository": {
     "type": "git",

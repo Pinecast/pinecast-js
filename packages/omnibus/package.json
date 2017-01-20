@@ -21,7 +21,6 @@
     "pinecast-analytics-dash": "^1.2.0",
     "pinecast-bank-form": "^1.0.5",
     "pinecast-importer": "^1.0.6",
-    "pinecast-react-analytics": "^1.4.2",
     "pinecast-uploader": "^1.0.8",
     "react": "^15.4.1",
     "react-datepicker": "^0.34.0",
