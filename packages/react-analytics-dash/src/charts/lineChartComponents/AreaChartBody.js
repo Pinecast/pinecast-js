@@ -50,5 +50,7 @@ export default class AreaChartBody extends LineChartBody {
             .style('opacity', 0.6)
             .style('stroke', d => data.datasets[d.index].pointColor)
             .style('stroke-width', '2px');
+
+        return lines;
     }
 }

@@ -2,6 +2,8 @@ import {Component} from 'react';
 import * as d3 from 'd3';
 import ReactFauxDOM from 'react-faux-dom';
 
+import renderBalloons from './balloons';
+
 
 const c = document.createElement('canvas');
 const ctx = c.getContext('2d');
@@ -21,7 +23,7 @@ export default class LineChartBody extends Component {
     }
 
     render() {
-        const {data, height, width} = this.props;
+        const {data, episodeList, height, startDate, width} = this.props;
 
         const elem = ReactFauxDOM.createElement('svg');
 
@@ -104,7 +106,28 @@ export default class LineChartBody extends Component {
             .style('font-size', '12px')
             .call(sel => sel.selectAll('.domain').style('stroke', 'none').style('fill', 'rgba(0, 0, 0, 0.2)'));
 
-        this.renderLines(vis, data, xRange, yRange);
+        const innerWidth = width - marginLeft - marginRight;
+
+        const lines = this.renderLines(vis, data, xRange, yRange);
+        data.labels.forEach((label, i) => {
+            lines.append('g')
+                .append('rect')
+                .attr('x', (xRange(i) + xRange(i - 1)) / 2 + 1)
+                .attr('y', marginTop)
+                .attr('width', innerWidth / data.labels.length)
+                .attr('height', height - marginTop - marginBottom - xAxisHeight)
+                .classed('has-tooltip', true)
+                .attr('data-tooltip', `
+                    <b>${label}</b><br>
+                    ${data.datasets.map(x => `${x.label}: ${x.data[i]}`).join('<br>')}
+                `)
+                .style('fill', 'transparent');
+        });
+
+        if (episodeList) {
+            const balloonsElem = vis.append('g').attr('transform', `translate(${marginLeft}, ${height - marginBottom - xAxisHeight})`);
+            renderBalloons(startDate, data, episodeList, balloonsElem, innerWidth);
+        }
 
         return elem.toReact();
     }
@@ -140,5 +163,6 @@ export default class LineChartBody extends Component {
                 .style('stroke', '#fff')
                 .style('stroke-width', '2px');
         });
+        return lines;
     }
 }

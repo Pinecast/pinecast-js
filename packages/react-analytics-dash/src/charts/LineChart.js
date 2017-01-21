@@ -96,13 +96,13 @@ export default class LineChart extends BaseChart {
             this.state.episodeListXHR.abort();
         }
 
-        const {podcast, extra} = this.props;
+        const {podcast, network} = this.props;
         const startDate = this.getStartDate();
         const episodeListXHR = xhr({
             method: 'get',
             url: '/dashboard/services/get_episodes?' +
                 (podcast ? `podcast=${encodeURIComponent(podcast)}&` : '') +
-                (extra ? `${extra}&` : '') +
+                (network ? `network_id=${encodeURIComponent(network)}&` : '') +
                 `start_date=${startDate.toISOString().replace(/\.\d+Z$/, '')}`, // Fuck off, milliseconds
         }, (err, res, body) => {
             const episodeList = JSON.parse(body);
@@ -114,23 +114,28 @@ export default class LineChart extends BaseChart {
 
     renderData() {
         const {
-            state: {data, displayType, width},
+            state: {data, displayType, episodeList, width},
         } = this;
         if (!data || data.datasets.every(ds => !ds.data.length)) {
             return <ChartEmptyState />;
         }
 
+        const startDate = this.getStartDate();
         return <div>
             {displayType === 'line' &&
                 <LineChartBody
                     data={data}
+                    episodeList={episodeList}
                     height={300}
+                    startDate={startDate}
                     width={width || 0}
                 />}
             {displayType === 'area' &&
                 <AreaChartBody
                     data={data}
+                    episodeList={episodeList}
                     height={300}
+                    startDate={startDate}
                     width={width || 0}
                 />}
         </div>;

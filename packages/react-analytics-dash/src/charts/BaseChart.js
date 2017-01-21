@@ -175,10 +175,71 @@ export default class BaseChart extends Component {
 
     render() {
         return this.state.data ?
-            this.renderBody() :
+            <div ref={e => this.bindTooltips(e)}>
+                {this.renderBody()}
+                <div
+                    ref='tooltip'
+                    style={{
+                        background: 'rgba(255, 255, 255, 0.85)',
+                        borderRadius: '3px',
+                        boxShadow: '0 2px 1px rgba(0, 0, 0, 0.1)',
+                        display: 'none',
+                        padding: '5px 10px',
+                        pointerEvents: 'none',
+                        position: 'fixed',
+                        transition: 'left 0.05s, top 0.05s',
+                        zIndex: '100',
+                    }}
+                />
+            </div> :
             <div style={{padding: '100px 0', textAlign: 'center'}}>
                 <Spinner />
             </div>;
+    }
+
+    bindTooltips(elem) {
+        if (!elem) {
+            return;
+        }
+
+        let shown = false;
+        elem.addEventListener('mouseenter', e => {
+            if (e.target.getAttribute('class') !== 'has-tooltip') {
+                return;
+            }
+            const tooltip = this.refs.tooltip;
+            tooltip.style.display = 'block';
+            tooltip.innerHTML = e.target.getAttribute('data-tooltip');
+            shown = true;
+        }, true);
+
+        elem.addEventListener('mouseout', e => {
+            let node = e.target;
+            while (true) {
+                if (node === document.body) {
+                    return;
+                }
+                if (node.getAttribute('class') === 'has-tooltip') {
+                    break;
+                }
+                node = node.parentNode;
+            }
+            this.refs.tooltip.style.display = 'none';
+            shown = false;
+        }, true);
+
+        elem.addEventListener('mousemove', e => {
+            if (!shown) {
+                return;
+            }
+            const {tooltip} = this.refs;
+            if (e.clientX + tooltip.clientWidth + 16 > document.body.clientWidth) {
+                tooltip.style.left = `${e.clientX - tooltip.clientWidth - 10}px`;
+            } else {
+                tooltip.style.left = `${e.clientX + 16}px`;
+            }
+            tooltip.style.top = `${e.clientY}px`;
+        }, true);
     }
 
 };
