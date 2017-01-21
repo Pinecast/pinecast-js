@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
 
-// import Chart from 'pinecast-react-analytics';
-
 import * as constants from './constants';
-import GeoChart from './charts/GeoChart';
-import LineChart from './charts/LineChart';
-import PieChart from './charts/PieChart';
-import Table from './charts/Table';
+import render from './charts';
 import TypePicker from './TypePicker';
 import VisibilityWrapper from './VisibilityWrapper';
 
@@ -41,22 +36,6 @@ export default class AnalyticsDash extends Component {
         return 'podcast';
     }
 
-    renderChartControl(commonProps) {
-        const chartType = constants.TYPES_CHART_TYPES[this.state.type];
-        switch (chartType) {
-            case 'geo':
-                return <GeoChart {...commonProps} />;
-            case 'line':
-                return <LineChart {...commonProps} />;
-            case 'pie':
-                return <PieChart {...commonProps} />;
-            case 'table':
-                return <Table {...commonProps} />;
-            default:
-                return <b>Invalid Chart Type</b>;
-        }
-    }
-
     renderBody() {
         const {
             props: {episode, isOwner, isPro, isStarter, network, podcast, upgradeURL},
@@ -66,16 +45,14 @@ export default class AnalyticsDash extends Component {
         const requires = constants.TYPES_CHART_REQUIRES[type];
         const meetsRequirement = requires === 'pro' && isPro || requires === 'starter' && (isPro || isStarter) || !requires;
 
+        const typeType = this.typeType;
         const commonProps = {
-            endpoint: constants.TYPES_ENDPOINTS[this.typeType][type],
+            endpoint: constants.TYPES_ENDPOINTS[typeType][type],
             episode,
-            isOwner,
-            meetsRequirement,
             network,
             podcast: this.props.podcast,
-            requirement: requires,
             type,
-            upgradeURL,
+            typeType,
         };
 
         if (type === constants.TYPE_SUBS) {
@@ -83,8 +60,10 @@ export default class AnalyticsDash extends Component {
             commonProps.hideGranularity = true;
         }
 
-        return <VisibilityWrapper {...commonProps}>
-            {this.renderChartControl(commonProps)}
+        return <VisibilityWrapper
+            {...{...commonProps, isOwner, meetsRequirement, requirement: requires, upgradeURL}}
+        >
+            {render(constants.TYPES_CHART_TYPES[type], commonProps)}
         </VisibilityWrapper>;
     }
 

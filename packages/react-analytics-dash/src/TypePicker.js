@@ -11,8 +11,8 @@ const TypePicker = ({onChange, type, typeType}) =>
         clearable={false}
         onChange={({value}) => onChange(value)}
         options={constants.TYPES[typeType].map(type => ({
-            value: type,
             label: constants.TYPES_NAMES[type],
+            value: type,
         }))}
         wrapperStyle={{zIndex: 100}}
         value={type}

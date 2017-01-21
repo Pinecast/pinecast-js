@@ -50,11 +50,11 @@ export default class BaseChart extends Component {
         } = this;
 
         return `${this.getBaseLoadURL()}?` +
-            (episode ? `episode=${encodeURIComponent(episode)}` : '') +
+            (episode ? `episode=${encodeURIComponent(episode)}&` : '') +
             (granularity ? `interval=${encodeURIComponent(granularity)}&` : '') +
             (network ? `network_id=${encodeURIComponent(network)}&` : '') +
             (podcast ? `podcast=${encodeURIComponent(podcast)}&` : '') +
-            (timeframe ? `timeframe=${encodeURIComponent(timeframe)}&` : '');
+            (timeframe ? `timeframe=${encodeURIComponent(timeframe)}` : '');
     }
 
     getCurrentTimeframe() {
