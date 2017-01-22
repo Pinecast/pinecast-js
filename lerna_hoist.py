@@ -46,23 +46,29 @@ for package in packages:
 print 'Common packages:', sum(1 for v in dep_map.values() if len(v) > 1)
 print 'Lone packages:', sum(1 for v in dep_map.values() if len(v) < 2)
 
-if not os.path.exists('lerna_modules'):
-    print 'Making lerna_modules directory...'
-    os.mkdir('lerna_modules')
-
 deps_to_move = [(x, v) for x, v in dep_map.items() if len(v) > 1]
 print 'Hoisting %d deps...' % len(deps_to_move)
 for dependancy, dependants in deps_to_move:
     dep_name, dep_version = dependancy
-    hoisted_from = dependants[0]
-    hoist_from_path = os.path.join('packages', hoisted_from, 'node_modules', dep_name)
+    target = os.path.join(os.getcwd(), 'node_modules', dep_name)
 
-    # print 'move', hoist_from_path, 'lerna_modules'
-    shutil.move(hoist_from_path, 'lerna_modules')
-    target = os.path.join('lerna_modules', dep_name)
+    if os.path.exists(target):
+        existing_version = json.load(open(os.path.join(target, 'package.json')))['version']
+        if existing_version != dep_version:
+            print 'Found existing mismatched node_modules package for %s: %s (existing) != %s (new)' % (
+                dep_name, existing_version, dep_version)
+            print 'Skipping...'
+            continue
+    else:
+        hoisted_from = dependants[0]
+        hoist_from_path = os.path.join('packages', hoisted_from, 'node_modules', dep_name)
+
+        # print 'move', hoist_from_path, 'node_modules'
+        shutil.move(hoist_from_path, 'node_modules')
+
     for dependant in dependants:
         dep_hoist_path = os.path.join('packages', dependant, 'node_modules', dep_name)
-        if dependant != hoisted_from:
+        if os.path.exists(dep_hoist_path):
             # print 'rmtree', dep_hoist_path
             shutil.rmtree(dep_hoist_path)
 

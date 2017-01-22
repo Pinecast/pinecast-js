@@ -1,23 +1,5 @@
 {
-  "name": "pinecast-js",
-  "version": "1.0.0",
-  "description": "Pinecast JavaScript monorepo",
-  "main": "index.js",
-  "scripts": {
-    "build": "lerna run build",
-    "cp": "npm run build && cp packages/omnibus/build/ui-omnibus.js /opt/pinecast/static/js/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Pinecast/pinecast-js.git"
-  },
-  "author": "Matt Basta <me@mattbasta.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Pinecast/pinecast-js/issues"
-  },
-  "homepage": "https://github.com/Pinecast/pinecast-js#readme",
-  "dependencies": {
+  "devDependencies": {
     "lerna": "2.0.0-beta.32"
   }
 }
