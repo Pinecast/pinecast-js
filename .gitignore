@@ -18,3 +18,4 @@ Thumbs.db
 desktop.ini
 *.sublime-project
 lerna-debug.log
+lerna_modules/

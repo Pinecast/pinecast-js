@@ -6,28 +6,33 @@ var webpack = require('webpack');
 module.exports = {
     // devtool: 'source-maps',
     entry: {
-        app: ['./src/index.js']
+        app: ['./src/index.js'],
     },
+    resolve: {
+        modules: [
+            path.resolve(__dirname, '../../lerna_modules'),
+            'node_modules',
+        ],
+    },
+    cache: false,
     output: {
         path: path.resolve(__dirname, 'build'),
         publicPath: '/',
         filename: '/ui-omnibus.js',
     },
     plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {
-                'NODE_ENV': '"production"',
-            },
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {warnings: false},
-            mangle: {},
-            sourceMap: false,
-        }),
-        new webpack.optimize.DedupePlugin(),
+        // new webpack.DefinePlugin({
+        //     'process.env': {
+        //         'NODE_ENV': '"production"',
+        //     },
+        // }),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     mangle: {},
+        // }),
+        // new webpack.LoaderOptionsPlugin({minimize: true}),
     ],
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
@@ -35,7 +40,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: 'style-loader!css-loader',
+                use: ['style-loader', 'css-loader'],
             },
         ],
     },
