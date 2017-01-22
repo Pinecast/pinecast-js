@@ -44,7 +44,7 @@ export default class Menu extends BaseChart {
     }
 
     renderBody() {
-        const {state: {data}} = this;
+        const {props: {type}, state: {data}} = this;
 
         if (!data || !Object.keys(data).length) {
             return <ChartEmptyState />;
@@ -52,16 +52,21 @@ export default class Menu extends BaseChart {
 
         const choice = this.getChoice();
         return <div style={{marginTop: 10}}>
-            <Select
-                clearable={false}
-                onChange={({value}) => this.setState({choice: value})}
-                options={Object.keys(data).sort().map(x => ({
-                    label: data[x],
-                    value: x,
-                }))}
-                wrapperStyle={{zIndex: 99}}
-                value={choice}
-            />
+            <div style={{alignItems: 'center', display: 'flex'}}>
+                <strong style={{lineHeight: '1em', marginRight: 10}}>
+                    {constants.MENU_LABELS[type]}
+                </strong>
+                <Select
+                    clearable={false}
+                    onChange={({value}) => this.setState({choice: value})}
+                    options={Object.keys(data).sort().map(x => ({
+                        label: data[x],
+                        value: x,
+                    }))}
+                    wrapperStyle={{flex: '1 1', zIndex: 99}}
+                    value={choice}
+                />
+            </div>
             {this.renderContent(choice)}
         </div>;
     }

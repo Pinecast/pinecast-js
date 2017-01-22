@@ -27,10 +27,10 @@ export const TYPES = {
         TYPE_BY_SOURCE,
         TYPE_BY_AGENT,
         TYPE_BY_OS,
-        TYPE_GEO_SUBS,
         TYPE_GEO_LISTENS,
-        TYPE_GEO_GRAN_SUBS,
         TYPE_GEO_GRAN_LISTENS,
+        TYPE_GEO_SUBS,
+        TYPE_GEO_GRAN_SUBS,
         TYPE_TOP_EPISODES,
     ],
 };
@@ -42,9 +42,9 @@ export const TYPES_NAMES = {
     [TYPE_BY_AGENT]: gettext('Listens by Agent'),
     [TYPE_BY_OS]: gettext('Listens by OS'),
     [TYPE_GEO_SUBS]: gettext('Subscriber Locations'),
+    [TYPE_GEO_GRAN_SUBS]: gettext('Subscriber Locations By City'),
     [TYPE_GEO_LISTENS]: gettext('Listener Locations'),
-    [TYPE_GEO_GRAN_SUBS]: gettext('Subscriber Locations (Granular)'),
-    [TYPE_GEO_GRAN_LISTENS]: gettext('Listener Locations (Granular)'),
+    [TYPE_GEO_GRAN_LISTENS]: gettext('Listener Locations By City'),
     [TYPE_TOP_EPISODES]: gettext('Top Episodes'),
 };
 
@@ -152,4 +152,9 @@ export const TYPE_TIMEFRAMES = {
 };
 export const TYPE_GRANULARITIES = {
     [TYPE_LISTENS]: DEFAULT_GRANULARITIES,
+};
+
+export const MENU_LABELS = {
+    [TYPE_GEO_GRAN_LISTENS]: gettext('Country:'),
+    [TYPE_GEO_GRAN_SUBS]: gettext('Country:'),
 };

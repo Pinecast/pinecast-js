@@ -15,7 +15,7 @@ export default class GranularGeoChart extends BaseChart {
             chartType='GeoChart'
             data={[
                 ['Latitude', 'Longitude', 'Name', 'Count'],
-                ...data.sort((a, b) => a.count - b.count).map(x => [x.lat, x.lon, x.label, x.count]),
+                ...data.sort((a, b) => a.count - b.count).map(x => [+x.lat, +x.lon, x.label, x.count]),
             ]}
             height='600px'
             options={{

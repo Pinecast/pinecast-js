@@ -28,7 +28,7 @@ export default class LineChart extends BaseChart {
             episodeListXHR: null,
             episodeList: null,
 
-            width: null,
+            width: 200,
 
             displayType: 'line',
         };
