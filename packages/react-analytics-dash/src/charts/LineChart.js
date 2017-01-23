@@ -67,7 +67,7 @@ export default class LineChart extends BaseChart {
     }
 
     getGranularities() {
-        const sup = super.getGranularities();
+        const sup = {...super.getGranularities()};
         if (!sup) {
             return null;
         }
