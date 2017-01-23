@@ -1,6 +1,6 @@
 {
   "name": "pinecast-spinner",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "",
   "main": "dist/Spinner.js",
   "jsnext:main": "src/Spinner.js",

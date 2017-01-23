@@ -1,6 +1,6 @@
 {
   "name": "pinecast-xhr",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A wrapper around the XHR library for making secure requests to Pinecast",
   "main": "index.js",
   "scripts": {

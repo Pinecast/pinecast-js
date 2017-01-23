@@ -1,6 +1,6 @@
 {
   "name": "pinecast-importer",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "",
   "main": "dist/Importer.js",
   "jsnext:main": "src/Importer.js",
@@ -14,8 +14,8 @@
   "license": "MIT",
   "dependencies": {
     "moment": "^2.17.0",
-    "pinecast-spinner": "^1.1.2",
-    "pinecast-xhr": "^1.0.3",
+    "pinecast-spinner": "^1.2.0",
+    "pinecast-xhr": "^1.0.4",
     "react": "^15.4.1",
     "react-dom": "^15.4.1"
   },

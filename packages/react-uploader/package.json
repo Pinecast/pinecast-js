@@ -1,6 +1,6 @@
 {
   "name": "pinecast-uploader",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "description": "",
   "main": "dist/Uploader.js",
   "jsnext:main": "src/Uploader.js",
@@ -16,7 +16,7 @@
     "blob-to-buffer": "^1.2.6",
     "exif": "^0.6.0",
     "pinecast-image-size": "^0.5.1",
-    "pinecast-xhr": "^1.0.3",
+    "pinecast-xhr": "^1.0.4",
     "react": "^15.4.1",
     "react-dom": "^15.4.1"
   },
