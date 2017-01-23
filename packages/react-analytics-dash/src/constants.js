@@ -16,6 +16,7 @@ export const TYPES = {
         // TYPE_BY_AGENT,
         // TYPE_BY_OS,
         TYPE_GEO_LISTENS,
+        TYPE_GEO_GRAN_LISTENS,
     ],
     network: [
         TYPE_LISTENS,
