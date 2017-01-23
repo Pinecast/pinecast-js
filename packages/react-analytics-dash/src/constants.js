@@ -57,7 +57,7 @@ export const TYPES_ENDPOINTS = {
     },
     network: {
         [TYPE_LISTENS]: 'network/listens',
-        [TYPE_SUBS]: 'network/subscriber',
+        [TYPE_SUBS]: 'network/subscribers',
     },
     podcast: {
         [TYPE_LISTENS]: 'podcast/listens',
