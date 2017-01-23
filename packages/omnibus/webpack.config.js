@@ -21,15 +21,15 @@ module.exports = {
         filename: '/ui-omnibus.js',
     },
     plugins: [
-        // new webpack.DefinePlugin({
-        //     'process.env': {
-        //         'NODE_ENV': '"production"',
-        //     },
-        // }),
-        // new webpack.optimize.UglifyJsPlugin({
-        //     mangle: {},
-        // }),
-        // new webpack.LoaderOptionsPlugin({minimize: true}),
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': '"production"',
+            },
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            mangle: {},
+        }),
+        new webpack.LoaderOptionsPlugin({minimize: true}),
     ],
     module: {
         rules: [
