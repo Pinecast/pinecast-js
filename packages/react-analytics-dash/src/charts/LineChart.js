@@ -67,25 +67,28 @@ export default class LineChart extends BaseChart {
     }
 
     getGranularities() {
-        const sup = {...super.getGranularities()};
-        if (!sup) {
+        const supRaw = super.getGranularities();
+        if (!supRaw) {
             return null;
         }
         const {timeframe} = this.state;
         if (timeframe === 'day') {
-            return {'hourly': sup.hourly};
+            return {'hourly': supRaw.hourly};
         }
         if (timeframe === 'week') {
-            return {'daily': sup.daily};
+            return {'daily': supRaw.daily};
         }
         if (timeframe === 'all') {
-            return {'monthly': sup.monthly};
+            return {'monthly': supRaw.monthly};
         }
 
+        const sup = {...supRaw};
         delete sup.hourly;
 
         if (timeframe === 'year') {
             delete sup.daily;
+        } else if (timeframe === 'month') {
+            delete sup.month;
         }
         return sup;
     }
