@@ -80,12 +80,14 @@ export default class BaseChart extends Component {
 
 
     getCurrentGranularity() {
-        if (this.state.granularity) {
-            return this.state.granularity;
-        }
         const granularities = this.getGranularities();
         if (!granularities) {
             return null;
+        }
+
+        const {granularity} = this.state;
+        if (granularity && granularity in granularities) {
+            return granularity;
         }
 
         const keys = Object.keys(granularities);

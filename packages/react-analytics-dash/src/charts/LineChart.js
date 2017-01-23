@@ -75,15 +75,16 @@ export default class LineChart extends BaseChart {
         if (timeframe === 'day') {
             return {'hourly': sup.hourly};
         }
+        if (timeframe === 'week') {
+            return {'daily': sup.daily};
+        }
         if (timeframe === 'all') {
             return {'monthly': sup.monthly};
         }
 
         delete sup.hourly;
 
-        if (timeframe === 'week') {
-            delete sup.monthly;
-        } else if (timeframe === 'year') {
+        if (timeframe === 'year') {
             delete sup.daily;
         }
         return sup;
