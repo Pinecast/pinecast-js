@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Spinner from 'pinecast-spinner';
 import xhr from 'pinecast-xhr';
 
 import ProgressBar from '../../ProgressBar';
 
 
-export default class Step1 extends React.Component {
+export default class Step1 extends Component {
     constructor(props) {
         super(props);
         this.state = {

@@ -1,4 +1,4 @@
-var xhr = require("xhr");
+var xhr = require('xhr');
 
 
 var CSRF_TOKEN = '';

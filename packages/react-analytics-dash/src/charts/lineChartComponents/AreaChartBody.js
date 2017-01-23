@@ -1,5 +1,11 @@
 import {Component} from 'react';
-import * as d3 from 'd3';
+import {
+    area as d3Area,
+    curveMonotoneX,
+    stack as d3Stack,
+    stackOffsetNone,
+    stackOrderNone,
+} from 'd3-shape';
 import ReactFauxDOM from 'react-faux-dom';
 
 import LineChartBody from './LineChartBody';
@@ -26,13 +32,13 @@ export default class AreaChartBody extends LineChartBody {
                 return acc;
             }, {}));
 
-        const stack = d3.stack()
+        const stack = d3Stack()
             .keys(keys)
-            .order(d3.stackOrderNone)
-            .offset(d3.stackOffsetNone);
+            .order(stackOrderNone)
+            .offset(stackOffsetNone);
 
-        const area = d3.area()
-            .curve(d3.curveMonotoneX)
+        const area = d3Area()
+            .curve(curveMonotoneX)
             .x((_, i) => xRange(i))
             .y0(d => yRange(d[0]))
             .y1(d => yRange(d[1]));

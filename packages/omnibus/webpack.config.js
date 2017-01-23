@@ -9,6 +9,10 @@ module.exports = {
         app: ['./src/index.js'],
     },
     resolve: {
+        mainFields: [
+            'jsnext:main',
+            'main',
+        ],
         modules: [
             path.resolve(__dirname, '../../node_modules'),
             'node_modules',
@@ -22,9 +26,7 @@ module.exports = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env': {
-                'NODE_ENV': '"production"',
-            },
+            'process.env.NODE_ENV': '"production"',
         }),
         new webpack.optimize.UglifyJsPlugin({
             mangle: {},
@@ -46,10 +48,18 @@ module.exports = {
     },
     externals: [
         function(context, request, callback) {
-            if (request === 'fs') {
-                return callback(null, 'null');
+            switch (request) {
+                case 'fs':
+                case 'net':
+                    return callback(null, 'null');
+                case 'tty':
+                    return callback(null, '{isatty:function() {}}');
+                case 'bluebird':
+                    // For react-google-charts
+                    return callback(null, '{Promise: Promise}');
+                default:
+                    return callback();
             }
-            return callback();
         }
     ],
 };

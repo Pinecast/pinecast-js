@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React from 'react';
+import React, {Component} from 'react';
 import Spinner from 'pinecast-spinner';
 import xhr from 'pinecast-xhr';
 
@@ -7,7 +7,7 @@ import {LOCALES} from '../../locales';
 import SlugField from './SlugField';
 
 
-export default class Step2 extends React.Component {
+export default class Step2 extends Component {
     constructor(props) {
         super(props);
         this.state = {

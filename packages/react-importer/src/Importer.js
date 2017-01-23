@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 import ProgressBar from './ProgressBar';
 import Step1 from './steps/step-1';
@@ -6,7 +6,7 @@ import Step2 from './steps/step-2';
 import Step3 from './steps/step-3';
 
 
-export default class Importer extends React.Component {
+export default class Importer extends Component {
     static selector = '.importer-placeholder';
 
     static propExtraction = {

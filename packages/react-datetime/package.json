@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/DateTime.js",
+  "jsnext:main": "src/DateTime.js",
   "scripts": {
     "build": "webpack --config=webpack.config.js --progress",
     "dev": "webpack --config=webpack.config.js --progress --watch --colors",

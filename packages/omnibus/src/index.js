@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import {createElement} from 'react';
+import {render} from 'react-dom';
 
 import AnalyticsDash from 'pinecast-analytics-dash';
 import BankForm from 'pinecast-bank-form';
@@ -26,8 +26,8 @@ components.forEach(component => {
         return;
     }
     Array.prototype.slice.call(elements).forEach(elem => {
-        ReactDOM.render(
-            React.createElement(
+        render(
+            createElement(
                 component,
                 Object.keys(component.propExtraction).reduce((acc, cur) => {
                     acc[cur] = component.propExtraction[cur](elem);

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import xhr from 'pinecast-xhr';
 
 
-export default class SlugField extends React.Component {
+export default class SlugField extends Component {
     constructor(props) {
         super(props);
         this.state = {

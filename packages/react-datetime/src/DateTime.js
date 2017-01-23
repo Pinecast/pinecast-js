@@ -1,9 +1,9 @@
 import DatePicker from 'react-datepicker';
+import React, {Component} from 'react';
 import TimeInput from 'time-input';
-import React from 'react';
 
 
-export default class Importer extends React.Component {
+export default class DateTime extends Component {
     static selector = '.input-datetime';
 
     static propExtraction = {

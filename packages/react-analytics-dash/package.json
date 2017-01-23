@@ -3,6 +3,7 @@
   "version": "1.2.0",
   "description": "",
   "main": "dist/AnalyticsDash.js",
+  "jsnext:main": "src/AnalyticsDash.js",
   "scripts": {
     "build": "webpack --config=webpack.config.js --progress",
     "dev": "webpack --config=webpack.config.js --progress --watch --colors",
@@ -13,6 +14,10 @@
   "license": "MIT",
   "dependencies": {
     "d3": "^4.4.0",
+    "d3-axis": "^1.0.4",
+    "d3-scale": "^1.0.4",
+    "d3-selection": "^1.0.3",
+    "d3-shape": "^1.0.4",
     "labella": "^1.1.2",
     "pinecast-spinner": "1.1.2",
     "pinecast-xhr": "^1.0.3",

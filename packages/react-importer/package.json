@@ -3,6 +3,7 @@
   "version": "1.0.6",
   "description": "",
   "main": "dist/Importer.js",
+  "jsnext:main": "src/Importer.js",
   "scripts": {
     "build": "webpack --config=webpack.config.js --progress",
     "dev": "webpack --config=webpack.config.js --progress --watch --colors",

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {Component} from 'react';
 
-export default class TimeRemainingIndicator extends React.Component {
+export default class TimeRemainingIndicator extends Component {
     constructor(props) {
         super(props);
         this.state = {

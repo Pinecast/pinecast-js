@@ -3,6 +3,7 @@
   "version": "1.0.8",
   "description": "",
   "main": "dist/Uploader.js",
+  "jsnext:main": "src/Uploader.js",
   "scripts": {
     "build": "webpack --config=webpack.config.js --progress",
     "dev": "webpack --config=webpack.config.js --progress --watch --colors",

@@ -1,6 +1,9 @@
+import {axisBottom, axisLeft} from 'd3-axis';
 import {Component} from 'react';
-import * as d3 from 'd3';
+import {curveMonotoneX, line as d3Line} from 'd3-shape';
 import ReactFauxDOM from 'react-faux-dom';
+import {scaleLinear} from 'd3-scale';
+import {select as d3Select} from 'd3-selection';
 
 import renderBalloons from './balloons';
 
@@ -37,22 +40,22 @@ export default class LineChartBody extends Component {
         const xAxisHeight = 60;
 
         // Ranges
-        const xRange = d3.scaleLinear()
+        const xRange = scaleLinear()
             .range([
                 marginLeft,
                 width - marginRight,
             ]).domain([0, data.labels.length - 1]);
-        const yRange = d3.scaleLinear()
+        const yRange = scaleLinear()
             .range([
                 height - marginBottom - xAxisHeight,
                 marginTop,
             ]).domain(this.getYDomain());
 
         // Axes
-        const xAxis = d3.axisBottom(xRange)
+        const xAxis = axisBottom(xRange)
             .tickSize(1)
             .tickFormat(x => data.labels[x]);
-        const yAxis = d3.axisLeft(yRange)
+        const yAxis = axisLeft(yRange)
             .tickSize(1)
             .tickFormat(i => {
                 if (Math.ceil(i) !== Math.floor(i)) {
@@ -62,7 +65,7 @@ export default class LineChartBody extends Component {
             });
 
         // Wrapper
-        const vis = d3.select(elem)
+        const vis = d3Select(elem)
             .attr('class', 'line-chart')
             .attr('height', height)
             .attr('width', width)
@@ -74,13 +77,13 @@ export default class LineChartBody extends Component {
         grid.append('g')
             .attr('class', 'gridlines-x')
             .attr('transform', `translate(0, ${height - marginBottom - xAxisHeight})`)
-            .call(d3.axisBottom(xRange).tickSize(-(height - marginTop - marginBottom - xAxisHeight), 0, 0).tickFormat(''))
+            .call(axisBottom(xRange).tickSize(-(height - marginTop - marginBottom - xAxisHeight), 0, 0).tickFormat(''))
             .call(sel => sel.selectAll('line, .domain').style('stroke', 'rgba(0, 0, 0, 0.075)').style('stroke-width', '0.5px'));
 
         grid.append('g')
             .attr('class', 'gridlines-y')
             .attr('transform', `translate(${marginLeft}, 0)`)
-            .call(d3.axisLeft(yRange).tickSize(-(width - marginLeft - marginRight), 0, 0).tickFormat(''))
+            .call(axisLeft(yRange).tickSize(-(width - marginLeft - marginRight), 0, 0).tickFormat(''))
             .call(sel => sel.selectAll('line, .domain').style('stroke', 'rgba(0, 0, 0, 0.075)').style('stroke-width', '0.5px'));
 
 
@@ -139,10 +142,10 @@ export default class LineChartBody extends Component {
 
             const dataGroup = lines.append('g');
 
-            const line = d3.line()
+            const line = d3Line()
                 .x(d => xRange(d.i))
                 .y(d => yRange(d.value))
-                .curve(d3.curveMonotoneX);
+                .curve(curveMonotoneX);
 
             dataGroup.append('path')
                 .datum(data)

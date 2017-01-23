@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import xhr from 'pinecast-xhr';
 
 import AccountNumberField from './fields/AccountNumberField';
@@ -15,7 +15,7 @@ import OwnerField from './fields/OwnerField';
 import RoutingNumberField from './fields/RoutingNumberField';
 
 
-export default class BankForm extends React.Component {
+export default class BankForm extends Component {
     static selector = '.bank-info-form';
 
     static propExtraction = {

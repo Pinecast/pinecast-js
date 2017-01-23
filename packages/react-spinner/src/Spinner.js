@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 import './spinner.css';
 
 
-export default class Spinner extends React.Component {
+export default class Spinner extends Component {
     render() {
         return <div className='spinner'>
             <svg height='36' width='36' viewBox='0 0 18 18'>
