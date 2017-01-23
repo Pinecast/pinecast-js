@@ -133,11 +133,6 @@ const DEFAULT_GRANULARITIES = {
 };
 export const DEFAULT_GRANULARITY = 'daily';
 
-const GEO_GRAN_TIMEFRAMES = {
-    'month': gettext('1MO'),
-    'week': gettext('Week'),
-    'day': gettext('Day'),
-};
 export const TYPE_TIMEFRAMES = {
     [TYPE_SUBS]: {
         'year': gettext('Year'),
@@ -148,8 +143,14 @@ export const TYPE_TIMEFRAMES = {
         'all': gettext('All'),
         ...DEFAULT_TIMEFRAMES,
     },
-    [TYPE_GEO_GRAN_SUBS]: GEO_GRAN_TIMEFRAMES,
-    [TYPE_GEO_GRAN_LISTENS]: GEO_GRAN_TIMEFRAMES,
+    [TYPE_GEO_GRAN_SUBS]: {
+        day: gettext('Day'),
+    },
+    [TYPE_GEO_GRAN_LISTENS]: {
+        'month': gettext('1MO'),
+        'week': gettext('Week'),
+        'day': gettext('Day'),
+    },
 };
 export const TYPE_GRANULARITIES = {
     [TYPE_LISTENS]: DEFAULT_GRANULARITIES,
