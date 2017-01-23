@@ -56,7 +56,7 @@ module.exports = {
                     return callback(null, '{isatty:function() {}}');
                 case 'bluebird':
                     // For react-google-charts
-                    return callback(null, '{Promise: Promise}');
+                    return callback(null, 'Promise');
                 default:
                     return callback();
             }
