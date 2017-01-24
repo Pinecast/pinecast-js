@@ -40,7 +40,7 @@ export default class Menu extends BaseChart {
             return null;
         }
 
-        return Object.keys(this.state.data).sort()[0];
+        return this.state.data[0].value;
     }
 
     renderBody() {
@@ -59,10 +59,7 @@ export default class Menu extends BaseChart {
                 <Select
                     clearable={false}
                     onChange={({value}) => this.setState({choice: value})}
-                    options={Object.keys(data).sort().map(x => ({
-                        label: data[x],
-                        value: x,
-                    }))}
+                    options={data}
                     wrapperStyle={{flex: '1 1', zIndex: 99}}
                     value={choice}
                 />
