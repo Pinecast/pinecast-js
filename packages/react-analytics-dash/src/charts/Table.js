@@ -3,6 +3,7 @@ import React from 'react';
 import BaseChart from './BaseChart';
 import ChartEmptyState from './ChartEmptyState';
 import * as constants from '../constants';
+import CSVLink from '../CSVLink';
 
 
 export default class Table extends BaseChart {
@@ -46,5 +47,12 @@ export default class Table extends BaseChart {
         }
 
         return formattedValue;
+    }
+
+    renderTimeframeSelectorExtra() {
+        if (!this.state.data || !this.state.data.length) {
+            return null;
+        }
+        return <CSVLink data={this.state.data}>CSV</CSVLink>;
     }
 };

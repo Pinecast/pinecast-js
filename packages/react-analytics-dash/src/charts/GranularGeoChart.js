@@ -3,7 +3,11 @@ import React from 'react';
 
 import BaseChart from './BaseChart';
 import ChartEmptyState from './ChartEmptyState';
+import CSVLink from '../CSVLink';
 
+
+const header = ['Latitude', 'Longitude', 'Name', 'Count'];
+const extractor = x => [+x.lat, +x.lon, x.label, x.count];
 
 export default class GranularGeoChart extends BaseChart {
     renderData() {
@@ -13,10 +17,7 @@ export default class GranularGeoChart extends BaseChart {
         }
         return <Chart
             chartType='GeoChart'
-            data={[
-                ['Latitude', 'Longitude', 'Name', 'Count'],
-                ...data.sort((a, b) => a.count - b.count).map(x => [+x.lat, +x.lon, x.label, x.count]),
-            ]}
+            data={[header, ...data.map(extractor)]}
             height='600px'
             options={{
                 sizeAxis: {colors: ['white', 'green']},
@@ -28,6 +29,18 @@ export default class GranularGeoChart extends BaseChart {
             width={null}
         />;
     }
+
+    renderTimeframeSelectorExtra() {
+        if (!this.state.data || !this.state.data.length) {
+            return null;
+        }
+        return <CSVLink
+            data={[header, ...this.state.data.sort((a, b) => b.count - a.count).map(extractor)]}
+        >
+            CSV
+        </CSVLink>;
+    }
+
     renderBody() {
         return <div>
             {this.renderTimeframeSelector()}

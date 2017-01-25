@@ -3,6 +3,7 @@ import React from 'react';
 
 import BaseChart from './BaseChart';
 import ChartEmptyState from './ChartEmptyState';
+import CSVLink from '../CSVLink';
 
 
 export default class GeoChart extends BaseChart {
@@ -21,6 +22,14 @@ export default class GeoChart extends BaseChart {
             width={null}
         />;
     }
+
+    renderTimeframeSelectorExtra() {
+        if (!this.state.data || !this.state.data.length) {
+            return null;
+        }
+        return <CSVLink data={this.state.data}>CSV</CSVLink>;
+    }
+
     renderBody() {
         return <div>
             {this.renderTimeframeSelector()}
