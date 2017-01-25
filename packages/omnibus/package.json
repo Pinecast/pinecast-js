@@ -1,6 +1,6 @@
 {
   "name": "pinecast-omnibus",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A master JS bundle for Pinecast",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
   "homepage": "https://github.com/Pinecast/omnibus#readme",
   "dependencies": {
     "@mattbasta/time-input": "^1.3.2",
-    "pinecast-analytics-dash": "^2.0.1",
+    "pinecast-analytics-dash": "^2.1.0",
     "pinecast-bank-form": "^1.1.0",
     "pinecast-importer": "^1.1.0",
     "pinecast-uploader": "^1.1.0",
