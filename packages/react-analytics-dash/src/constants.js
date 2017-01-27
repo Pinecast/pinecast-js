@@ -131,6 +131,10 @@ const DEFAULT_GRANULARITIES = {
     'daily': gettext('Day'),
     'hourly': gettext('Hour'),
 };
+const ALL_TIMEFRAMES = {
+    'all': gettext('All'),
+    ...DEFAULT_TIMEFRAMES,
+};
 export const DEFAULT_GRANULARITY = 'daily';
 
 export const TYPE_TIMEFRAMES = {
@@ -139,10 +143,7 @@ export const TYPE_TIMEFRAMES = {
         'sixmonth': gettext('6MO'),
         'month': gettext('1MO'),
     },
-    [TYPE_LISTENS]: {
-        'all': gettext('All'),
-        ...DEFAULT_TIMEFRAMES,
-    },
+    [TYPE_LISTENS]: ALL_TIMEFRAMES,
     [TYPE_GEO_GRAN_SUBS]: {
         day: gettext('Day'),
     },
@@ -151,6 +152,7 @@ export const TYPE_TIMEFRAMES = {
         'week': gettext('Week'),
         'day': gettext('Day'),
     },
+    [TYPE_TOP_EPISODES]: ALL_TIMEFRAMES,
 };
 export const TYPE_GRANULARITIES = {
     [TYPE_LISTENS]: DEFAULT_GRANULARITIES,
