@@ -10,21 +10,21 @@ const TypePicker = ({onChange, type, typeType}) =>
     <Select
         clearable={false}
         onChange={({value}) => onChange(value)}
-        optionRenderer={({isPro, label}) =>
+        optionRenderer={({showProTag, label}) =>
             <span>
-                {isPro && <i className='pro-tag' style={{position: 'relative', top: -1, marginRight: 5}} />}
+                {showProTag && <i className='pro-tag' style={{position: 'relative', top: -1, marginRight: 5}} />}
                 {label}
             </span>}
         options={constants.TYPES[typeType].map(type => ({
-            isPro: constants.TYPES_CHART_REQUIRES[type] === 'pro',
+            showProTag: constants.TYPES_CHART_REQUIRES[type] === 'pro' && typeType !== 'network',
             label: constants.TYPES_NAMES[type],
             value: type,
         }))}
         wrapperStyle={{zIndex: 100}}
         value={type}
-        valueRenderer={({isPro, label}) =>
+        valueRenderer={({showProTag, label}) =>
             <strong>
-                {isPro && <i className='pro-tag' style={{position: 'relative', top: -1, marginRight: 5}} />}
+                {showProTag && <i className='pro-tag' style={{position: 'relative', top: -1, marginRight: 5}} />}
                 {label}
             </strong>}
     />;

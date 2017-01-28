@@ -121,9 +121,12 @@ export default class BaseChart extends Component {
                 timeframe,
                 xhr: null,
             });
+            this.gotData(data);
         });
         this.setState({xhr: req});
     }
+
+    gotData() {}
 
     getTimeframes() {
         const {type} = this.props;

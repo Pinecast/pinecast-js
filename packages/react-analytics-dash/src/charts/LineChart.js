@@ -31,6 +31,7 @@ export default class LineChart extends BaseChart {
             width: 200,
 
             displayType: 'line',
+            selectedSeries: null,
         };
 
         this.wrapper = null;
@@ -116,19 +117,29 @@ export default class LineChart extends BaseChart {
         this.setState({episodeListXHR});
     }
 
+    gotData(data) {
+        this.setState({selectedSeries: [...new Array(data.datasets.length)].fill(true)});
+    }
+
     renderData() {
         const {
-            state: {data, displayType, episodeList, width},
+            state: {data, displayType, episodeList, selectedSeries, width},
         } = this;
         if (!data || data.datasets.every(ds => !ds.data.length)) {
             return <ChartEmptyState />;
         }
 
         const startDate = this.getStartDate();
+        const filteredData = selectedSeries.every(x => x) ?
+            data :
+            {
+                ...data,
+                datasets: data.datasets.filter((_, i) => selectedSeries[i]),
+            };
         return <div>
             {displayType === 'line' &&
                 <LineChartBody
-                    data={data}
+                    data={filteredData}
                     episodeList={episodeList}
                     height={300}
                     startDate={startDate}
@@ -136,7 +147,7 @@ export default class LineChart extends BaseChart {
                 />}
             {displayType === 'area' &&
                 <AreaChartBody
-                    data={data}
+                    data={filteredData}
                     episodeList={episodeList}
                     height={300}
                     startDate={startDate}
@@ -146,7 +157,7 @@ export default class LineChart extends BaseChart {
     }
     renderLegend() {
         const {
-            state: {data},
+            state: {data, selectedSeries},
         } = this;
 
         if (!data || data.datasets.length < 2) {
@@ -155,18 +166,28 @@ export default class LineChart extends BaseChart {
 
         return <div>
             {data.datasets.map((x, i) =>
-                <div key={i}>
+                <div
+                    key={i}
+                    onClick={() => {
+                        const newSelection = [...selectedSeries];
+                        newSelection[i] = !newSelection[i];
+                        this.setState({selectedSeries: newSelection});
+                    }}
+                >
                     <b
                         style={{
-                            background: x.strokeColor,
+                            background: selectedSeries[i] ? x.strokeColor : '#fff',
+                            border: `1px solid ${x.strokeColor}`,
                             borderRadius: 2,
                             display: 'inline-block',
-                            height: 10,
+                            height: 8,
                             marginRight: 10,
-                            width: 10,
+                            width: 8,
                         }}
                     />
-                    {x.label}
+                    <span style={{opacity: selectedSeries[i] ? 1 : 0.5}}>
+                        {x.label}
+                    </span>
                 </div>)}
         </div>;
     }
