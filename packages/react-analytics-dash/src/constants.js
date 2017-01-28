@@ -21,6 +21,10 @@ export const TYPES = {
     network: [
         TYPE_LISTENS,
         TYPE_SUBS,
+        TYPE_GEO_LISTENS,
+        TYPE_GEO_GRAN_LISTENS,
+        TYPE_GEO_SUBS,
+        TYPE_GEO_GRAN_SUBS,
     ],
     podcast: [
         TYPE_LISTENS,
@@ -58,7 +62,11 @@ export const TYPES_ENDPOINTS = {
     },
     network: {
         [TYPE_LISTENS]: 'network/listens',
+        [TYPE_GEO_LISTENS]: 'network/listens/location',
+        [TYPE_GEO_GRAN_LISTENS]: 'network/listens/location/options',
         [TYPE_SUBS]: 'network/subscribers',
+        [TYPE_GEO_SUBS]: 'network/subscribers/location',
+        [TYPE_GEO_GRAN_SUBS]: 'network/subscribers/location/options',
     },
     podcast: {
         [TYPE_LISTENS]: 'podcast/listens',
@@ -77,7 +85,10 @@ export const TYPES_ENDPOINTS_MENU = {
     episode: {
         [TYPE_GEO_GRAN_LISTENS]: choice => `episode/listens/location/${encodeURIComponent(choice)}`,
     },
-    network: {},
+    network: {
+        [TYPE_GEO_GRAN_LISTENS]: choice => `network/listens/location/${encodeURIComponent(choice)}`,
+        [TYPE_GEO_GRAN_SUBS]: choice => `network/subscribers/location/${encodeURIComponent(choice)}`,
+    },
     podcast: {
         [TYPE_GEO_GRAN_LISTENS]: choice => `podcast/listens/location/${encodeURIComponent(choice)}`,
         [TYPE_GEO_GRAN_SUBS]: choice => `podcast/subscribers/location/${encodeURIComponent(choice)}`,
