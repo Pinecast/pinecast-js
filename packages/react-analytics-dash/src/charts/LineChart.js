@@ -32,6 +32,7 @@ export default class LineChart extends BaseChart {
 
             displayType: 'line',
             selectedSeries: null,
+            showEpisodes: true,
         };
 
         this.wrapper = null;
@@ -123,7 +124,7 @@ export default class LineChart extends BaseChart {
 
     renderData() {
         const {
-            state: {data, displayType, episodeList, selectedSeries, width},
+            state: {data, displayType, episodeList, selectedSeries, showEpisodes, width},
         } = this;
         if (!data || data.datasets.every(ds => !ds.data.length)) {
             return <ChartEmptyState />;
@@ -140,7 +141,7 @@ export default class LineChart extends BaseChart {
             {displayType === 'line' &&
                 <LineChartBody
                     data={filteredData}
-                    episodeList={episodeList}
+                    episodeList={showEpisodes ? episodeList : null}
                     height={300}
                     startDate={startDate}
                     width={width || 0}
@@ -148,7 +149,7 @@ export default class LineChart extends BaseChart {
             {displayType === 'area' &&
                 <AreaChartBody
                     data={filteredData}
-                    episodeList={episodeList}
+                    episodeList={showEpisodes ? episodeList : null}
                     height={300}
                     startDate={startDate}
                     width={width || 0}
@@ -194,21 +195,62 @@ export default class LineChart extends BaseChart {
 
     renderTimeframeSelectorExtra() {
         const {
-            state: {data, displayType},
+            state: {data, displayType, showEpisodes},
         } = this;
 
-        if (!data || data.datasets.length < 2) {
+        if (!data || !data.datasets.length) {
             return null;
         }
 
-        return <ChartOptionSelector
-            defaultSelection={displayType}
-            onChange={value => this.setState({displayType: value})}
-            options={{
-                area: gettext('Area'),
-                line: gettext('line'),
-            }}
-        />;
+        const out = [
+            <label
+                key='eptog'
+                style={{
+                    display: 'inline-block',
+                }}
+            >
+                <input
+                    checked={showEpisodes}
+                    onChange={e => this.setState({showEpisodes: e.target.checked})}
+                    style={{
+                        border: '1px solid #ccc',
+                        borderRadius: 3,
+                        display: 'inline-block',
+                        float: 'none',
+                        height: 13,
+                        margin: 0,
+                        verticalAlign: 'middle',
+                        width: 13,
+                    }}
+                    type='checkbox'
+                />
+                <span
+                    style={{
+                        display: 'inline-block',
+                        marginLeft: 5,
+                    }}
+                >
+                    Episodes
+                </span>
+            </label>,
+        ];
+
+        if (!data || data.datasets.length < 2) {
+            return out;
+        }
+
+        return [
+            <ChartOptionSelector
+                defaultSelection={displayType}
+                key='tfsel'
+                onChange={value => this.setState({displayType: value})}
+                options={{
+                    area: gettext('Area'),
+                    line: gettext('line'),
+                }}
+            />,
+            ...out,
+        ];
     }
 
     renderBody() {
