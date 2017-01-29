@@ -71,8 +71,8 @@ export default class SlugField extends Component {
             <label>
                 <span>{gettext('Slug')}</span>
                 <input
-                    defaultValue={this.props.defaultValue}
-                    maxLength={64}
+                    defaultValue={this.props.defaultValue.slice(0, 50)}
+                    maxLength={50}
                     ref={e => {
                         this.field = e;
                     }}
