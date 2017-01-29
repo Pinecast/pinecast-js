@@ -72,6 +72,7 @@ export default class Uploader extends Component {
                 }
                 detectImageProblems(fileObj).then(error => this.setState({error}));
             case 'audio/mp3':
+            case 'audio/mpeg':
             case 'audio/m4a':
             case 'audio/wav':
                 if (!this.props.audioDurationSelector) {
