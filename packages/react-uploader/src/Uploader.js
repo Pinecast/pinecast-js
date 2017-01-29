@@ -199,6 +199,23 @@ export default class Uploader extends Component {
         this.setState({uploadStart: Date.now()});
     }
 
+    renderRequiredPlaceholder() {
+        return <input
+            className='required-placeholder'
+            key='opf'
+            required
+            style={{
+                appearance: 'none',
+                WebkitAppearance: 'none',
+                height: 0,
+                opacity: 0.00001,
+                width: 0,
+            }}
+            title={gettext('You must upload a file')}
+            type='text'
+        />;
+    }
+
     renderBody() {
         const {
             props: {name: nameProp, optional},
@@ -222,11 +239,7 @@ export default class Uploader extends Component {
                     startTime={uploadStart}
                 />,
                 <ErrorComponent error={error} key='err' />,
-                optional || <input
-                    key='opf'
-                    required
-                    style={{display: 'none'}}
-                />,
+                optional || this.renderRequiredPlaceholder(),
             ];
         }
 
@@ -294,6 +307,7 @@ export default class Uploader extends Component {
                     required={!optional}
                     type='file'
                 />
+                {!optional && this.renderRequiredPlaceholder()}
             </label>;
         }
 
