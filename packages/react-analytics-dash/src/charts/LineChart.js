@@ -119,7 +119,7 @@ export default class LineChart extends BaseChart {
     }
 
     gotData(data) {
-        this.setState({selectedSeries: [...new Array(data.datasets.length)].fill(true)});
+        this.setState({selectedSeries: data.datasets.map(() => true)});
     }
 
     renderData() {
@@ -131,7 +131,7 @@ export default class LineChart extends BaseChart {
         }
 
         const startDate = this.getStartDate();
-        const filteredData = selectedSeries.every(x => x) ?
+        const filteredData = (selectedSeries || []).every(x => x) ?
             data :
             {
                 ...data,
@@ -170,6 +170,9 @@ export default class LineChart extends BaseChart {
                 <div
                     key={i}
                     onClick={() => {
+                        if (!selectedSeries) {
+                            return;
+                        }
                         const newSelection = [...selectedSeries];
                         newSelection[i] = !newSelection[i];
                         this.setState({selectedSeries: newSelection});
@@ -177,7 +180,7 @@ export default class LineChart extends BaseChart {
                 >
                     <b
                         style={{
-                            background: selectedSeries[i] ? x.strokeColor : '#fff',
+                            background: !selectedSeries || selectedSeries[i] ? x.strokeColor : '#fff',
                             border: `1px solid ${x.strokeColor}`,
                             borderRadius: 2,
                             display: 'inline-block',
@@ -186,7 +189,7 @@ export default class LineChart extends BaseChart {
                             width: 8,
                         }}
                     />
-                    <span style={{opacity: selectedSeries[i] ? 1 : 0.5}}>
+                    <span style={{opacity: !selectedSeries || selectedSeries[i] ? 1 : 0.5}}>
                         {x.label}
                     </span>
                 </div>)}
