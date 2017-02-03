@@ -6,6 +6,7 @@ import AreaChartBody from './lineChartComponents/AreaChartBody';
 import BaseChart from './BaseChart';
 import ChartEmptyState from './ChartEmptyState';
 import ChartOptionSelector from '../optionSelector';
+import {TYPES_SHOW_TOTAL} from '../constants';
 import LineChartBody from './lineChartComponents/LineChartBody';
 
 
@@ -158,14 +159,27 @@ export default class LineChart extends BaseChart {
     }
     renderLegend() {
         const {
+            props: {type},
             state: {data, selectedSeries},
         } = this;
 
+        function getTotal() {
+            return gettext('Total: ') + data.datasets.reduce(
+                (acc, cur) => acc + cur.data.reduce((acc2, cur2) => acc2 + cur2, 0),
+                0
+            );
+        }
+
         if (!data || data.datasets.length < 2) {
-            return null;
+            if (TYPES_SHOW_TOTAL[type]) {
+                return <span>{getTotal()}</span>;
+            } else {
+                return null;
+            }
         }
 
         return <div>
+            <div>{getTotal()}</div>
             {data.datasets.map((x, i) =>
                 <div
                     key={i}

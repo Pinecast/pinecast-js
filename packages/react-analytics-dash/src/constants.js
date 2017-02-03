@@ -125,6 +125,10 @@ export const TYPES_CHART_REQUIRES = {
     [TYPE_TOP_EPISODES]: 'pro',
 };
 
+export const TYPES_SHOW_TOTAL = {
+    [TYPE_LISTENS]: true,
+};
+
 
 export const DEFAULT_TIMEFRAMES = {
     // 'all': gettext('All'),
