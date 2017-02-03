@@ -50,7 +50,7 @@ export default class Step1 extends Component {
                 this.setState({progress: 60});
 
                 const parsed = JSON.parse(body);
-                this.processFeed(parsed.content);
+                this.processFeed(parsed.content, url);
             });
 
         });
@@ -58,7 +58,7 @@ export default class Step1 extends Component {
         this.setState({loading: true, progress: 0});
     }
 
-    processFeed(feed) {
+    processFeed(feed, feedURL) {
         xhr({
             method: 'post',
             form: {feed},
@@ -92,7 +92,7 @@ export default class Step1 extends Component {
                 return;
             }
 
-            this.props.onNextStep(parsed);
+            this.props.onNextStep(parsed, feedURL);
 
         });
     }

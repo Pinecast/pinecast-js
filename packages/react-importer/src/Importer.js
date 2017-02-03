@@ -19,6 +19,7 @@ export default class Importer extends Component {
             step: 1,
 
             feed: null,
+            feedURL: null,
         };
     }
 
@@ -26,7 +27,7 @@ export default class Importer extends Component {
         switch (this.state.step) {
             case 1:
                 return <Step1
-                    onNextStep={parsedFeed => this.setState({step: 2, feed: parsedFeed})}
+                    onNextStep={(feed, feedURL) => this.setState({step: 2, feed, feedURL})}
                     rssFetch={this.props.rssFetch}
                 />;
             case 2:
@@ -36,8 +37,8 @@ export default class Importer extends Component {
                 />;
             case 3:
                 return <Step3
-                    // onNextStep={updatedFeed => this.setState({step: 3, feed: updatedFeed})}
                     feed={this.state.feed}
+                    feedURL={this.state.feedURL}
                 />;
         }
     }

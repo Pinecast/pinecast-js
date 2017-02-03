@@ -96,7 +96,68 @@ export default class Step3 extends Component {
         if (failed) {
             return <abbr title={error}>{gettext('Failed')}</abbr>;
         }
-        return gettext('Complete');
+        return <span>
+            <i className='icon icon-ok' style={{color: '#56D3C9'}} />
+            {gettext('Complete')}
+        </span>;
+    }
+
+    getFeedSource() {
+        const {feedURL} = this.props;
+        if (/libsyn/i.exec(feedURL)) {
+            return 'libsyn';
+        } else if (/soundcloud/i.exec(feedURL)) {
+            return 'soundcloud';
+        } else if (/podbean/i.exec(feedURL)) {
+            return 'podbean';
+        } else if (/buzzsprout/i.exec(feedURL)) {
+            return 'buzzsprout';
+        }
+    }
+
+    renderWhatsNext() {
+        const feedSource = this.getFeedSource();
+        if (!feedSource) {
+            return null;
+        }
+
+        function renderBody() {
+            switch (feedSource) {
+                case 'libsyn':
+                    return <a href='https://support.libsyn.com/faqs/rss-feed-creating-a-redirect/'>
+                        {gettext('Setting up a redirect from LibSyn...')}
+                    </a>;
+                case 'soundcloud':
+                    return <a href='http://podcasting.help.soundcloud.com/customer/portal/articles/2162171-redirecting-your-rss-feed-to-another-host'>
+                        {gettext('Setting up a redirect from SoundCloud...')}
+                    </a>;
+                case 'podbean':
+                    return <a href='http://support.podbean.com/customer/en/portal/articles/1350413-podbean-%7C-how-to-set-a-new-feed-url?b_id=4193'>
+                        {gettext('Setting up a redirect from PodBean...')}
+                    </a>;
+                case 'buzzsprout':
+                    return <a href='https://www.buzzsprout.com/help/9-transfer-away-from-buzzsprout'>
+                        {gettext('Setting up a redirect from Buzzsprout...')}
+                    </a>;
+            }
+            return null;
+        }
+
+        return <div
+            className='panel'
+            style={{
+                flexWrap: 'nowrap',
+                flexDirection: 'column',
+            }}
+        >
+            <b>{gettext("What's Next")}</b>
+            <p>{gettext('Next, you should set up a redirect from your old feed to your new Pinecast feed.')}</p>
+            <p>
+                {gettext("You can find instructions on your provider's website:")}
+                <br />
+                {renderBody()}
+            </p>
+        </div>;
     }
 
     renderStatus() {
@@ -107,7 +168,7 @@ export default class Step3 extends Component {
         }
 
         if (!importing) {
-            return <div style={{display: 'flex', justifyContent: 'center'}}>
+            return <div style={{display: 'flex', justifyContent: 'center', padding: '40px 0'}}>
                 <Spinner />
             </div>;
         }
@@ -127,6 +188,7 @@ export default class Step3 extends Component {
                         {gettext('Visit podcast dashboard...')}
                     </a>
                 </p>}
+            {progress === 1 && this.renderWhatsNext()}
 
             <table>
                 <thead>
@@ -140,7 +202,14 @@ export default class Step3 extends Component {
                         const elem = elements[elemKey];
                         return <tr key={elemKey}>
                             <td>
-                                {this.getElementTaskType(elem)}
+                                <div style={{
+                                    maxWidth: 400,
+                                    overflowX: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                }}>
+                                    {this.getElementTaskType(elem)}
+                                </div>
                             </td>
                             <td>
                                 {this.getElementTaskStatus(elem)}
