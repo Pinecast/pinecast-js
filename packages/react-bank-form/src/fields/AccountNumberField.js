@@ -5,7 +5,7 @@ import {FieldComponent} from './FieldComponent';
 
 export default class AccountNumberField extends FieldComponent {
     get isValid() {
-        return super.isValid && Stripe.bankAccount.validateAccountNumber(this.value, 'US');
+        return super.isValid && Stripe.bankAccount.validateAccountNumber(this.value, this.props.country);
     }
 
     render() {

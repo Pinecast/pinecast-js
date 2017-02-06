@@ -15,7 +15,8 @@
   "dependencies": {
     "pinecast-xhr": "^1.0.4",
     "react": "^15.4.1",
-    "react-dom": "^15.4.1"
+    "react-dom": "^15.4.1",
+    "react-select": "^1.0.0-rc.3"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

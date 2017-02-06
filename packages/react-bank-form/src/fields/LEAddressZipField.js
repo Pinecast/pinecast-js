@@ -15,7 +15,8 @@ export default class ZipField extends FieldComponent {
                 maxLength={5}
                 name='zip'
                 onInput={this.setEmpty.bind(this, 'zip-field')}
-                pattern='\d{5}' />
+                pattern='\d{5}'
+                style={{flex: '0 0 120px', textAlign: 'center'}} />
         </label>;
     }
 };

@@ -15,7 +15,8 @@ export default class LEAddressStateField extends FieldComponent {
                 onInput={this.setEmpty.bind(this, `leaddressstate-field`)}
                 pattern='[A-Z][A-Z]'
                 ref='field'
-                required={true} />
+                required={true}
+                style={{flex: '0 0 70px', textAlign: 'center'}} />
         </label>;
     }
 };

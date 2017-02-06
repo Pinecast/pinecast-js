@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
+import Select from 'react-select';
 import xhr from 'pinecast-xhr';
 
+import 'react-select/dist/react-select.css';
+
 import AccountNumberField from './fields/AccountNumberField';
+import * as currencies from './currencies';
 import LEAddressCityField from './fields/LEAddressCityField';
+import LEAddressCountryField from './fields/LEAddressCountryField';
 import LEAddressStateField from './fields/LEAddressStateField';
 import LEAddressSecondField from './fields/LEAddressSecondField';
 import LEAddressStreetField from './fields/LEAddressStreetField';
@@ -20,6 +25,9 @@ export default class BankForm extends Component {
 
     static propExtraction = {
         hasExisting: e => e.getAttribute('data-has-existing') === 'true',
+
+        existingCountry: e => e.getAttribute('data-country'),
+        existingCurrency: e => e.getAttribute('data-currency'),
     };
 
     constructor(props) {
@@ -28,9 +36,13 @@ export default class BankForm extends Component {
             error: null,
             saving: false,
 
-            collapsed: !!this.props.hasExisting,
+            collapsed: !!props.hasExisting,
+
+            bankCountry: props.existingCountry || 'us',
+            bankCurrency: props.existingCurrency || 'usd',
         };
     }
+
 
     save(e) {
         e.preventDefault();
@@ -46,8 +58,8 @@ export default class BankForm extends Component {
         this.setState({saving: true, error: null});
 
         Stripe.bankAccount.createToken({
-            country: 'US',
-            currency: 'USD',
+            country: this.state.bankCountry,
+            currency: this.state.bankCurrency,
 
             routing_number: this.refs.routing.value,
             account_number: this.refs.account.value,
@@ -77,6 +89,7 @@ export default class BankForm extends Component {
                 addressCity: this.refs.leaddresscity.value,
                 addressState: this.refs.leaddressstate.value,
                 addressZip: this.refs.leaddresszip.value,
+                addressCountry: this.refs.leaddresscountry.value,
                 dob: this.refs.ledob.value.toISOString(),
                 firstName: this.refs.lefn.value,
                 lastName: this.refs.leln.value,
@@ -112,7 +125,12 @@ export default class BankForm extends Component {
     }
 
     render() {
-        if (this.state.collapsed) {
+        const {
+            props: {hasExisting},
+            state: {bankCountry, bankCurrency, collapsed, error, saving},
+        } = this;
+
+        if (collapsed) {
             return <button className='bank-form-update-account-btn'
                 onClick={() => this.setState({collapsed: false})}
                 type='button'>
@@ -127,7 +145,7 @@ export default class BankForm extends Component {
                 flexDirection: 'column',
             }}>
 
-            {this.state.error && <div className='error'>{this.state.error}</div>}
+            {error && <div className='error'>{error}</div>}
 
             <LEFirstNameField ref='lefn' />
             <LELastNameField ref='leln' />
@@ -141,16 +159,51 @@ export default class BankForm extends Component {
             <LEAddressCityField ref='leaddresscity' />
             <LEAddressStateField ref='leaddressstate' />
             <LEAddressZipField ref='leaddresszip' />
+            <LEAddressCountryField ref='leaddresscountry' />
 
             <hr />
 
+            {!hasExisting &&
+                <label>
+                    <span>{gettext('Bank Country')}</span>
+                    <Select
+                        clearable={false}
+                        onChange={({value}) => {
+                            this.setState({
+                                bankCountry: value,
+                                bankCurrency: currencies.countriesToCurrencies[value][0]
+                            });
+                        }}
+                        options={[
+                            {label: 'United States', value: 'us'},
+                            {label: 'Australia', value: 'au'},
+                            {label: 'Canada', value: 'ca'},
+                            {label: 'United Kingdom', value: 'gb'},
+                        ]}
+                        value={bankCountry}
+                    />
+                </label>}
+
+            {currencies.countriesToCurrencies[bankCountry].length > 1 &&
+                <label>
+                    <span>{gettext('Account Currency')}</span>
+                    <Select
+                        clearable={false}
+                        onChange={({value}) => this.setState({bankCurrency: value})}
+                        options={
+                            currencies.countriesToCurrencies[bankCountry].map(value => ({label: currencies.names[key], value}))
+                        }
+                        value={bankCurrency}
+                    />
+                </label>}
+
             <OwnerField ref='owner' />
 
-            <RoutingNumberField ref='routing' />
-            <AccountNumberField ref='account' />
+            <RoutingNumberField ref='routing' country={bankCountry} />
+            <AccountNumberField ref='account' country={bankCountry} />
 
             <div>
-                <button className='btn' disabled={this.state.saving}>
+                <button className='btn' disabled={saving}>
                     {gettext('Set Bank Account')}
                 </button>
             </div>

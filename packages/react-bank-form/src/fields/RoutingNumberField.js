@@ -5,7 +5,7 @@ import {FieldComponent} from './FieldComponent';
 
 export default class RoutingNumberField extends FieldComponent {
     get isValid() {
-        return super.isValid && Stripe.bankAccount.validateRoutingNumber(this.value, 'US');
+        return super.isValid && Stripe.bankAccount.validateRoutingNumber(this.value, this.props.country);
     }
 
     render() {
@@ -17,8 +17,7 @@ export default class RoutingNumberField extends FieldComponent {
                 ref='field'
                 required={true}
                 maxLength={9}
-                onInput={this.setEmpty.bind(this, 'routing-field')}
-                pattern='\d\d\d\d[\d\-][\d\-]?\d*' />
+                onInput={this.setEmpty.bind(this, 'routing-field')} />
         </label>;
     }
 };
