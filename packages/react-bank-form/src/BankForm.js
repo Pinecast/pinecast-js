@@ -7,7 +7,6 @@ import 'react-select/dist/react-select.css';
 import AccountNumberField from './fields/AccountNumberField';
 import * as currencies from './currencies';
 import LEAddressCityField from './fields/LEAddressCityField';
-import LEAddressCountryField from './fields/LEAddressCountryField';
 import LEAddressStateField from './fields/LEAddressStateField';
 import LEAddressSecondField from './fields/LEAddressSecondField';
 import LEAddressStreetField from './fields/LEAddressStreetField';
@@ -20,13 +19,22 @@ import OwnerField from './fields/OwnerField';
 import RoutingNumberField from './fields/RoutingNumberField';
 
 
+const countryOptions = [
+    {label: 'United States', value: 'us'},
+    {label: 'Australia', value: 'au'},
+    {label: 'Canada', value: 'ca'},
+    {label: 'United Kingdom', value: 'gb'},
+];
+
+
 export default class BankForm extends Component {
     static selector = '.bank-info-form';
 
     static propExtraction = {
         hasExisting: e => e.getAttribute('data-has-existing') === 'true',
 
-        existingCountry: e => e.getAttribute('data-country'),
+        entityCountry: e => e.getAttribute('data-entity-country'),
+        existingCountry: e => e.getAttribute('data-bank-country'),
         existingCurrency: e => e.getAttribute('data-currency'),
     };
 
@@ -38,8 +46,9 @@ export default class BankForm extends Component {
 
             collapsed: !!props.hasExisting,
 
-            bankCountry: props.existingCountry || 'us',
-            bankCurrency: props.existingCurrency || 'usd',
+            entityCountry: (props.entityCountry || 'us').toLowerCase(),
+            bankCountry: (props.existingCountry || 'us').toLowerCase(),
+            bankCurrency: (props.existingCurrency || 'usd').toLowerCase(),
         };
     }
 
@@ -89,11 +98,11 @@ export default class BankForm extends Component {
                 addressCity: this.refs.leaddresscity.value,
                 addressState: this.refs.leaddressstate.value,
                 addressZip: this.refs.leaddresszip.value,
-                addressCountry: this.refs.leaddresscountry.value,
+                addressCountry: this.state.entityCountry,
                 dob: this.refs.ledob.value.toISOString(),
                 firstName: this.refs.lefn.value,
                 lastName: this.refs.leln.value,
-                ssnLastFour: this.refs.ssnlf.value,
+                ssnLastFour: this.refs.ssnlf ? this.refs.ssnlf.value : '',
             },
             url: '/payments/services/set_tip_cashout',
         }, (err, res, body) => {
@@ -118,7 +127,7 @@ export default class BankForm extends Component {
             this.refs.leaddresscity.isValid &&
             this.refs.leaddressstate.isValid &&
             this.refs.leaddresszip.isValid &&
-            this.refs.ssnlf.isValid &&
+            (!this.refs.ssnlf || this.refs.ssnlf.isValid) &&
             this.refs.lefn.isValid &&
             this.refs.leln.isValid &&
             this.refs.ledob.isValid;
@@ -127,72 +136,115 @@ export default class BankForm extends Component {
     render() {
         const {
             props: {hasExisting},
-            state: {bankCountry, bankCurrency, collapsed, error, saving},
+            state: {bankCountry, bankCurrency, collapsed, entityCountry, error, saving},
         } = this;
 
         if (collapsed) {
-            return <button className='bank-form-update-account-btn'
-                onClick={() => this.setState({collapsed: false})}
-                type='button'>
-                <span>{gettext('Update Account')}</span>
-                <i className='arrowicon' />
-            </button>;
+            return <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    padding: '40px 0',
+                }}
+            >
+                <button className='bank-form-update-account-btn'
+                    onClick={() => this.setState({collapsed: false})}
+                    type='button'>
+                    <span>{gettext('Update Account')}</span>
+                    <i className='arrowicon' />
+                </button>
+            </div>;
         }
+
+        const availableCurrencies = (
+            currencies
+                .countriesToCurrencies[entityCountry]
+                .filter(x => currencies.countriesToCurrencies[bankCountry].indexOf(x) !== -1)
+        );
+
         return <form className='bank-form'
             onSubmit={this.save.bind(this)}
             style={{
                 display: 'flex',
                 flexDirection: 'column',
+                paddingTop: 0,
             }}>
 
             {error && <div className='error'>{error}</div>}
 
+            <aside>
+                <p>
+                    {gettext('This information should reflect the owner of the podcast. These details will be used for tax purposes, if necessary.')}
+                </p>
+                {hasExisting && <p>{gettext('To change an account country, please contact Pinecast support.')}</p>}
+            </aside>
+
             <LEFirstNameField ref='lefn' />
             <LELastNameField ref='leln' />
-            <LEDOBField ref='ledob' />
-            <LESSNLastFourField ref='ssnlf' />
-
-            <hr />
 
             <LEAddressStreetField ref='leaddressstr' />
             <LEAddressSecondField ref='leaddresssec' />
             <LEAddressCityField ref='leaddresscity' />
-            <LEAddressStateField ref='leaddressstate' />
+            <LEAddressStateField ref='leaddressstate' country={entityCountry} />
             <LEAddressZipField ref='leaddresszip' />
-            <LEAddressCountryField ref='leaddresscountry' />
-
-            <hr />
-
             {!hasExisting &&
                 <label>
-                    <span>{gettext('Bank Country')}</span>
+                    <span>{gettext('Country')}</span>
                     <Select
                         clearable={false}
                         onChange={({value}) => {
                             this.setState({
+                                entityCountry: value,
                                 bankCountry: value,
-                                bankCurrency: currencies.countriesToCurrencies[value][0]
+                                bankCurrency: currencies.countriesToCurrencies[value][0],
                             });
                         }}
-                        options={[
-                            {label: 'United States', value: 'us'},
-                            {label: 'Australia', value: 'au'},
-                            {label: 'Canada', value: 'ca'},
-                            {label: 'United Kingdom', value: 'gb'},
-                        ]}
-                        value={bankCountry}
+                        options={countryOptions}
+                        value={entityCountry}
                     />
                 </label>}
 
-            {currencies.countriesToCurrencies[bankCountry].length > 1 &&
+            <hr />
+
+            <div style={{position: 'relative'}}>
+                <aside className='aside--secure'>
+                    <strong>{gettext('Personal Details')}</strong>
+                    <p>
+                        {gettext('Stripe uses these details to verify your identity and prevent fraud.')}
+                    </p>
+                </aside>
+
+                <LEDOBField ref='ledob' />
+                {entityCountry === 'us' && <LESSNLastFourField ref='ssnlf' />}
+            </div>
+            <hr />
+
+            <label>
+                <span>{gettext('Bank Country')}</span>
+                <Select
+                    clearable={false}
+                    onChange={({value}) => {
+                        this.setState({bankCountry: value});
+                        if (!currencies.countriesToCurrencies[value].some(x => x === bankCurrency)) {
+                            this.setState({bankCurrency: currencies.countriesToCurrencies[value][0]});
+                        }
+                    }}
+                    options={countryOptions.filter(({value}) => {
+                        const bankCountryCurrencies = currencies.countriesToCurrencies[value];
+                        const entityCountryCurrencies = currencies.countriesToCurrencies[entityCountry];
+                        return bankCountryCurrencies.some(x => entityCountryCurrencies.indexOf(x) !== -1);
+                    })}
+                    value={bankCountry}
+                />
+            </label>
+
+            {availableCurrencies.length > 1 &&
                 <label>
                     <span>{gettext('Account Currency')}</span>
                     <Select
                         clearable={false}
                         onChange={({value}) => this.setState({bankCurrency: value})}
-                        options={
-                            currencies.countriesToCurrencies[bankCountry].map(value => ({label: currencies.names[key], value}))
-                        }
+                        options={availableCurrencies.map(value => ({label: currencies.names[value], value}))}
                         value={bankCurrency}
                     />
                 </label>}

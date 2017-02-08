@@ -13,7 +13,8 @@ export default class LESSNLastFourField extends FieldComponent {
                 required={true}
                 maxLength={4}
                 onInput={this.setEmpty.bind(this, 'ssn-field')}
-                pattern='\d{4}' />
+                pattern='\d{4}'
+                style={{flex: '0 0 120px', textAlign: 'center'}} />
         </label>;
     }
 };

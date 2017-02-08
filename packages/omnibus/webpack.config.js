@@ -28,9 +28,9 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': '"production"',
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            mangle: {},
-        }),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     mangle: {},
+        // }),
         new webpack.LoaderOptionsPlugin({minimize: true}),
     ],
     module: {
