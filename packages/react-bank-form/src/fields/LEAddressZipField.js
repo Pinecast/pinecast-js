@@ -12,7 +12,6 @@ export default class ZipField extends FieldComponent {
                 className='zip-field is-empty'
                 ref='field'
                 required={true}
-                maxLength={5}
                 name='zip'
                 onInput={this.setEmpty.bind(this, 'zip-field')}
                 style={{flex: '0 0 120px', textAlign: 'center'}} />
