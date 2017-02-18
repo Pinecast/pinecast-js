@@ -194,6 +194,9 @@ export default class LineChart extends BaseChart {
                         }
                         const newSelection = [...selectedSeries];
                         newSelection[i] = !newSelection[i];
+                        if (newSelection.every(x => !x)) {
+                            return;
+                        }
                         this.setState({selectedSeries: newSelection});
                     }}
                 >
