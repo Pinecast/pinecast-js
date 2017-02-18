@@ -6,6 +6,7 @@ import AreaChartBody from './lineChartComponents/AreaChartBody';
 import BaseChart from './BaseChart';
 import ChartEmptyState from './ChartEmptyState';
 import ChartOptionSelector from '../optionSelector';
+import * as constants from '../constants';
 import {TYPES_SHOW_TOTAL} from '../constants';
 import LineChartBody from './lineChartComponents/LineChartBody';
 
@@ -31,7 +32,7 @@ export default class LineChart extends BaseChart {
 
             width: 200,
 
-            displayType: 'line',
+            displayType: constants.LINE_CHART_DEFAULT_DISPLAY_OVERRIDE[this.props.type] || 'line',
             selectedSeries: null,
             showEpisodes: true,
         };
@@ -45,6 +46,19 @@ export default class LineChart extends BaseChart {
         this.widthCalcer = setInterval(() => this.calcWidth(), 250);
         this.calcWidth();
     }
+
+    componentWillReceiveProps(newProps) {
+        super.componentWillReceiveProps(newProps);
+        const {type: newType} = newProps;
+        if (newType !== this.props.type) {
+            if (newType in constants.LINE_CHART_DEFAULT_DISPLAY_OVERRIDE) {
+                this.setState({displayType: constants.LINE_CHART_DEFAULT_DISPLAY_OVERRIDE[newType]});
+            } else {
+                this.setState({displayType: 'line'});
+            }
+        }
+    }
+
     componentWillUnmount() {
         super.componentWillUnmount();
         if (this.state.episodeListXHR) {

@@ -98,7 +98,7 @@ export const TYPES_ENDPOINTS_MENU = {
 export const TYPES_CHART_TYPES = {
     [TYPE_LISTENS]: 'line',
     [TYPE_SUBS]: 'line',
-    [TYPE_BY_SOURCE]: 'pie',
+    [TYPE_BY_SOURCE]: 'line',
     [TYPE_BY_AGENT]: 'pie',
     [TYPE_BY_OS]: 'pie',
     [TYPE_GEO_SUBS]: 'geo',
@@ -159,6 +159,7 @@ export const TYPE_TIMEFRAMES = {
         'month': gettext('1MO'),
     },
     [TYPE_LISTENS]: ALL_TIMEFRAMES,
+    [TYPE_BY_SOURCE]: ALL_TIMEFRAMES,
     [TYPE_GEO_GRAN_SUBS]: {
         day: gettext('Day'),
     },
@@ -171,9 +172,14 @@ export const TYPE_TIMEFRAMES = {
 };
 export const TYPE_GRANULARITIES = {
     [TYPE_LISTENS]: DEFAULT_GRANULARITIES,
+    [TYPE_BY_SOURCE]: DEFAULT_GRANULARITIES,
 };
 
 export const MENU_LABELS = {
     [TYPE_GEO_GRAN_LISTENS]: gettext('Country:'),
     [TYPE_GEO_GRAN_SUBS]: gettext('Country:'),
+};
+
+export const LINE_CHART_DEFAULT_DISPLAY_OVERRIDE = {
+    [TYPE_BY_SOURCE]: 'area',
 };
