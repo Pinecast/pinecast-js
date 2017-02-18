@@ -165,7 +165,12 @@ export default class LineChart extends BaseChart {
 
         function getTotal() {
             return gettext('Total: ') + data.datasets.reduce(
-                (acc, cur) => acc + cur.data.reduce((acc2, cur2) => acc2 + cur2, 0),
+                (acc, cur, i) => {
+                    if (selectedSeries && !selectedSeries[i]) {
+                        return acc;
+                    }
+                    return acc + cur.data.reduce((acc2, cur2) => acc2 + cur2, 0);
+                },
                 0
             );
         }
