@@ -52,7 +52,7 @@ export default function draw(startDate, data, rawEpisodeData, elem, innerWidth) 
         .classed('flag', true)
         .attr('r', NODE_SIZE / 2)
         .style('cursor', 'pointer')
-        .style('fill', d => pointColors.get(d.data.podcastSlug) || 'rgba(48, 63, 159, 0.5)');
+        .style('fill', d => pointColors.get(d.data.podcastSlug) || 'rgba(50, 50, 50, 0.5)');
 
     // Draw path from point on the timeline to the label rectangle
     linkLayer.selectAll('path.link')

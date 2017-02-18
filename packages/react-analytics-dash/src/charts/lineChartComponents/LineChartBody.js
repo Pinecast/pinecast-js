@@ -162,9 +162,9 @@ export default class LineChartBody extends Component {
                 .append('circle')
                 .attr('cx', d => xRange(d.i))
                 .attr('cy', d => yRange(d.value))
-                .attr('r', 4.5)
+                .attr('r', d => d.value ? 4.5 : 2.5)
                 .style('fill', dataset.pointColor)
-                .style('stroke', '#fff')
+                .style('stroke', d => d.value ? '#fff' : 'transparent')
                 .style('stroke-width', '2px');
         });
         return lines;
