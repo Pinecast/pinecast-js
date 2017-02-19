@@ -23,6 +23,7 @@
     "pinecast-spinner": "^1.2.0",
     "pinecast-xhr": "^1.0.4",
     "react": "^15.4.1",
+    "react-datepicker": "^0.41.1",
     "react-dom": "^15.4.1",
     "react-faux-dom": "^3.0.0",
     "react-google-charts": "^1.2.1",
