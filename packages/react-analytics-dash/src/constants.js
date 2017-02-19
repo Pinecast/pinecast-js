@@ -1,5 +1,6 @@
 export const TYPE_LISTENS = 'listen';
 export const TYPE_SUBS = 'subscribers';
+export const TYPE_BY_EPISODE = 'listen_by_episode';
 export const TYPE_BY_SOURCE = 'listen_by_source';
 export const TYPE_BY_AGENT = 'listen_by_agent';
 export const TYPE_BY_OS = 'listen_by_os';
@@ -29,6 +30,7 @@ export const TYPES = {
     podcast: [
         TYPE_LISTENS,
         TYPE_SUBS,
+        TYPE_BY_EPISODE,
         TYPE_BY_SOURCE,
         TYPE_BY_AGENT,
         TYPE_BY_OS,
@@ -43,6 +45,7 @@ export const TYPES = {
 export const TYPES_NAMES = {
     [TYPE_LISTENS]: gettext('Listens'),
     [TYPE_SUBS]: gettext('Subscribers'),
+    [TYPE_BY_EPISODE]: gettext('Listens by Episode'),
     [TYPE_BY_SOURCE]: gettext('Listens by Source'),
     [TYPE_BY_AGENT]: gettext('Listens by Agent'),
     [TYPE_BY_OS]: gettext('Listens by OS'),
@@ -70,6 +73,7 @@ export const TYPES_ENDPOINTS = {
     },
     podcast: {
         [TYPE_LISTENS]: 'podcast/listens',
+        [TYPE_BY_EPISODE]: 'podcast/listens/episode',
         [TYPE_BY_SOURCE]: 'podcast/listens/breakdown',
         [TYPE_BY_AGENT]: 'podcast/listens/agent',
         [TYPE_BY_OS]: 'podcast/listens/os',
@@ -98,6 +102,7 @@ export const TYPES_ENDPOINTS_MENU = {
 export const TYPES_CHART_TYPES = {
     [TYPE_LISTENS]: 'line',
     [TYPE_SUBS]: 'line',
+    [TYPE_BY_EPISODE]: 'line',
     [TYPE_BY_SOURCE]: 'line',
     [TYPE_BY_AGENT]: 'pie',
     [TYPE_BY_OS]: 'pie',
@@ -115,6 +120,7 @@ export const TYPES_CHART_MENU_TYPES = {
 export const TYPES_CHART_REQUIRES = {
     [TYPE_LISTENS]: null,
     [TYPE_SUBS]: null,
+    [TYPE_BY_EPISODE]: 'starter',
     [TYPE_BY_SOURCE]: null,
     [TYPE_BY_AGENT]: 'starter',
     [TYPE_BY_OS]: 'starter',
@@ -159,6 +165,7 @@ export const TYPE_TIMEFRAMES = {
         'month': gettext('1MO'),
     },
     [TYPE_LISTENS]: ALL_TIMEFRAMES,
+    [TYPE_BY_EPISODE]: ALL_TIMEFRAMES,
     [TYPE_BY_SOURCE]: ALL_TIMEFRAMES,
     [TYPE_GEO_GRAN_SUBS]: {
         day: gettext('Day'),
@@ -172,6 +179,7 @@ export const TYPE_TIMEFRAMES = {
 };
 export const TYPE_GRANULARITIES = {
     [TYPE_LISTENS]: DEFAULT_GRANULARITIES,
+    [TYPE_BY_EPISODE]: DEFAULT_GRANULARITIES,
     [TYPE_BY_SOURCE]: DEFAULT_GRANULARITIES,
 };
 
@@ -181,5 +189,6 @@ export const MENU_LABELS = {
 };
 
 export const LINE_CHART_DEFAULT_DISPLAY_OVERRIDE = {
+    [TYPE_BY_EPISODE]: 'area',
     [TYPE_BY_SOURCE]: 'area',
 };
