@@ -226,7 +226,7 @@ export default class LineChart extends BaseChart {
                         }}
                     />
                     <span style={{opacity: !selectedSeries || selectedSeries[i] ? 1 : 0.5}}>
-                        {x.label}
+                        {`${x.label} (${x.data.reduce((acc, cur) => acc + cur, 0)})`}
                     </span>
                 </div>)}
         </div>;
