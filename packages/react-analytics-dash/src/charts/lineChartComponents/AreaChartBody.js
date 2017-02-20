@@ -23,6 +23,7 @@ export default class AreaChartBody extends LineChartBody {
     }
 
     renderLines(vis, data, xRange, yRange) {
+        const {hovering} = this.props;
         const lines = vis.append('g').attr('class', 'lines');
 
         const keys = data.datasets.map((_, i) => `key_${i}`);
@@ -53,7 +54,7 @@ export default class AreaChartBody extends LineChartBody {
             .attr('class', 'streamPath')
             .attr('d', area)
             .style('fill', d => data.datasets[d.index].pointColor)
-            .style('opacity', 0.6)
+            .style('opacity', d => hovering === d.index ? 1 : 0.6)
             .style('stroke', d => data.datasets[d.index].pointColor)
             .style('stroke-width', '2px');
 

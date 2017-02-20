@@ -7,7 +7,7 @@ import BaseChart from './BaseChart';
 import ChartEmptyState from './ChartEmptyState';
 import ChartOptionSelector from '../optionSelector';
 import * as constants from '../constants';
-import {TYPES_SHOW_TOTAL} from '../constants';
+import Legend from './lineChartComponents/Legend';
 import LineChartBody from './lineChartComponents/LineChartBody';
 
 
@@ -35,6 +35,8 @@ export default class LineChart extends BaseChart {
             displayType: constants.LINE_CHART_DEFAULT_DISPLAY_OVERRIDE[this.props.type] || 'line',
             selectedSeries: null,
             showEpisodes: true,
+
+            hoveringSeries: null,
         };
 
         this.wrapper = null;
@@ -139,7 +141,7 @@ export default class LineChart extends BaseChart {
 
     renderData() {
         const {
-            state: {data, displayType, episodeList, selectedSeries, showEpisodes, width},
+            state: {data, displayType, episodeList, hoveringSeries, selectedSeries, showEpisodes, width},
         } = this;
         if (!data || data.datasets.every(ds => !ds.data.length)) {
             return <ChartEmptyState />;
@@ -157,6 +159,7 @@ export default class LineChart extends BaseChart {
                 <LineChartBody
                     data={filteredData}
                     episodeList={showEpisodes ? episodeList : null}
+                    hovering={hoveringSeries}
                     height={300}
                     startDate={startDate}
                     width={width || 0}
@@ -165,70 +168,11 @@ export default class LineChart extends BaseChart {
                 <AreaChartBody
                     data={filteredData}
                     episodeList={showEpisodes ? episodeList : null}
+                    hovering={hoveringSeries}
                     height={300}
                     startDate={startDate}
                     width={width || 0}
                 />}
-        </div>;
-    }
-    renderLegend() {
-        const {
-            props: {type},
-            state: {data, selectedSeries},
-        } = this;
-
-        function getTotal() {
-            return gettext('Total: ') + data.datasets.reduce(
-                (acc, cur, i) => {
-                    if (selectedSeries && !selectedSeries[i]) {
-                        return acc;
-                    }
-                    return acc + cur.data.reduce((acc2, cur2) => acc2 + cur2, 0);
-                },
-                0
-            );
-        }
-
-        if (!data || data.datasets.length < 2) {
-            if (TYPES_SHOW_TOTAL[type]) {
-                return <span>{getTotal()}</span>;
-            } else {
-                return null;
-            }
-        }
-
-        return <div>
-            <div>{getTotal()}</div>
-            {data.datasets.map((x, i) =>
-                <div
-                    key={i}
-                    onClick={() => {
-                        if (!selectedSeries) {
-                            return;
-                        }
-                        const newSelection = [...selectedSeries];
-                        newSelection[i] = !newSelection[i];
-                        if (newSelection.every(x => !x)) {
-                            return;
-                        }
-                        this.setState({selectedSeries: newSelection});
-                    }}
-                >
-                    <b
-                        style={{
-                            background: !selectedSeries || selectedSeries[i] ? x.strokeColor : '#fff',
-                            border: `1px solid ${x.strokeColor}`,
-                            borderRadius: 2,
-                            display: 'inline-block',
-                            height: 8,
-                            marginRight: 10,
-                            width: 8,
-                        }}
-                    />
-                    <span style={{opacity: !selectedSeries || selectedSeries[i] ? 1 : 0.5}}>
-                        {`${x.label} (${x.data.reduce((acc, cur) => acc + cur, 0)})`}
-                    </span>
-                </div>)}
         </div>;
     }
 
@@ -269,7 +213,7 @@ export default class LineChart extends BaseChart {
                         marginLeft: 5,
                     }}
                 >
-                    Episodes
+                    {gettext('Episodes')}
                 </span>
             </label>,
         ];
@@ -293,6 +237,11 @@ export default class LineChart extends BaseChart {
     }
 
     renderBody() {
+        const {
+            props: {type},
+            state: {data, hoveringSeries, selectedSeries},
+        } = this;
+
         return <div
             ref={e => {
                 this.wrapper = e;
@@ -301,7 +250,20 @@ export default class LineChart extends BaseChart {
         >
             {this.renderTimeframeSelector()}
             {this.renderData()}
-            {this.renderLegend()}
+            <Legend
+                data={data}
+                hovering={hoveringSeries}
+                onHover={i => {
+                    this.setState({hoveringSeries: i});
+                }}
+                onToggle={i => {
+                    const newSelection = [...selectedSeries];
+                    newSelection[i] = !newSelection[i];
+                    this.setState({selectedSeries: newSelection});
+                }}
+                selectedSeries={selectedSeries}
+                type={type}
+            />
         </div>;
     }
 };

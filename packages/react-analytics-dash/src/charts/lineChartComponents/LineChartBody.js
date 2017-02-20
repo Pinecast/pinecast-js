@@ -137,8 +137,9 @@ export default class LineChartBody extends Component {
     }
 
     renderLines(vis, data, xRange, yRange) {
+        const {hovering} = this.props;
         const lines = vis.append('g').attr('class', 'lines');
-        data.datasets.forEach(dataset => {
+        data.datasets.forEach((dataset, idx) => {
             const data = dataset.data.map((value, i) => ({value, i}));
 
             const dataGroup = lines.append('g');
@@ -154,7 +155,7 @@ export default class LineChartBody extends Component {
                 .attr('d', line)
                 .style('fill', 'none')
                 .style('stroke', dataset.strokeColor)
-                .style('stroke-width', 2);
+                .style('stroke-width', d => hovering === idx ? 3.5 : 2);
 
             dataGroup.selectAll('circle')
                 .data(data)
