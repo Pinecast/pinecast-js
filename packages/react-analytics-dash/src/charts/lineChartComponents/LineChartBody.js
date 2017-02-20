@@ -123,7 +123,7 @@ export default class LineChartBody extends Component {
                 .attr('data-tooltip', `
                     <b>${label}</b><br>
                     ${data.datasets.length > 1 ? `Total: ${data.datasets.reduce((acc, cur) => acc + cur.data[i], 0)}<br>` : ''}
-                    ${data.datasets.map(x => `${x.label}: ${x.data[i]}`).join('<br>')}
+                    ${data.datasets.filter(x => x.data[i]).map(x => `${x.label}: ${x.data[i]}`).join('<br>')}
                 `)
                 .style('fill', 'transparent');
         });
