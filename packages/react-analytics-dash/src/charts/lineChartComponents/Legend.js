@@ -20,16 +20,25 @@ export default class Legend extends Component {
 
         if (!data || data.datasets.length < 2) {
             if (TYPES_SHOW_TOTAL[type]) {
-                return <span>{getTotal()}</span>;
+                return <span style={{fontSize: '0.8em'}}>{getTotal()}</span>;
             } else {
                 return null;
             }
         }
 
-        return <div>
-            <div>{getTotal()}</div>
+        return <div
+            className='dash-legend'
+            style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+            }}
+        >
+            <div style={{flex: '1 1 100%', fontSize: '0.8em'}}>
+                {getTotal()}
+            </div>
             {data.datasets.map((x, i) =>
                 <div
+                    className='dash-legend-item'
                     key={i}
                     onClick={() => {
                         if (!selectedSeries || selectedSeries.every((selected, idx) => !selected || i === idx)) {
@@ -43,6 +52,10 @@ export default class Legend extends Component {
                             return;
                         }
                         onHover(null);
+                    }}
+                    style={{
+                        flex: '1 1 50%',
+                        minWidth: 400,
                     }}
                 >
                     <b
