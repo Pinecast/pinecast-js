@@ -189,7 +189,7 @@ export default class Step2 extends Component {
                     {ngettextf(
                         'There is %d episode in your feed that we cannot import.',
                         'There are %d episodes in your feed that we cannot import.',
-                        items.length
+                        ignoredItems
                     )}
                     {gettext(' Episodes like this do not have an <enclosure /> tag, which means there is no audio to download.')}
                 </p>}
