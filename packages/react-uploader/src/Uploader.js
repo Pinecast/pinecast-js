@@ -114,16 +114,26 @@ export default class Uploader extends Component {
             props: {podcast, type},
             state: {maxUploadSize},
         } = this;
+
+        this.setState({dragging: 0});
+
         if (fileObj.size > maxUploadSize) {
-            this.setState({dragging: 0, error: 'file_too_big'});
+            this.setState({error: `file_too_big_${type}`});
+            return;
+        } else if (fileObj.size === 0) {
+            this.setState({error: 'file_read_error'});
             return;
         }
         if (type === 'image' && fileObj.size > 1024 * 1024 * 2) {
-            this.setState({dragging: 0, error: 'image_too_big'});
+            this.setState({error: 'image_too_big'});
             return;
         }
+        if (type === 'audio' && fileObj.type === 'audio/wav') {
+            this.setState({error: 'no_wav'});
+            return;
+        }
+
         this.setState({
-            dragging: 0,
             fileObj,
             uploading: true,
             error: null,
@@ -232,13 +242,13 @@ export default class Uploader extends Component {
 
         if (uploading) {
             return [
+                <ErrorComponent error={error} key='err' />,
                 <ProgressBar key='pb' progress={progress} />,
                 <TimeRemainingIndicator
                     key='tri'
                     progress={progress}
                     startTime={uploadStart}
                 />,
-                <ErrorComponent error={error} key='err' />,
                 optional || this.renderRequiredPlaceholder(),
             ];
         }
@@ -249,11 +259,9 @@ export default class Uploader extends Component {
                 {Boolean(name || size || type) &&
                     <dl>
                         {Boolean(size) && <dt>{gettext('Size')}</dt>}
-                        {Boolean(size) && <dd>{size}</dd>}
+                        {Boolean(size) && <dd>{size}b</dd>}
                         {Boolean(name) && <dt>{gettext('Name')}</dt>}
                         {Boolean(name) && <dd>{name}</dd>}
-                        {Boolean(type) && <dt>{gettext('Type')}</dt>}
-                        {Boolean(type) && <dd>{type}</dd>}
                     </dl>}
                 {this.isImage() && <ImagePreview url={this.getImageURL()} />}
                 <button
@@ -266,7 +274,7 @@ export default class Uploader extends Component {
                 <ErrorComponent error={error} />
                 <input type='hidden' name={nameProp} value={finalContentURL} />
                 <input type='hidden' name={`${nameProp}-name`} value={this.getSafeName(name) || ''} />
-                <input type='hidden' name={`${nameProp}-size`} value={size || ''} />
+                <input type='hidden' name={`${nameProp}-size`} value={size || 0} />
                 <input type='hidden' name={`${nameProp}-type`} value={type || ''} />
             </div>;
         }
@@ -295,12 +303,15 @@ export default class Uploader extends Component {
                     e.preventDefault();
                     this.setNewFile(e.dataTransfer.files[0]);
                 }}
+                style={{
+                    flexWrap: 'wrap',
+                }}
             >
+                <ErrorComponent error={error} />
                 <i
                     data-text-choose={gettext('Choose a file to upload')}
                     data-text-drop={gettext('or drop a file to upload')}
                 />
-                <ErrorComponent error={error} />
                 <input
                     accept={accept}
                     onChange={e => this.setNewFile(e.target.files[0])}
