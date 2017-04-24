@@ -9,15 +9,15 @@ export const TYPE_GEO_LISTENS = 'listen_geo';
 export const TYPE_GEO_GRAN_SUBS = 'subscribers_geo_gran';
 export const TYPE_GEO_GRAN_LISTENS = 'listen_geo_gran';
 export const TYPE_TOP_EPISODES = 'top_episodes';
+export const TYPE_TOP_CITIES = 'top_cities';
 
 export const TYPES = {
     episode: [
         TYPE_LISTENS,
         TYPE_BY_SOURCE,
-        // TYPE_BY_AGENT,
-        // TYPE_BY_OS,
         TYPE_GEO_LISTENS,
         TYPE_GEO_GRAN_LISTENS,
+        TYPE_TOP_CITIES,
     ],
     network: [
         TYPE_LISTENS,
@@ -26,6 +26,7 @@ export const TYPES = {
         TYPE_GEO_GRAN_LISTENS,
         TYPE_GEO_SUBS,
         TYPE_GEO_GRAN_SUBS,
+        TYPE_TOP_CITIES,
     ],
     podcast: [
         TYPE_LISTENS,
@@ -39,6 +40,7 @@ export const TYPES = {
         TYPE_GEO_SUBS,
         TYPE_GEO_GRAN_SUBS,
         TYPE_TOP_EPISODES,
+        TYPE_TOP_CITIES,
     ],
 };
 
@@ -54,6 +56,7 @@ export const TYPES_NAMES = {
     [TYPE_GEO_LISTENS]: gettext('Listener Locations'),
     [TYPE_GEO_GRAN_LISTENS]: gettext('Listener Locations By City'),
     [TYPE_TOP_EPISODES]: gettext('Top Episodes'),
+    [TYPE_TOP_CITIES]: gettext('Top Cities (by listen)'),
 };
 
 export const TYPES_ENDPOINTS = {
@@ -62,6 +65,7 @@ export const TYPES_ENDPOINTS = {
         [TYPE_BY_SOURCE]: 'episode/listens/breakdown',
         [TYPE_GEO_LISTENS]: 'episode/listens/location',
         [TYPE_GEO_GRAN_LISTENS]: 'episode/listens/location/options',
+        [TYPE_TOP_CITIES]: 'episode/listens/location/options',
     },
     network: {
         [TYPE_LISTENS]: 'network/listens',
@@ -70,6 +74,7 @@ export const TYPES_ENDPOINTS = {
         [TYPE_SUBS]: 'network/subscribers',
         [TYPE_GEO_SUBS]: 'network/subscribers/location',
         [TYPE_GEO_GRAN_SUBS]: 'network/subscribers/location/options',
+        [TYPE_TOP_CITIES]: 'network/listens/location/options',
     },
     podcast: {
         [TYPE_LISTENS]: 'podcast/listens',
@@ -83,19 +88,23 @@ export const TYPES_ENDPOINTS = {
         [TYPE_SUBS]: 'podcast/subscribers',
         [TYPE_GEO_SUBS]: 'podcast/subscribers/location',
         [TYPE_GEO_GRAN_SUBS]: 'podcast/subscribers/location/options',
+        [TYPE_TOP_CITIES]: 'podcast/listens/location/options',
     },
 };
 export const TYPES_ENDPOINTS_MENU = {
     episode: {
         [TYPE_GEO_GRAN_LISTENS]: choice => `episode/listens/location/${encodeURIComponent(choice)}`,
+        [TYPE_TOP_CITIES]: choice => `episode/listens/location/${encodeURIComponent(choice)}/top`,
     },
     network: {
         [TYPE_GEO_GRAN_LISTENS]: choice => `network/listens/location/${encodeURIComponent(choice)}`,
         [TYPE_GEO_GRAN_SUBS]: choice => `network/subscribers/location/${encodeURIComponent(choice)}`,
+        [TYPE_TOP_CITIES]: choice => `network/listens/location/${encodeURIComponent(choice)}/top`,
     },
     podcast: {
         [TYPE_GEO_GRAN_LISTENS]: choice => `podcast/listens/location/${encodeURIComponent(choice)}`,
         [TYPE_GEO_GRAN_SUBS]: choice => `podcast/subscribers/location/${encodeURIComponent(choice)}`,
+        [TYPE_TOP_CITIES]: choice => `podcast/listens/location/${encodeURIComponent(choice)}/top`,
     },
 };
 
@@ -111,10 +120,12 @@ export const TYPES_CHART_TYPES = {
     [TYPE_GEO_GRAN_SUBS]: 'menu',
     [TYPE_GEO_GRAN_LISTENS]: 'menu',
     [TYPE_TOP_EPISODES]: 'table',
+    [TYPE_TOP_CITIES]: 'menu',
 };
 export const TYPES_CHART_MENU_TYPES = {
     [TYPE_GEO_GRAN_SUBS]: 'geo_gran',
     [TYPE_GEO_GRAN_LISTENS]: 'geo_gran',
+    [TYPE_TOP_CITIES]: 'table',
 };
 
 export const TYPES_CHART_REQUIRES = {
@@ -129,6 +140,7 @@ export const TYPES_CHART_REQUIRES = {
     [TYPE_GEO_GRAN_SUBS]: 'pro',
     [TYPE_GEO_GRAN_LISTENS]: 'pro',
     [TYPE_TOP_EPISODES]: 'pro',
+    [TYPE_TOP_CITIES]: 'pro',
 };
 
 export const TYPES_SHOW_TOTAL = {
@@ -170,11 +182,6 @@ export const TYPE_TIMEFRAMES = {
     [TYPE_GEO_GRAN_SUBS]: {
         day: gettext('Day'),
     },
-    [TYPE_GEO_GRAN_LISTENS]: {
-        'month': gettext('1MO'),
-        'week': gettext('Week'),
-        'day': gettext('Day'),
-    },
     [TYPE_TOP_EPISODES]: ALL_TIMEFRAMES,
 };
 export const TYPE_GRANULARITIES = {
@@ -183,9 +190,12 @@ export const TYPE_GRANULARITIES = {
     [TYPE_BY_SOURCE]: DEFAULT_GRANULARITIES,
 };
 
+
+const countryLabel = gettext('Country:');
 export const MENU_LABELS = {
-    [TYPE_GEO_GRAN_LISTENS]: gettext('Country:'),
-    [TYPE_GEO_GRAN_SUBS]: gettext('Country:'),
+    [TYPE_GEO_GRAN_LISTENS]: countryLabel,
+    [TYPE_GEO_GRAN_SUBS]: countryLabel,
+    [TYPE_TOP_CITIES]: countryLabel,
 };
 
 export const LINE_CHART_DEFAULT_DISPLAY_OVERRIDE = {
