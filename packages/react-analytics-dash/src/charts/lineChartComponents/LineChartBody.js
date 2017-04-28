@@ -26,7 +26,7 @@ export default class LineChartBody extends Component {
     }
 
     render() {
-        const {data, episodeList, height, startDate, width} = this.props;
+        const {data, endDate, episodeList, height, startDate, width} = this.props;
 
         const elem = ReactFauxDOM.createElement('svg');
 
@@ -130,7 +130,7 @@ export default class LineChartBody extends Component {
 
         if (episodeList) {
             const balloonsElem = vis.append('g').attr('transform', `translate(${marginLeft}, ${height - marginBottom - xAxisHeight})`);
-            renderBalloons(startDate, data, episodeList, balloonsElem, innerWidth);
+            renderBalloons(startDate, endDate, data, episodeList, balloonsElem, innerWidth);
         }
 
         return elem.toReact();

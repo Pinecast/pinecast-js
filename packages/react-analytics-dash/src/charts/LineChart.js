@@ -11,16 +11,6 @@ import Legend from './lineChartComponents/Legend';
 import LineChartBody from './lineChartComponents/LineChartBody';
 
 
-const durations = {
-    day: 1,
-    week: 7,
-    month: 30,
-    sixmonth: 30 * 6,
-    year: 365,
-    all: null,
-};
-
-
 export default class LineChart extends BaseChart {
     constructor(...args) {
         super(...args);
@@ -79,12 +69,6 @@ export default class LineChart extends BaseChart {
         }
     }
 
-    getStartDate() {
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() - durations[this.getCurrentTimeframe()]);
-        return startDate;
-    }
-
     getGranularities() {
         const supRaw = super.getGranularities();
         if (!supRaw) {
@@ -121,12 +105,15 @@ export default class LineChart extends BaseChart {
 
         const {podcast, network} = this.props;
         const startDate = this.getStartDate();
+        const currentTimeframe = this.getCurrentTimeframe();
         const episodeListXHR = xhr({
             method: 'get',
             url: '/dashboard/services/get_episodes?' +
                 (podcast ? `podcast=${encodeURIComponent(podcast)}&` : '') +
                 (network ? `network_id=${encodeURIComponent(network)}&` : '') +
-                `start_date=${startDate.toISOString().replace(/\.\d+Z$/, '')}`, // Fuck off, milliseconds
+                `start_date=${startDate.toISOString().replace(/\.\d+Z$/, '')}` + // Fuck off, milliseconds
+                (currentTimeframe === 'custom' ?
+                    `&end_date=${this.state.customTimeframe[1].toISOString().replace(/\.\d+Z$/, '')}` : '')
         }, (err, res, body) => {
             const episodeList = JSON.parse(body);
             this.setState({episodeListXHR: null, episodeList});
@@ -148,6 +135,7 @@ export default class LineChart extends BaseChart {
         }
 
         const startDate = this.getStartDate();
+        const endDate = this.getCurrentTimeframe() === 'custom' ? this.state.customTimeframe[1] : new Date();
         const filteredData = (selectedSeries || []).every(x => x) ?
             data :
             {
@@ -158,6 +146,7 @@ export default class LineChart extends BaseChart {
             {displayType === 'line' &&
                 <LineChartBody
                     data={filteredData}
+                    endDate={endDate}
                     episodeList={showEpisodes ? episodeList : null}
                     hovering={hoveringSeries}
                     height={300}
@@ -167,6 +156,7 @@ export default class LineChart extends BaseChart {
             {displayType === 'area' &&
                 <AreaChartBody
                     data={filteredData}
+                    endDate={endDate}
                     episodeList={showEpisodes ? episodeList : null}
                     hovering={hoveringSeries}
                     height={300}

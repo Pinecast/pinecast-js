@@ -1,3 +1,5 @@
+import {DateRangePicker} from 'react-dates';
+import moment from 'moment';
 import React, {Component} from 'react';
 
 import Spinner from 'pinecast-spinner';
@@ -5,6 +7,18 @@ import xhr from 'pinecast-xhr';
 
 import ChartOptionSelector from '../optionSelector';
 import * as constants from '../constants';
+
+import './reactDatesStyles.css';
+
+
+const durations = {
+    day: 1,
+    week: 7,
+    month: 30,
+    sixmonth: 30 * 6,
+    year: 365,
+    all: 365,
+};
 
 
 export default class BaseChart extends Component {
@@ -16,6 +30,9 @@ export default class BaseChart extends Component {
 
             granularity: null,
             timeframe: null,
+            customTimeframe: null,
+
+            focusedInput: null,
         };
     }
 
@@ -47,6 +64,7 @@ export default class BaseChart extends Component {
     getLoadURL(timeframe, granularity) {
         const {
             props: {episode, network, podcast},
+            state: {customTimeframe},
         } = this;
 
         return `${this.getBaseLoadURL()}?` +
@@ -54,7 +72,8 @@ export default class BaseChart extends Component {
             (granularity ? `interval=${encodeURIComponent(granularity)}&` : '') +
             (network ? `network_id=${encodeURIComponent(network)}&` : '') +
             (podcast ? `podcast=${encodeURIComponent(podcast)}&` : '') +
-            (timeframe ? `timeframe=${encodeURIComponent(timeframe)}` : '');
+            (timeframe ? `timeframe=${encodeURIComponent(timeframe)}&` : '') +
+            (timeframe === 'custom' ? `tf_range=${encodeURIComponent(customTimeframe.map(x => x.toISOString()).join(','))}` : '');
     }
 
     getCurrentTimeframe() {
@@ -103,11 +122,17 @@ export default class BaseChart extends Component {
     }
 
     startLoadingData() {
+        const {customTimeframe} = this.state;
+        const timeframe = this.getCurrentTimeframe();
+
+        if (timeframe === 'custom' && (!customTimeframe[0] || !customTimeframe[1])) {
+            return;
+        }
+
         if (this.state.xhr) {
             this.state.xhr.abort();
         }
 
-        const timeframe = this.getCurrentTimeframe();
         const granularity = this.getCurrentGranularity();
 
         const req = xhr({
@@ -138,12 +163,40 @@ export default class BaseChart extends Component {
         return constants.TYPE_GRANULARITIES[type];
     }
 
+    getStartDate(timeframe = this.getCurrentTimeframe()) {
+        if (timeframe === 'custom') {
+            return this.state.customTimeframe[0];
+        }
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - durations[timeframe]);
+        return startDate;
+    }
+
+    getCustomTimeframeFromNow(timeframe) {
+        return [this.getStartDate(timeframe), new Date()];
+    }
+
+    setTimeframe(newTimeframe, cb) {
+        const {timeframe} = this.state;
+        this.setState(
+            {
+                data: null,
+                timeframe: newTimeframe,
+                customTimeframe: newTimeframe === 'custom' ?
+                    this.getCustomTimeframeFromNow(timeframe) :
+                    null,
+            },
+            cb
+        );
+    }
+
     renderTimeframeSelector() {
         const timeframes = this.getTimeframes();
         const granularities = this.getGranularities();
 
-        const {granularity, timeframe} = this.state;
+        const {customTimeframe, focusedInput, granularity, timeframe} = this.state;
 
+        const currentTimeframe = this.getCurrentTimeframe();
         const extra = this.renderTimeframeSelectorExtra();
 
         return (timeframes || granularities || extra) &&
@@ -152,10 +205,7 @@ export default class BaseChart extends Component {
                     <ChartOptionSelector
                         defaultSelection={timeframe}
                         onChange={value => {
-                            this.setState(
-                                {data: null, timeframe: value},
-                                () => this.startLoadingData()
-                            );
+                            this.setTimeframe(value, () => this.startLoadingData());
                         }}
                         options={timeframes}
                     />}
@@ -170,13 +220,32 @@ export default class BaseChart extends Component {
                         }}
                         options={granularities}
                     />}
-                {Boolean(extra) && extra}
+                {extra}
+                {currentTimeframe === 'custom' &&
+                    <DateRangePicker
+                        endDate={moment(customTimeframe[1])}
+                        focusedInput={focusedInput}
+                        isOutsideRange={day =>
+                            moment(customTimeframe[0]).add(365, 'days').isBefore(day) ||
+                            moment(customTimeframe[1]).subtract(365, 'days').isAfter(day) ||
+                            day.isAfter(moment().add(1, 'days'))
+                        }
+                        onDatesChange={({startDate, endDate}) => {
+                            if (!startDate || !endDate) {
+                                return;
+                            }
+                            this.setState(
+                                {customTimeframe: [startDate.toDate(), endDate.toDate()]},
+                                () => this.startLoadingData()
+                            );
+                        }}
+                        onFocusChange={focusedInput => this.setState({focusedInput})}
+                        startDate={moment(customTimeframe[0])}
+                    />}
             </div>;
     }
 
-    renderTimeframeSelectorExtra() {
-        return null;
-    }
+    renderTimeframeSelectorExtra() {}
 
     render() {
         return this.state.data ?

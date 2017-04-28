@@ -167,6 +167,7 @@ const DEFAULT_GRANULARITIES = {
 const ALL_TIMEFRAMES = {
     'all': gettext('All'),
     ...DEFAULT_TIMEFRAMES,
+    'custom': gettext('Custom'),
 };
 export const DEFAULT_GRANULARITY = 'daily';
 

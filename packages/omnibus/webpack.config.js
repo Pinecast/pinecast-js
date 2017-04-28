@@ -22,7 +22,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'build'),
         publicPath: '/',
-        filename: '/ui-omnibus.js',
+        filename: 'ui-omnibus.js',
     },
     plugins: [
         new webpack.DefinePlugin({

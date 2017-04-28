@@ -3,7 +3,7 @@ import {Force, Node, Renderer} from 'labella';
 
 const NODE_SIZE = 8;
 
-export default function draw(startDate, data, rawEpisodeData, elem, innerWidth) {
+export default function draw(startDate, endDate, data, rawEpisodeData, elem, innerWidth) {
     const pointColors = new Map();
     data.datasets.forEach(ds => {
         pointColors.set(ds.slug, ds.pointColor);
@@ -19,8 +19,8 @@ export default function draw(startDate, data, rawEpisodeData, elem, innerWidth) 
     const dummyText = elem.append('text');
 
     const startDateTicks = startDate.getTime();
-    const nowTicks = Date.now();
-    const timeScale = date => (date.getTime() - startDateTicks) / (nowTicks - startDateTicks) * innerWidth;
+    const endDateTicks = endDate.getTime();
+    const timeScale = date => (date.getTime() - startDateTicks) / (endDateTicks - startDateTicks) * innerWidth;
 
     const nodes = episodeData.map(ep => new Node(timeScale(ep.parsedDate), NODE_SIZE, {...ep, h: NODE_SIZE, w: NODE_SIZE}));
 
