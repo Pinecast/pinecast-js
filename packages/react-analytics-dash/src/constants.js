@@ -164,9 +164,12 @@ const DEFAULT_GRANULARITIES = {
     'daily': gettext('Day'),
     'hourly': gettext('Hour'),
 };
-const ALL_TIMEFRAMES = {
+const ALL_TIMEFRAMES_WITHOUT_CUSTOM = {
     'all': gettext('All'),
     ...DEFAULT_TIMEFRAMES,
+};
+const ALL_TIMEFRAMES = {
+    ...ALL_TIMEFRAMES_WITHOUT_CUSTOM,
     'custom': gettext('Custom'),
 };
 export const DEFAULT_GRANULARITY = 'daily';
@@ -183,7 +186,7 @@ export const TYPE_TIMEFRAMES = {
     [TYPE_GEO_GRAN_SUBS]: {
         day: gettext('Day'),
     },
-    [TYPE_TOP_EPISODES]: ALL_TIMEFRAMES,
+    [TYPE_TOP_EPISODES]: ALL_TIMEFRAMES_WITHOUT_CUSTOM,
 };
 export const TYPE_GRANULARITIES = {
     [TYPE_LISTENS]: DEFAULT_GRANULARITIES,
