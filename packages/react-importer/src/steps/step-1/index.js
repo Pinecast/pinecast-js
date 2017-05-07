@@ -125,11 +125,11 @@ export default class Step1 extends Component {
             <strong>{gettext('Let\'s get started!')}</strong>
 
             <p>
-                {gettext('To begin, enter the RSS feed URL or iTunes directory URL of the podcast that you would like to import to Pinecast.')}
+                {gettext('To begin, enter the RSS feed URL or Apple Podcasts directory URL of the podcast that you would like to import to Pinecast.')}
             </p>
 
             <label>
-                <span>{gettext('Feed or iTunes URL')}</span>
+                <span>{gettext('Podcast URL')}</span>
                 <input
                     placeholder='http://wtfpod.libsyn.com/rss'
                     ref='url'
