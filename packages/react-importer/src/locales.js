@@ -1,3 +1,6 @@
+import {gettext} from 'pinecast-i18n';
+
+
 export const LOCALES = {
     'af-NA': gettext('Afrikaans (Namibia)'),
     'af-ZA': gettext('Afrikaans (South Africa)'),

@@ -1,3 +1,6 @@
+import {gettext} from 'pinecast-i18n';
+
+
 export const names = {
     aud: gettext('Australian Dollar'),
     cad: gettext('Canadian Dollar'),

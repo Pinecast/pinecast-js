@@ -13,6 +13,7 @@
   "author": "Matt Basta <me@mattbasta.com>",
   "license": "MIT",
   "dependencies": {
+    "pinecast-i18n": "^1.0.0",
     "pinecast-xhr": "^1.0.4",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",

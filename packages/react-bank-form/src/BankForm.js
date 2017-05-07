@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import Select from 'react-select';
-import xhr from 'pinecast-xhr';
-
 import 'react-select/dist/react-select.css';
+
+import {gettext} from 'pinecast-i18n';
+import xhr from 'pinecast-xhr';
 
 import AccountNumberField from './fields/AccountNumberField';
 import * as currencies from './currencies';

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import {gettext} from 'pinecast-i18n';
+
 import ErrorComponent from './Error';
 import ImagePreview from './ImagePreview';
 import ProgressBar from './ProgressBar';

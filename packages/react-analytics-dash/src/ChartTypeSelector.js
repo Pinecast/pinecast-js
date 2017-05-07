@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import {gettext} from 'pinecast-i18n';
+
 import ChartOptionSelector from './optionSelector';
 
 

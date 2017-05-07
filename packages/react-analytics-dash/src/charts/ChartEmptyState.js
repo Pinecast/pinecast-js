@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {gettext} from 'pinecast-i18n';
+
 
 const ChartEmptyState = () =>
     <div className='episode-empty-state empty-state'>

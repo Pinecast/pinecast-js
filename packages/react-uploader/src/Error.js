@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {gettext} from 'pinecast-i18n';
+
 
 const ERRORS = {
     file_too_big_image: gettext('The image you are trying to upload is too large to be uploaded. Images must be less than two megabytes.'),

@@ -20,6 +20,7 @@
     "d3-selection": "^1.0.3",
     "d3-shape": "^1.0.4",
     "labella": "^1.1.2",
+    "pinecast-i18n": "^1.0.0",
     "pinecast-spinner": "^1.2.0",
     "pinecast-xhr": "^1.0.4",
     "react": "^15.4.1",

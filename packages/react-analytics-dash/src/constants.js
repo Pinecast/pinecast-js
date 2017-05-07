@@ -1,3 +1,6 @@
+import {gettext} from 'pinecast-i18n';
+
+
 export const TYPE_LISTENS = 'listen';
 export const TYPE_SUBS = 'subscribers';
 export const TYPE_BY_EPISODE = 'listen_by_episode';

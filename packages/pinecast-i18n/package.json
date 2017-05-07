@@ -1,0 +1,11 @@
+{
+  "name": "pinecast-i18n",
+  "version": "1.0.0",
+  "description": "I18n helpers for Pinecast",
+  "jsnext:main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matt Basta <me@mattbasta.com>",
+  "license": "MIT"
+}

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {gettext} from 'pinecast-i18n';
 import xhr from 'pinecast-xhr';
 
 import AreaChartBody from './lineChartComponents/AreaChartBody';

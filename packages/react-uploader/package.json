@@ -15,6 +15,7 @@
   "dependencies": {
     "blob-to-buffer": "^1.2.6",
     "exif": "^0.6.0",
+    "pinecast-i18n": "^1.0.0",
     "pinecast-image-size": "^0.5.1",
     "pinecast-xhr": "^1.0.4",
     "react": "^15.4.1",

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {gettext} from 'pinecast-i18n';
+
 
 const VisibilityWrapper = props => {
     const {

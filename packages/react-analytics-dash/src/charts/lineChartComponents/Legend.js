@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import {gettext} from 'pinecast-i18n';
+
 import {TYPES_SHOW_TOTAL} from '../../constants';
 
 
