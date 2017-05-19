@@ -37,6 +37,7 @@
     "css-loader": "^0.26.0",
     "json-loader": "^0.5.4",
     "style-loader": "^0.13.1",
-    "webpack": "^1.14.0"
+    "webpack": "^1.14.0",
+    "webpack-bundle-analyzer": "^2.8.2"
   }
 }

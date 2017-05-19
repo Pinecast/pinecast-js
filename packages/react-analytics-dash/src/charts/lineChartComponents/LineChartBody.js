@@ -2,7 +2,7 @@ import {axisBottom, axisLeft} from 'd3-axis';
 import {Component} from 'react';
 import {curveMonotoneX, line as d3Line} from 'd3-shape';
 import ReactFauxDOM from 'react-faux-dom';
-import {scaleLinear} from 'd3-scale';
+// import scaleLinear from 'd3-scale/src/linear';
 import {select as d3Select} from 'd3-selection';
 
 import renderBalloons from './balloons';
@@ -14,6 +14,19 @@ const ctx = c.getContext('2d');
 function measureText(text, font = '14px sans-serif') {
     ctx.font = font;
     return ctx.measureText(text).width;
+}
+
+function scale(domainStart, domainEnd, rangeStart, rangeEnd) {
+    const out = val => (
+        (val - domainStart) / (domainEnd - domainStart) *
+        (rangeEnd - rangeStart) +
+        rangeStart
+    );
+    out.domain = () => [domainStart, domainEnd];
+    out.range = () => [rangeStart, rangeEnd];
+    out.copy = () => scale(domainStart, domainEnd, rangeStart, rangeEnd);
+    out.ticks = (count = 10) => [...new Array(count)].map((_, i) => out(i / (count - 1) * (domainEnd - domainStart) + domainStart));
+    return out;
 }
 
 export default class LineChartBody extends Component {
@@ -40,16 +53,21 @@ export default class LineChartBody extends Component {
         const xAxisHeight = 60;
 
         // Ranges
-        const xRange = scaleLinear()
-            .range([
-                marginLeft,
-                width - marginRight,
-            ]).domain([0, data.labels.length - 1]);
-        const yRange = scaleLinear()
-            .range([
-                height - marginBottom - xAxisHeight,
-                marginTop,
-            ]).domain(this.getYDomain());
+
+        const xRange = scale(0, data.labels.length - 1, marginLeft, width - marginRight);
+        const [yDomainStart, yDomainEnd] = this.getYDomain();
+        const yRange = scale(yDomainStart, yDomainEnd, height - marginBottom - xAxisHeight, marginTop);
+
+        // const xRange = scaleLinear()
+        //     .range([
+        //         marginLeft,
+        //         width - marginRight,
+        //     ]).domain([0, data.labels.length - 1]);
+        // const yRange = scaleLinear()
+        //     .range([
+        //         height - marginBottom - xAxisHeight,
+        //         marginTop,
+        //     ]).domain(this.getYDomain());
 
         // Axes
         const xAxis = axisBottom(xRange)

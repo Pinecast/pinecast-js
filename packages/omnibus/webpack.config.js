@@ -1,6 +1,7 @@
-var path = require('path');
+const path = require('path');
 
-var webpack = require('webpack');
+const webpack = require('webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
 module.exports = {
@@ -28,11 +29,12 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': '"production"',
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            mangle: {},
-        }),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     mangle: {},
+        // }),
         new webpack.LoaderOptionsPlugin({minimize: true}),
-    ],
+        process.env.ANALYZE ? new BundleAnalyzerPlugin() : undefined,
+    ].filter(x => x),
     module: {
         rules: [
             {
@@ -54,6 +56,8 @@ module.exports = {
                     return callback(null, 'null');
                 case 'tty':
                     return callback(null, '{isatty:function() {}}');
+                case 'isarray':
+                    return callback(null, 'Array.isArray');
                 case 'bluebird':
                     // For react-google-charts
                     return callback(null, 'Promise');
