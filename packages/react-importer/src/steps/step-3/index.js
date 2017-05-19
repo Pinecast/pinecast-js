@@ -126,7 +126,7 @@ export default class Step3 extends Component {
         function renderBody() {
             switch (feedSource) {
                 case 'libsyn':
-                    return <a href='https://support.libsyn.com/faqs/rss-feed-creating-a-redirect/'>
+                    return <a href='https://support.libsyn.com/kb/changing-your-feed-url-in-itunes/'>
                         {gettext('Setting up a redirect from LibSyn...')}
                     </a>;
                 case 'soundcloud':
