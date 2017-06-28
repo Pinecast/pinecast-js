@@ -5,29 +5,24 @@
   "main": "dist/Importer.js",
   "jsnext:main": "src/Importer.js",
   "scripts": {
-    "build": "webpack --config=webpack.config.js --progress",
-    "dev": "webpack --config=webpack.config.js --progress --watch --colors",
-    "prepublish": "rm -rf dist/* && npm run transpile",
+    "_prepublish": "rm -rf dist/* && npm run transpile",
     "transpile": "babel src --out-dir dist --source-maps"
   },
   "author": "Matt Basta <me@mattbasta.com>",
   "license": "MIT",
   "dependencies": {
-    "moment": "^2.17.0",
+    "moment": "^2.18.1",
     "pinecast-i18n": "^1.0.0",
     "pinecast-spinner": "^1.2.0",
     "pinecast-xhr": "^1.0.4",
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1"
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-loader": "^6.2.8",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-react": "^6.16.0",
-    "babel-preset-stage-2": "^6.18.0",
-    "css-loader": "^0.26.0",
-    "style-loader": "^0.13.1",
-    "webpack": "^1.14.0"
+    "babel-cli": "^6.24.1",
+    "babel-loader": "^7.1.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1"
   }
 }
