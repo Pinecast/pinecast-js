@@ -10,6 +10,8 @@ import './tabs';
 import Categories from './categories';
 import DateTime from './datetime';
 
+import './reactDatesStyles.css';
+
 
 const components = [
     AnalyticsDash,

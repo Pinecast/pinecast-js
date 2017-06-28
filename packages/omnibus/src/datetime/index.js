@@ -1,9 +1,7 @@
-import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import React, {Component} from 'react';
+import {SingleDatePicker} from 'react-dates';
 import TimeInput from '@mattbasta/time-input';
-
-import 'react-datepicker/dist/react-datepicker.css';
 
 
 export default class DateTime extends Component {
@@ -23,6 +21,8 @@ export default class DateTime extends Component {
         super(props);
 
         this.state = {
+            dateFocused: false,
+
             option: props.defaultValue ? 'datetime' : 'now',
             selection: props.defaultValue ? new Date(props.defaultValue) : null,
         };
@@ -48,7 +48,7 @@ export default class DateTime extends Component {
                 labelTime,
                 name,
             },
-            state: {option, selection},
+            state: {dateFocused, option, selection},
         } = this;
 
         return <div className='radio-group half-flush'>
@@ -82,9 +82,12 @@ export default class DateTime extends Component {
                 <div>
                     <label>
                         <span>{labelDate}</span>
-                        <DatePicker
-                            selected={moment(selection)}
-                            onChange={d => {
+                        <SingleDatePicker
+                            date={moment(selection)}
+                            focused={dateFocused}
+                            isDayBlocked={() => false}
+                            isOutsideRange={() => false}
+                            onDateChange={d => {
                                 this.setState({
                                     selection: new Date(
                                         d.year(),
@@ -95,6 +98,8 @@ export default class DateTime extends Component {
                                     ),
                                 });
                             }}
+                            onFocusChange={({focused}) => this.setState({dateFocused: focused})}
+                            required
                         />
                     </label>
                     <label>

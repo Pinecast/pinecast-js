@@ -8,8 +8,6 @@ import xhr from 'pinecast-xhr';
 import ChartOptionSelector from '../optionSelector';
 import * as constants from '../constants';
 
-import './reactDatesStyles.css';
-
 
 const durations = {
     day: 1,
