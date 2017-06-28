@@ -23,6 +23,8 @@ def found_dep(package, package_json_path):
 print 'Scanning %d packages...' % len(packages)
 for package in packages:
     node_modules_path = os.path.join('packages', package, 'node_modules')
+    if not os.path.exists(node_modules_path):
+        continue
     for nm in os.listdir(node_modules_path):
         if nm.startswith('.'):
             continue
