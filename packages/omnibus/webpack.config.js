@@ -6,7 +6,7 @@ const webpack = require('webpack');
 module.exports = {
     // devtool: 'source-maps',
     entry: {
-        app: ['./src/index.js'],
+        app: ['babel-polyfill', './src/index.js'],
     },
     resolve: {
         mainFields: [
@@ -25,13 +25,14 @@ module.exports = {
         filename: 'ui-omnibus.js',
     },
     plugins: [
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': '"production"',
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            mangle: {},
-        }),
-        new webpack.LoaderOptionsPlugin({minimize: true}),
+        // new webpack.DefinePlugin({
+        //     'process.env.NODE_ENV': '"production"',
+        // }),
+        // new webpack.LoaderOptionsPlugin({minimize: true}),
+        // new webpack.optimize.ModuleConcatenationPlugin(),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     mangle: {},
+        // }),
     ],
     module: {
         rules: [
@@ -65,13 +66,15 @@ module.exports = {
                 case 'is-array':
                 case 'isarray':
                     return callback(null, 'Array.isArray');
+                case 'is-finite':
+                    return callback(null, 'function(x) {return typeof x !== "number" && !isNaN(x) && x !== Infinity && x !== -Infinity;}');
                 case 'is-function':
                     return callback(null, 'function(x) {return typeof x === "function";}');
                 case 'object.assign':
                 case 'object-assign':
                     return callback(null, 'Object.assign');
                 case 'object-keys':
-                    return callback(null, '(function() {var x = Object.keys(); x.shim = x; return x;}())');
+                    return callback(null, '(function() {var x = Object.keys.bind(Object); x.shim = x; return x;}())');
 
                 default:
                     return callback();

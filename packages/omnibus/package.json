@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Pinecast/omnibus#readme",
   "dependencies": {
     "@mattbasta/time-input": "^1.3.2",
+    "babel-polyfill": "^6.23.0",
     "moment": "^2.18.1",
     "pinecast-analytics-dash": "^2.1.2",
     "pinecast-bank-form": "^1.1.0",
@@ -33,6 +34,8 @@
     "babel-cli": "^6.24.1",
     "babel-loader": "^7.1.1",
     "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^0.28.4",

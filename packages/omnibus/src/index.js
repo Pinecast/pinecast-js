@@ -4,7 +4,9 @@ import {render} from 'react-dom';
 import AnalyticsDash from 'pinecast-analytics-dash';
 import BankForm from 'pinecast-bank-form';
 import Importer from 'pinecast-importer';
-import Uploader from 'pinecast-uploader';
+
+import AudioUploader from 'pinecast-uploader';
+import LegacyUploader from 'pinecast-uploader/src/legacy/Uploader';
 
 import './tabs';
 import Categories from './categories';
@@ -19,7 +21,9 @@ const components = [
     Categories,
     DateTime,
     Importer,
-    Uploader,
+
+    AudioUploader,
+    LegacyUploader,
 ];
 
 components.forEach(component => {

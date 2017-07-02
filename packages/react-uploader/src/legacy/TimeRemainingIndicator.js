@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 
 import {gettext} from 'pinecast-i18n';
 
 
-export default class TimeRemainingIndicator extends Component {
+export default class TimeRemainingIndicator extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -11,8 +11,6 @@ export default class TimeRemainingIndicator extends Component {
         };
 
         this.timer = null;
-
-        this.tick = this.tick.bind(this);
     }
 
     componentDidMount() {
@@ -27,7 +25,7 @@ export default class TimeRemainingIndicator extends Component {
         clearInterval(this.timer);
     }
 
-    tick() {
+    tick = () => {
         let percent = this.props.progress;
         if (!percent) {
             return;
@@ -45,8 +43,12 @@ export default class TimeRemainingIndicator extends Component {
     }
 
     render() {
+        const body = this.state.timeRemaining || gettext('Calculating time remaining...');
+        if (this.props.renderer) {
+            return this.props.renderer(body);
+        }
         return <div className='time-remaining'>
-            {this.state.timeRemaining || gettext('Calculating time remaining...')}
+            {body}
         </div>;
     }
 

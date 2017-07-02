@@ -6,7 +6,7 @@ import ErrorComponent from './Error';
 import ImagePreview from './ImagePreview';
 import ProgressBar from './ProgressBar';
 import TimeRemainingIndicator from './TimeRemainingIndicator';
-import {detectAudioSize, detectImageProblems, getFields} from './util';
+import {detectImageProblems, getFields} from './util';
 
 
 export default class Uploader extends Component {
@@ -23,7 +23,6 @@ export default class Uploader extends Component {
         defSize: e => e.getAttribute('data-default-size'),
         defType: e => e.getAttribute('data-default-type'),
         noiTunesSizeCheck: e => e.getAttribute('data-no-itunes-size-check') === 'true',
-        audioDurationSelector: e => e.getAttribute('data-audio-duration-selector'),
 
         optional: e => e.getAttribute('data-optional') || false,
     };
@@ -73,23 +72,6 @@ export default class Uploader extends Component {
                     return;
                 }
                 detectImageProblems(fileObj).then(error => this.setState({error}));
-            case 'audio/mp3':
-            case 'audio/mpeg':
-            case 'audio/m4a':
-            case 'audio/wav':
-                if (!this.props.audioDurationSelector) {
-                    return;
-                }
-                detectAudioSize(fileObj).then(({hours, minutes, seconds}) => {
-                    const durLab = document.querySelector(this.props.audioDurationSelector);
-                    const durHours = durLab.querySelector('[name="duration-hours"]');
-                    const durMinutes = durLab.querySelector('[name="duration-minutes"]');
-                    const durSeconds = durLab.querySelector('[name="duration-seconds"]');
-
-                    durHours.value = hours;
-                    durMinutes.value = minutes;
-                    durSeconds.value = seconds;
-                });
         }
     }
 
@@ -128,10 +110,6 @@ export default class Uploader extends Component {
         }
         if (type === 'image' && fileObj.size > 1024 * 1024 * 2) {
             this.setState({error: 'image_too_big'});
-            return;
-        }
-        if (type === 'audio' && fileObj.type === 'audio/wav') {
-            this.setState({error: 'no_wav'});
             return;
         }
 
