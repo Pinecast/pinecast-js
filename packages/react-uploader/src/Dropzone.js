@@ -25,7 +25,7 @@ export default ({accept, children, label, onDrop, style}) =>
         style={{...defaultStyle, ...style}}
     >
         {children}
-        {label}<br />
+        <span style={{fontSize: 14}}>{label}</span><br />
         or <a href='' onClick={e => e.preventDefault()}>click to browse</a>.
     </Dropzone>
 

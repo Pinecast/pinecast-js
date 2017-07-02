@@ -27,10 +27,7 @@ export default class AddArtwork extends React.PureComponent {
                     {gettext('Would you like to add artwork to your episode?')}
                 </b>
                 <span style={{display: 'block', marginBottom: '0.5em'}}>
-                    {gettext('Artwork will appear on your podcast website and in podcast apps. If you don\'t provide any, your cover art will be used.')}
-                </span>
-                <span style={{display: 'block', marginBottom: '0.5em'}}>
-                    {gettext('Images should be square and between 1400x1400 and 3000x3000 pixels, up to 2MB.')}
+                    {gettext('Artwork will appear on your podcast website and in podcast apps instead of your cover art. Images should be square and between 1400x1400 and 3000x3000 pixels, up to 2MB.')}
                 </span>
                 {error && <Error>{error}</Error>}
                 <Dropzone
