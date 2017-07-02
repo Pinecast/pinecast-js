@@ -101,6 +101,8 @@ class UploadManager {
             }
             data.append('file', this.getSendable());
             xhr.send(data);
+
+            this.xhr = xhr;
         });
     }
 
@@ -119,6 +121,7 @@ class UploadManager {
         if (!this.xhr || this.progress === 100 || this.error) {
             return;
         }
+        this.clearUnloadHandler();
         this.xhr.abort();
         this.error = gettext('Aborted');
         this.update();

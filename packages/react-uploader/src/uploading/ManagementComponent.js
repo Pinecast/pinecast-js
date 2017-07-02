@@ -17,10 +17,16 @@ export default class ManagementComponent extends React.PureComponent {
             startTime: Date.now(),
             totalPercent: 0,
         };
+
+        this.aborted = false;
     }
 
     refresh() {
-        const {state: {files}} = this;
+        const {aborted, state: {files}} = this;
+        if (aborted) {
+            return;
+        }
+
         const newFiles = files.map(f => f.inst.getEntry());
         this.setState({
             files: newFiles,
@@ -34,6 +40,7 @@ export default class ManagementComponent extends React.PureComponent {
     }
 
     abort = () => {
+        this.aborted = true;
         this.props.orders.forEach(f => f.abort())
         this.props.onCancel();
     };
