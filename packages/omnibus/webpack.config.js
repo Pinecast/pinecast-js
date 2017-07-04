@@ -25,20 +25,25 @@ module.exports = {
         filename: 'ui-omnibus.js',
     },
     plugins: [
-        // new webpack.DefinePlugin({
-        //     'process.env.NODE_ENV': '"production"',
-        // }),
-        // new webpack.LoaderOptionsPlugin({minimize: true}),
-        // new webpack.optimize.ModuleConcatenationPlugin(),
-        // new webpack.optimize.UglifyJsPlugin({
-        //     mangle: {},
-        // }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': '"production"',
+        }),
+        new webpack.LoaderOptionsPlugin({minimize: true}),
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            mangle: {},
+        }),
     ],
     module: {
         rules: [
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
+                loader: 'babel-loader',
+            },
+            {
+                test: /\.js$/,
+                include: /jsmediatags|pretty\-bytes/,
                 loader: 'babel-loader',
             },
             {
