@@ -7,7 +7,7 @@ import Dropzone from './Dropzone';
 
 export default ({onGetFile}) =>
     <Dropzone
-        accept='audio/mpeg, audio/mp3, audio/aac, audio/m4a, audio/x-m4a'
-        label={gettext('Drop an MP3 file here')}
+        accept='image/jpg, image/jpeg, image/png'
+        label={gettext('Drop a PNG or JPEG file here')}
         onDrop={onGetFile}
     />;

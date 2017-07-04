@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 
 import {gettext} from 'pinecast-i18n';
 
-import {decodeFileObject, guardCallback, getInstance} from './legacy/util';
+import {decodeFileObject, downloadAsArrayBuffer, guardCallback, getInstance} from './legacy/util';
 
 import addMetadata from './mp3/addMetadata';
 import AudioFilePicker from './AudioFilePicker';
@@ -10,6 +10,8 @@ import AudioFilePreview from './AudioFilePreview';
 import CardAddMetadata from './cards/AddMetadata';
 import CardAddArtwork from './cards/AddArtwork';
 import CardRemoveArtwork from './cards/RemoveArtwork';
+import CardReplaceArtwork from './cards/ReplaceArtwork';
+import CardStorage from './cards/Storage';
 import {detectAudioSize, getID3Tags} from './mp3';
 import ErrorComponent from './Error';
 import ImageFilePreview from './ImageFilePreview';
@@ -18,8 +20,6 @@ import UploadManager from './uploading/ManagementComponent';
 import UploadOrder from './uploading/order';
 import WaitingPlaceholder from './WaitingPlaceholder';
 
-
-const maxUploadSize = Number(document.querySelector('main').getAttribute('data-max-upload-size'));
 
 const typeNames = {
     audio: gettext('Audio'),
@@ -30,6 +30,9 @@ const typeDefaultFilenamesByMIME = {
     'image/jpg': 'artwork.jpg',
     'image/png': 'artwork.png',
 };
+function getFilenameForImage(blob) {
+    return typeDefaultFilenamesByMIME[blob.type] || 'artwork.jpg';
+}
 
 const uploadedPhases = {
     uploaded: true,
@@ -37,6 +40,9 @@ const uploadedPhases = {
 };
 
 function unsign(signedURL) {
+    if (!signedURL) {
+        return null;
+    }
     return signedURL.split('.').slice(0, -1).join('.');
 }
 
@@ -54,6 +60,10 @@ export default class AudioUploader extends PureComponent {
         defImageURL: e => e.getAttribute('data-image-url'),
         defSize: e => e.getAttribute('data-default-size'),
         defType: e => e.getAttribute('data-default-type'),
+
+        plan: e => e.getAttribute('data-plan'),
+        uploadLimit: e => parseFloat(e.getAttribute('data-upload-limit')),
+        uploadSurge: e => parseFloat(e.getAttribute('data-upload-surge')),
     };
 
     constructor(props) {
@@ -78,8 +88,6 @@ export default class AudioUploader extends PureComponent {
             imageSourceURL: props.defImageURL || null,
 
             uploadOrders: null,
-
-            readyToSubmit: false,
         };
     }
 
@@ -105,8 +113,6 @@ export default class AudioUploader extends PureComponent {
             imageSourceURL: null,
 
             uploadOrders: null,
-
-            readyToSubmit: false,
             ...extra,
         }, cb);
     }
@@ -128,20 +134,27 @@ export default class AudioUploader extends PureComponent {
 
     gotFileToUpload = async () => {
         const {
-            props: {podcastAuthor},
+            props: {defImageURL, podcastAuthor, uploadLimit, uploadSurge},
             state: {fileObj},
         } = this;
 
-        if (fileObj.size > maxUploadSize) {
+        if (fileObj.size > uploadLimit + uploadSurge) {
             this.clearFile({error: gettext('The file you chose is too large to upload with your plan.')});
             return;
         }
+        if (fileObj.size === 0) {
+            this.clearFile({error: gettext('When we tried to read the file you chose, we got back no data.')});
+            return;
+        }
+
+        const baseState = {fileSize: fileObj.size, fileType: fileObj.type};
 
         try {
             const duration = await guardCallback(this, detectAudioSize(fileObj));
-            await this.promiseSetState({fileObj, fileSize: fileObj.size, fileType: fileObj.type, duration});
+            await this.promiseSetState({...baseState, duration});
         } catch (e) {
-            await this.promiseSetState({fileObj, fileSize: fileObj.size, fileType: fileObj.type, duration: 0});
+            console.error(e);
+            await this.promiseSetState({...baseState, duration: 0});
         }
 
         switch (fileObj.type) {
@@ -165,6 +178,11 @@ export default class AudioUploader extends PureComponent {
 
         try {
             const id3Tags = await guardCallback(this, getID3Tags(decoded));
+            const getBaseMetadata = () => ({
+                title: id3Tags.tags.title,
+                artist: id3Tags.tags.artist,
+                album: id3Tags.tags.album,
+            });
             if (
                 !id3Tags.tags.title ||
                 !id3Tags.tags.artist && podcastAuthor ||
@@ -176,23 +194,28 @@ export default class AudioUploader extends PureComponent {
                 // -> has id3, missing artwork
                 this.setState({
                     phase: 'missing pic',
-                    metadataScratch: {
-                        title: id3Tags.tags.title,
-                        artist: id3Tags.tags.artist,
-                        album: id3Tags.tags.album,
-                    },
+                    metadataScratch: getBaseMetadata(),
                 });
             } else {
                 // -> has id3
                 const imgBuffer = (new Uint8Array(id3Tags.tags.picture.data)).buffer;
                 imgBuffer.type = id3Tags.tags.picture.format;
+                if (defImageURL) {
+                    await this.promiseSetState({
+                        imageAsArrayBuffer: imgBuffer,
+                        metadataScratch: getBaseMetadata(),
+                        phase: 'replace pic',
+                    });
+                    return;
+                }
                 await this.promiseSetState({imageAsArrayBuffer: imgBuffer});
                 this.startUploading([
                     this.getUploadOrder('audio', fileObj),
-                    this.getUploadOrder('image', imgBuffer, typeDefaultFilenamesByMIME[imgBuffer.type] || 'artwork.jpg'),
+                    this.getUploadOrder('image', imgBuffer, getFilenameForImage(imgBuffer)),
                 ]);
             }
         } catch (e) {
+            console.error(e);
             // -> start uploading
             this.startUploading([
                 this.getUploadOrder('audio', fileObj),
@@ -200,21 +223,58 @@ export default class AudioUploader extends PureComponent {
         }
     };
 
-    addMetadata = async () => {
+    replacePicWithExisting = async () => {
+        await this.promiseSetState({phase: 'waiting'});
+
+        const {
+            props: {defImageURL},
+            state: {fileObj, imageAsArrayBuffer, metadataScratch},
+        } = this;
+
+        let imgContent;
+        try {
+            // TODO: Move this into the card and show progress.
+            // I didn't do that now because it means a few things:
+            //  1. Much more complicated error handling
+            //  2. Extra work is needed because the audio can be cleared while this downloads
+            imgContent = await downloadAsArrayBuffer(unsign(defImageURL));
+        } catch (e) {
+            console.error(e);
+            // Just give up and use the new one
+            this.startUploading([
+                this.getUploadOrder('audio', fileObj),
+                this.getUploadOrder('image', imageAsArrayBuffer, getFilenameForImage(imageAsArrayBuffer)),
+            ]);
+            return;
+        }
+
+        await this.promiseSetState({
+            imageAsArrayBuffer: imgContent,
+            imageSourceURL: defImageURL,
+            metadataScratch: {...metadataScratch, artwork: imgContent},
+        });
+
+        return this.addMetadata(true);
+    };
+
+    addMetadata = async (noImageUpload = false) => {
         const {state: {fileObj, fileAsArrayBuffer, metadataScratch}} = this;
         let blob;
         try {
             blob = addMetadata(fileAsArrayBuffer, metadataScratch);
             blob.name = fileObj.name;
-            blob.type = fileObj.type;
-            await this.promiseSetState({fileAsArrayBuffer: blob, fileSize: blob.byteLength});
+            if (!blob.type) {
+                blob.type = fileObj.type;
+            }
+            await this.promiseSetState({fileAsArrayBuffer: blob, fileSize: blob.byteLength || blob.size});
         } catch (e) {
+            console.error(e);
             blob = fileAsArrayBuffer;
         }
 
         this.startUploading([
             this.getUploadOrder('audio', blob),
-            metadataScratch.artwork && this.getUploadOrder('image', metadataScratch.artwork),
+            metadataScratch.artwork && !noImageUpload && this.getUploadOrder('image', metadataScratch.artwork),
         ]);
     };
 
@@ -226,13 +286,30 @@ export default class AudioUploader extends PureComponent {
     };
 
     renderAudioPreview() {
-        const {state: {duration, fileObj, fileAsArrayBuffer, fileSize, phase}} = this;
+        const {
+            state: {
+                duration,
+                fileObj,
+                fileAsArrayBuffer,
+                fileSourceURL,
+                fileSize,
+                phase,
+                uploadOrders,
+            },
+        } = this;
         return <AudioFilePreview
             duration={duration}
             isUploaded={Boolean(uploadedPhases[phase])}
             name='Episode Audio'
             onCancel={this.clearFile}
             size={fileSize}
+            url={
+                unsign(
+                    uploadOrders ?
+                        uploadOrders.find(x => x.type === 'audio').getURL() :
+                        fileSourceURL
+                )
+            }
         />;
     }
 
@@ -250,17 +327,34 @@ export default class AudioUploader extends PureComponent {
     }
 
     renderBody() {
-        const {props, state: {duration, metadataScratch, phase, uploadOrders}} = this;
+        const {
+            props,
+            state: {
+                duration,
+                fileObj,
+                imageAsArrayBuffer,
+                metadataScratch,
+                phase,
+                uploadOrders,
+            },
+        } = this;
         switch (phase) {
             case 'ready':
-                return <AudioFilePicker
-                    onGetFile={
-                        file => this.setState(
-                            {fileObj: file, phase: 'waiting'},
-                            this.gotFileToUpload
-                        )
-                    }
-                />;
+                return <div>
+                    <AudioFilePicker
+                        onGetFile={
+                            file => this.setState(
+                                {fileObj: file, phase: 'waiting'},
+                                this.gotFileToUpload
+                            )
+                        }
+                    />
+                    <CardStorage
+                        limit={props.uploadLimit}
+                        plan={props.plan}
+                        surge={props.uploadSurge}
+                    />
+                </div>;
 
             case 'waiting':
                 return <WaitingPlaceholder />;
@@ -287,12 +381,14 @@ export default class AudioUploader extends PureComponent {
                 return <div>
                     {this.renderAudioPreview()}
                     <CardAddArtwork
-                        onGotFile={file => {
+                        existingSource={unsign(props.defImageURL)}
+                        onGotFile={(file, isExisting) => {
                             this.setState({
                                 imageAsArrayBuffer: file,
+                                imageSourceURL: isExisting ? props.defImageURL : null,
                                 metadataScratch: {...metadataScratch, artwork: file},
                                 phase: 'waiting',
-                            }, this.addMetadata);
+                            }, () => this.addMetadata(isExisting));
                         }}
                         onReject={() => {
                             if (metadataScratch) {
@@ -300,6 +396,29 @@ export default class AudioUploader extends PureComponent {
                                 return;
                             }
                             this.startUploading();
+                        }}
+                        onRequestWaiting={() => this.promiseSetState({phase: 'waiting'})}
+                        sizeLimit={props.uploadLimit + props.uploadSurge - fileObj.size}
+                    />
+                </div>;
+
+            case 'replace pic':
+                return <div>
+                    {this.renderAudioPreview()}
+                    <CardReplaceArtwork
+                        existingSource={unsign(props.defImageURL)}
+                        newSource={imageAsArrayBuffer}
+                        onChooseExisting={this.replacePicWithExisting}
+                        onChooseNew={() => {
+                            this.setState(
+                                {metadataScratch: null},
+                                () => {
+                                    this.startUploading([
+                                        this.getUploadOrder('audio', fileObj),
+                                        this.getUploadOrder('image', imageAsArrayBuffer, getFilenameForImage(imageAsArrayBuffer)),
+                                    ]);
+                                }
+                            );
                         }}
                     />
                 </div>;
@@ -352,15 +471,22 @@ export default class AudioUploader extends PureComponent {
             return null;
         }
         const field = (key, value) => Boolean(value) && <input key={key} name={key} type='hidden' value={value} />;
+        const getOrderURL = (type, def) => {
+            if (!uploadOrders) {
+                if (!def) {
+                    return null;
+                }
+                return field(`${type}-url`, def);
+            }
+            const order = uploadOrders.find(x => x.type === type);
+            if (!order && !def) {
+                return null;
+            }
+            return field(`${type}-url`, order ? order.getURL() : def);
+        };
         return [
-            ...(
-                uploadOrders ?
-                    uploadOrders.map(x => field(`${x.type}-url`, x.getURL())) :
-                    [
-                        field('audio-url', fileSourceURL),
-                        field('image-url', imageSourceURL),
-                    ]
-            ),
+            getOrderURL('audio', fileSourceURL),
+            getOrderURL('image', imageSourceURL),
             field('audio-url-size', fileSize),
             field('audio-url-type', fileType),
             field('duration', duration),

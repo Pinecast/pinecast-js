@@ -1,76 +1,3 @@
-// Must come first.
-// `exif` tries to monkeypatch `Buffer.prototype` but it all goes poorly
-// because of how `blob-to-buffer` does its thing.
-import {Buffer} from 'buffer';
-global.Buffer = Buffer;
-import 'exif/lib/exif/Buffer';
-
-import {ExifImage} from 'exif';
-import imageSize from 'pinecast-image-size';
-import xhr from 'pinecast-xhr';
-
-
-export function getFields(podcastSlug, type, fileType, fileName, cb) {
-    xhr({
-        method: 'get',
-        url: `/dashboard/services/getUploadURL/${encodeURIComponent(podcastSlug)}/${encodeURIComponent(type)}?` +
-            `type=${encodeURIComponent(fileType)}&name=${encodeURIComponent(fileName)}`,
-    }, (err, res, body) => {
-        if (err || res.statusCode !== 200) {
-            cb(err || res.status);
-            return;
-        }
-
-        cb(null, JSON.parse(body));
-    });
-};
-
-export function getExifData(buff) {
-    return new Promise((resolve, reject) => {
-        new ExifImage({image: buff}, (err, exifData) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(exifData);
-            }
-        });
-    });
-};
-
-export async function detectImageProblems(fileObj) {
-    const buff = Buffer.from(await decodeFile(fileObj));
-    const i = imageSize(buff);
-    if (i.width < 1400 || i.height < 1400) {
-        return 'min_size';
-    } else if (i.width > 3000 || i.height > 3000) {
-        return 'max_size';
-    } else if (i.width !== i.height) {
-        return 'not_square';
-    }
-
-    if (fileObj.type !== 'image/jpeg') {
-        return null;
-    }
-
-    const exifData = await getExifData(buff);
-    if (
-        exifData.image.XResolution && exifData.image.XResolution !== 72 ||
-        exifData.image.YResolution && exifData.image.YResolution !== 72
-    ) {
-        return 'dpi';
-    }
-
-    if (exifData.exif.ColorSpace && exifData.exif.ColorSpace !== 1) {
-        return 'color_space';
-    }
-
-    if (exifData.image.Orientation && exifData.image.Orientation !== 1) {
-        return 'orientation';
-    }
-
-    return null;
-};
-
 let inst = 0;
 export function getInstance() {
     inst += 1;
@@ -108,5 +35,28 @@ export function decodeFileObject(fileObj) {
         };
         fr.onerror = err => reject(err);
         fr.readAsArrayBuffer(fileObj);
+    });
+};
+
+export function downloadAsArrayBuffer(url) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'arraybuffer';
+        xhr.open('GET', url, true);
+        xhr.send();
+
+        xhr.onload = () => {
+            if (xhr.status !== 200) {
+                reject(new Error('Non-200 response code'));
+                return;
+            }
+            const response = xhr.response;
+            response.type = xhr.getResponseHeader('content-type');
+            response.size = parseFloat(xhr.getResponseHeader('content-length'));
+            resolve(response);
+        };
+        xhr.onerror = () => {
+            reject(new Error('Could not download asset'));
+        };
     });
 };

@@ -6,7 +6,7 @@ import BankForm from 'pinecast-bank-form';
 import Importer from 'pinecast-importer';
 
 import AudioUploader from 'pinecast-uploader';
-import LegacyUploader from 'pinecast-uploader/src/legacy/Uploader';
+import ImageUploader from 'pinecast-uploader/src/ImageUploader';
 
 import './tabs';
 import Categories from './categories';
@@ -23,7 +23,7 @@ const components = [
     Importer,
 
     AudioUploader,
-    LegacyUploader,
+    ImageUploader,
 ];
 
 components.forEach(component => {

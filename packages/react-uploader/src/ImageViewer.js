@@ -29,7 +29,8 @@ export default class ImageViewer extends React.PureComponent {
         if (typeof File !== 'undefined' && source instanceof File) {
             return this.windowURL = URL.createObjectURL(source);
         }
-        return this.windowURL = URL.createObjectURL(new Blob([source]));
+        const type = source.type ? {type: source.type} : undefined;
+        return this.windowURL = URL.createObjectURL(new Blob([source], type));
     }
 
     render() {

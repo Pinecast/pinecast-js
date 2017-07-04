@@ -8,6 +8,7 @@ export default ({children, onClick, primary = false, style}) =>
             background: '#f5f5f5',
             border: 0,
             color: '#444',
+            cursor: 'pointer',
             fontSize: 14,
             marginRight: 10,
             padding: '5px 10px',

@@ -51,10 +51,11 @@ class UploadManager {
     }
 
     startUpload() {
+        const safeName = this.order.fileName.replace(/[^a-zA-Z0-9\._\-]/g, '_');
         this.xhr = xhr({
             method: 'get',
             url: `/dashboard/services/getUploadURL/${encodeURIComponent(this.order.podcast)}/${this.order.type}?` +
-                `type=${encodeURIComponent(this.order.blob.type)}&name=${encodeURIComponent(this.order.fileName)}`,
+                `type=${encodeURIComponent(this.order.blob.type)}&name=${encodeURIComponent(safeName)}`,
         }, (err, res, body) => {
             if (err || res.statusCode !== 200) {
                 this.error = gettext('Could not contact Pinecast');

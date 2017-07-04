@@ -3,9 +3,10 @@ import React from 'react';
 
 import Card from './Card';
 import ImageViewer from './ImageViewer';
+import ReadyToUploadOverlay from './ReadyToUploadOverlay';
 
 
-export default ({name, onRemove, size, source}) =>
+export default ({isUploaded = true, name, onRemove, size, source}) =>
     <Card
         style={{
             alignItems: 'center',
@@ -29,6 +30,7 @@ export default ({name, onRemove, size, source}) =>
             <strong style={{display: 'block'}}>{name}</strong>
             {size && <div>{prettyBytes(size)}</div>}
         </div>
+        {!isUploaded && <ReadyToUploadOverlay />}
         <button
             onClick={e => {
                 e.preventDefault();

@@ -21,7 +21,8 @@ export default ({accept, children, label, onDrop, style}) =>
             border: '2px dashed #8d52d1',
             boxShadow: '0 0 10px rgba(141, 82, 209, 0.3)',
         }}
-        onDrop={acceptedFiles => onDrop(acceptedFiles[0])}
+        disablePreview
+        onDrop={acceptedFiles => acceptedFiles.length && onDrop(acceptedFiles[0])}
         style={{...defaultStyle, ...style}}
     >
         {children}

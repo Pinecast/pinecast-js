@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const ProgressBar = ({progress}) =>
+const ProgressBar = ({progress, style}) =>
     <div style={{
         background: '#ecf0f1',
         borderRadius: 3,
@@ -9,6 +9,7 @@ const ProgressBar = ({progress}) =>
         display: 'block',
         height: 5,
         marginBottom: 15,
+        ...style,
     }}>
         <i style={{
             background: '#52d1c7',

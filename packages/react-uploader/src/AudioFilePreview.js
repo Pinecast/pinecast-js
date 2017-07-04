@@ -1,8 +1,11 @@
 import prettyBytes from 'pretty-bytes';
 import React from 'react';
 
+import {gettext} from 'pinecast-i18n';
+
 import Card from './Card';
 import Cassette from './icons/cassette';
+import ReadyToUploadOverlay from './ReadyToUploadOverlay';
 
 
 function lpad(str, length, pad) {
@@ -14,7 +17,7 @@ function lpad(str, length, pad) {
 }
 
 
-export default ({duration, isUploaded = false, name, onCancel, size}) =>
+export default ({duration, isUploaded = false, name, onCancel, size, url}) =>
     <Card
         style={{
             alignItems: 'center',
@@ -31,7 +34,7 @@ export default ({duration, isUploaded = false, name, onCancel, size}) =>
             }}
         >
             <strong style={{display: 'block'}}>{name}</strong>
-            {(duration || size) &&
+            {(duration || size || url) &&
                 <div>
                     {Boolean(duration) &&
                         <span>
@@ -41,27 +44,12 @@ export default ({duration, isUploaded = false, name, onCancel, size}) =>
                         </span>}
                     {Boolean(duration && size) && ' • '}
                     {Boolean(size) && <span>{prettyBytes(size)}</span>}
+                    {Boolean((duration || size) && url) && ' • '}
+                    {Boolean(url) &&
+                        <a href={url} download>{gettext('Download')}</a>}
                 </div>}
         </div>
-        {!isUploaded &&
-            <div
-                style={{
-                    alignItems: 'center',
-                    background: 'rgba(255, 255, 255, 0.6) repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.75) 2px, transparent 2px, transparent 5px)',
-                    bottom: 0,
-                    color: '#777',
-                    display: 'flex',
-                    fontWeight: 'bold',
-                    justifyContent: 'center',
-                    left: 0,
-                    position: 'absolute',
-                    right: 0,
-                    textAlign: 'center',
-                    top: 0,
-                }}
-            >
-                Ready to Upload
-            </div>}
+        {!isUploaded && <ReadyToUploadOverlay />}
         <button
             onClick={e => {
                 e.preventDefault();

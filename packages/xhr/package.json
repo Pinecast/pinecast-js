@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/Pinecast/pinecast-xhr#readme",
   "dependencies": {
-    "xhr": "^2.2.0"
+    "xhr": "^2.4.0"
   }
 }
