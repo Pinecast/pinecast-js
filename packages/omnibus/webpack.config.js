@@ -31,7 +31,9 @@ module.exports = {
         new webpack.LoaderOptionsPlugin({minimize: true}),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.optimize.UglifyJsPlugin({
-            mangle: {},
+            mangle: {
+                except: ['Buffer'],
+            },
         }),
     ],
     module: {
