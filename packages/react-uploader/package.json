@@ -18,7 +18,6 @@
     "jsmediatags": "^3.6.1",
     "pinecast-i18n": "^1.0.0",
     "pinecast-xhr": "^1.0.4",
-    "pretty-bytes": "^4.0.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-dropzone": "^3.13.3"

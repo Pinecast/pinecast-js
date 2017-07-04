@@ -1,10 +1,10 @@
-import prettyBytes from 'pretty-bytes';
 import React from 'react';
 
 import {gettext} from 'pinecast-i18n';
 
 import Card from './Card';
 import Cassette from './icons/cassette';
+import prettyBytes from './formatSize';
 import ReadyToUploadOverlay from './ReadyToUploadOverlay';
 
 

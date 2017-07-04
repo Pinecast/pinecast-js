@@ -1,8 +1,8 @@
-import prettyBytes from 'pretty-bytes';
 import React from 'react';
 
 import Card from './Card';
 import ImageViewer from './ImageViewer';
+import prettyBytes from './formatSize';
 import ReadyToUploadOverlay from './ReadyToUploadOverlay';
 
 
