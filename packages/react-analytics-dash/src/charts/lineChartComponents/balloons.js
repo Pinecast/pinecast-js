@@ -52,10 +52,12 @@ export default function draw(startDate, endDate, data, rawEpisodeData, innerWidt
                 >
                     <circle
                         className='flag'
-                        r={NODE_SIZE / 2}
+                        r={NODE_SIZE / 2 + 2}
                         style={{
                             cursor: 'pointer',
                             fill: pointColors.get(node.data.podcastSlug) || 'rgba(50, 50, 50, 0.5)',
+                            stroke: '#fff',
+                            strokeWidth: 2,
                         }}
                     />
                 </a>
