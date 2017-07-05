@@ -25,16 +25,16 @@ module.exports = {
         filename: 'ui-omnibus.js',
     },
     plugins: [
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': '"production"',
-        }),
-        new webpack.LoaderOptionsPlugin({minimize: true}),
-        new webpack.optimize.ModuleConcatenationPlugin(),
-        new webpack.optimize.UglifyJsPlugin({
-            mangle: {
-                except: ['Buffer'],
-            },
-        }),
+        // new webpack.DefinePlugin({
+        //     'process.env.NODE_ENV': '"production"',
+        // }),
+        // new webpack.LoaderOptionsPlugin({minimize: true}),
+        // new webpack.optimize.ModuleConcatenationPlugin(),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     mangle: {
+        //         except: ['Buffer'],
+        //     },
+        // }),
     ],
     module: {
         rules: [
