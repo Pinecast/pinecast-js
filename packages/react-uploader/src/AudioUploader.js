@@ -161,9 +161,7 @@ export default class AudioUploader extends PureComponent {
             case 'audio/m4a':
             case 'audio/x-m4a':
             case 'audio/aac':
-                this.startUploading([
-                    this.getUploadOrder('audio', fileObj),
-                ]);
+                this.startUploading();
                 return;
         }
 
