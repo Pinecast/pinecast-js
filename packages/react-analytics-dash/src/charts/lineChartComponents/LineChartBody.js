@@ -212,15 +212,6 @@ export default class LineChartBody extends Component {
                 })}
             </g>
             {this.renderLines(data, xRange, yRange)}
-            {episodeList &&
-                renderBalloons(
-                    startDate,
-                    endDate,
-                    data,
-                    episodeList,
-                    innerWidth,
-                    `translate(${marginLeft}, ${height - marginBottom - xAxisHeight})`
-                )}
             <g className='tooltips'>
                 {data.labels.map((label, idx) => {
                     return <g key={idx}>
@@ -241,6 +232,15 @@ export default class LineChartBody extends Component {
                     </g>;
                 })}
             </g>
+            {episodeList &&
+                renderBalloons(
+                    startDate,
+                    endDate,
+                    data,
+                    episodeList,
+                    innerWidth,
+                    `translate(${marginLeft}, ${height - marginBottom - xAxisHeight})`
+                )}
         </svg>;
     }
 
