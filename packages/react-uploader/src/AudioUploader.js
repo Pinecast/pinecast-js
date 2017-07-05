@@ -182,6 +182,7 @@ export default class AudioUploader extends PureComponent {
                 album: id3Tags.tags.album,
             });
             if (
+                !id3Tags ||
                 !id3Tags.tags.title ||
                 !id3Tags.tags.artist && podcastAuthor ||
                 !id3Tags.tags.album
