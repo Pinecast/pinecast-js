@@ -148,6 +148,8 @@ export const TYPES_CHART_REQUIRES = {
 
 export const TYPES_SHOW_TOTAL = {
     [TYPE_LISTENS]: true,
+    [TYPE_BY_EPISODE]: true,
+    [TYPE_BY_SOURCE]: true,
 };
 
 

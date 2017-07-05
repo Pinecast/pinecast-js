@@ -35,9 +35,10 @@ export default class Legend extends Component {
                 flexWrap: 'wrap',
             }}
         >
-            <div style={{flex: '1 1 100%', fontSize: '0.8em'}}>
-                {getTotal()}
-            </div>
+            {TYPES_SHOW_TOTAL[type] &&
+                <div style={{flex: '1 1 100%', fontSize: '0.8em'}}>
+                    {getTotal()}
+                </div>}
             {data.datasets.map((x, i) =>
                 <div
                     className='dash-legend-item'
@@ -72,7 +73,9 @@ export default class Legend extends Component {
                         }}
                     />
                     <span style={{opacity: !selectedSeries || selectedSeries[i] ? 1 : 0.5}}>
-                        {`${x.label} (${x.data.reduce((acc, cur) => acc + cur, 0)})`}
+                        {TYPES_SHOW_TOTAL[type] ?
+                            `${x.label} (${x.data.reduce((acc, cur) => acc + cur, 0)})` :
+                            x.label}
                     </span>
                 </div>)}
         </div>;

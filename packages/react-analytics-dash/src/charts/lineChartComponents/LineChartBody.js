@@ -148,7 +148,7 @@ export default class LineChartBody extends Component {
             <g
                 className='xAxis'
                 fill='none'
-                fontSize={10}
+                fontSize={12}
                 fontFamily='sans-serif'
                 textAnchor='end'
                 transform={`translate(0, ${height - marginBottom - xAxisHeight})`}
@@ -170,7 +170,6 @@ export default class LineChartBody extends Component {
                         <text
                             dy='0.71em'
                             fill='#000'
-                            fontSize={12}
                             transform='rotate(-45)'
                             y={0}
                             x={-6}
@@ -183,6 +182,8 @@ export default class LineChartBody extends Component {
             <g
                 className='yAxis'
                 fill='none'
+                fontSize={12}
+                textAnchor='end'
                 transform={`translate(${marginLeft}, 0)`}
             >
                 <line
@@ -200,12 +201,7 @@ export default class LineChartBody extends Component {
                         transform={`translate(0, ${yRange(tickValue)})`}
                     >
                         <line stroke='#000' x2={-1} />
-                        <text
-                            dy='0.32em'
-                            fill='#000'
-                            fontSize={12}
-                            x={-8}
-                        >
+                        <text dy='0.32em' fill='#000' x={-8}>
                             {Math.ceil(tickValue) === Math.floor(tickValue) ? tickValue : ''}
                         </text>
                     </g>;

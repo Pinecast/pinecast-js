@@ -60,7 +60,7 @@ export default class Menu extends BaseChart {
                     clearable={false}
                     onChange={({value}) => this.setState({choice: value})}
                     options={data}
-                    wrapperStyle={{flex: '1 1', zIndex: 99}}
+                    wrapperStyle={{flex: '1 1', zIndex: 9}}
                     value={choice}
                 />
             </div>
