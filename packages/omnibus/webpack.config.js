@@ -6,7 +6,10 @@ const webpack = require('webpack');
 module.exports = {
     // devtool: 'source-maps',
     entry: {
-        app: ['babel-polyfill', './src/index.js'],
+        app: [
+            // 'babel-polyfill',
+            './src/index.js',
+        ],
     },
     resolve: {
         mainFields: [
@@ -47,6 +50,10 @@ module.exports = {
                 test: /\.js$/,
                 include: /jsmediatags|monotone\-cubic\-spline/,
                 loader: 'babel-loader',
+                options: {
+                    presets: ['es2015', 'es2016'],
+                    plugins: [],
+                },
             },
             {
                 test: /\.css$/,

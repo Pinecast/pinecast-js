@@ -20,7 +20,7 @@ const TypePicker = ({onChange, type, typeType}) =>
             label: constants.TYPES_NAMES[type],
             value: type,
         }))}
-        wrapperStyle={{zIndex: 100}}
+        wrapperStyle={{zIndex: 10}}
         value={type}
         valueRenderer={({showProTag, label}) =>
             <strong>
