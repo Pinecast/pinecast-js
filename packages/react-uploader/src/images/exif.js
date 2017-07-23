@@ -16,6 +16,10 @@ export function getExifData(buff) {
                     resolve({image: {}, exif: {}});
                     return;
                 }
+                if (/The Exif data is not valid/i.exec(err)) {
+                    resolve({image: {}, exif: {}});
+                    return;
+                }
                 reject(err);
             } else {
                 resolve(exifData);
