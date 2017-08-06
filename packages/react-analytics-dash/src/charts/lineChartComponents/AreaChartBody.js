@@ -10,8 +10,8 @@ export default class AreaChartBody extends LineChartBody {
         return [
             0,
             Math.max(
-                ...data.labels.map((_, i) =>
-                    data.datasets.reduce((acc, cur) => acc + cur.data[i], 0))
+                ...data.labels
+                    .map((_, i) => data.datasets.reduce((acc, cur) => acc + cur.data[i - (data.labels.length - cur.data.length)] || 0, 0))
             ),
         ];
     }
@@ -36,8 +36,9 @@ export default class AreaChartBody extends LineChartBody {
                     d={
                         spline.svgPath(
                             spline.points(
-                                dataset.data.map((value, i) => {
+                                data.labels.map((_, i) => {
                                     const start = totals[i];
+                                    const value = dataset.data[i - (data.labels.length - dataset.data.length)] || 0;
                                     totals[i] += value;
                                     return [xRange(i), yRange(value + start)];
                                 })

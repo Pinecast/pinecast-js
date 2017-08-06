@@ -247,13 +247,25 @@ export default class LineChartBody extends Component {
                 <g key={idx}>
                     <path
                         className='chart-line'
-                        d={spline.svgPath(spline.points(dataset.data.map((x, i) => [xRange(i), yRange(x)])))}
+                        d={
+                            spline.svgPath(
+                                spline.points(
+                                    data.labels.map(
+                                        (_, i) => [
+                                            xRange(i),
+                                            yRange(dataset.data[i - (data.labels.length - dataset.data.length)] || 0)
+                                        ]
+                                    )
+                                )
+                            )
+                        }
                         fill='none'
                         stroke={dataset.strokeColor}
                         strokeWidth={hovering === idx ? 3.5 : 2}
                     />
-                    {dataset.data.map((value, i) =>
-                        <circle
+                    {data.labels.map((_, i) => {
+                        const value = dataset.data[i - (data.labels.length - dataset.data.length)] || 0;
+                        return <circle
                             key={i}
                             cx={xRange(i)}
                             cy={yRange(value)}
@@ -261,7 +273,8 @@ export default class LineChartBody extends Component {
                             fill={dataset.pointColor}
                             stroke={value ? '#fff' : 'transparent'}
                             strokeWidth='2px'
-                        />)}
+                        />;
+                    })}
                 </g>
             )}
         </g>;
