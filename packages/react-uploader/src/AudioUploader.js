@@ -469,7 +469,7 @@ export default class AudioUploader extends PureComponent {
         if (!uploadedPhases[phase]) {
             return null;
         }
-        const field = (key, value) => Boolean(value) && <input key={key} name={key} type='hidden' value={value} />;
+        const field = (key, value) => Boolean(value && value !== 0) && <input key={key} name={key} type='hidden' value={value} />;
         const getOrderURL = (type, def) => {
             if (!uploadOrders) {
                 if (!def) {
