@@ -23,10 +23,26 @@ export function detectAudioSize(fileObj) {
         try {
             const u = URL.createObjectURL(fileObj);
             const audio = new Audio(u);
-            audio.addEventListener('loadedmetadata', () => {
+            let handled = false;
+            function handler() {
+                if (handled) {
+                    return;
+                }
+                if (audio.duration === Infinity || isNaN(audio.duration)) {
+                    return;
+                }
+                handled = true;
                 URL.revokeObjectURL(u);
                 resolve(audio.duration);
-            });
+            }
+            audio.addEventListener('loadedmetadata', handler);
+            audio.addEventListener('durationchanged', handler);
+            setTimeout(() => {
+                handler();
+                if (!handled) {
+                    reject();
+                }
+            }, 3000);
         } catch (e) {
             reject();
         }
