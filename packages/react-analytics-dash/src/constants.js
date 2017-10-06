@@ -155,7 +155,7 @@ export const TYPES_SHOW_TOTAL = {
 
 export const DEFAULT_TIMEFRAMES = {
     // 'all': gettext('All'),
-    'year': gettext('Year'),
+    'year': gettext('1YR'),
     'sixmonth': gettext('6MO'),
     'month': gettext('1MO'),
     'week': gettext('Week'),
@@ -181,7 +181,7 @@ export const DEFAULT_GRANULARITY = 'daily';
 
 export const TYPE_TIMEFRAMES = {
     [TYPE_SUBS]: {
-        'year': gettext('Year'),
+        'year': gettext('1YR'),
         'sixmonth': gettext('6MO'),
         'month': gettext('1MO'),
     },
