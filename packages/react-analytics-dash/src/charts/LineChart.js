@@ -182,7 +182,7 @@ export default class LineChart extends BaseChart {
                 ]
             ),
         ];
-        return <CSVLink data={data}>CSV</CSVLink>;
+        return <CSVLink data={data}>{gettext('CSV')}</CSVLink>;
     }
 
     renderTimeframeSelectorExtra() {
