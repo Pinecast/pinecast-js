@@ -1,8 +1,5 @@
 {
-  "scripts": {
-    "reinstall": "rm -rf packages/*/node_modules && lerna bootstrap && python lerna_hoist.py"
-  },
   "dependencies": {
-    "lerna": "^2.0.0-rc.5"
+    "lerna": "^2.4.0"
   }
 }
