@@ -8,6 +8,7 @@ import BaseChart from './BaseChart';
 import ChartEmptyState from './ChartEmptyState';
 import ChartOptionSelector from '../optionSelector';
 import * as constants from '../constants';
+import CSVLink from '../CSVLink';
 import Legend from './lineChartComponents/Legend';
 import LineChartBody from './lineChartComponents/LineChartBody';
 
@@ -167,6 +168,23 @@ export default class LineChart extends BaseChart {
         </div>;
     }
 
+    renderCSVLink() {
+        const {data: {datasets, labels}} = this.state;
+        const data = [
+            [
+                'Timestamp',
+                ...datasets.map(d => d.label),
+            ],
+            ...labels.map(
+                (label, i) => [
+                    label,
+                    ...datasets.map(d => d.data[labels.length - d.data.length + i]),
+                ]
+            ),
+        ];
+        return <CSVLink data={data}>CSV</CSVLink>;
+    }
+
     renderTimeframeSelectorExtra() {
         const {
             state: {data, displayType, showEpisodes},
@@ -207,6 +225,7 @@ export default class LineChart extends BaseChart {
                     {gettext('Episodes')}
                 </span>
             </label>,
+            Boolean(data) && React.cloneElement(this.renderCSVLink(), {key: 'csv-link'}),
         ];
 
         if (!data || data.datasets.length < 2) {
