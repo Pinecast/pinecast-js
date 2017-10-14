@@ -1,4 +1,3 @@
-import {DateRangePicker} from 'react-dates';
 import moment from 'moment';
 import React, {Component} from 'react';
 
@@ -6,6 +5,7 @@ import Spinner from 'pinecast-spinner';
 import xhr from 'pinecast-xhr';
 
 import ChartOptionSelector from '../optionSelector';
+import DateRangePicker from '../DateRangePicker';
 import * as constants from '../constants';
 
 const durations = {
@@ -27,8 +27,6 @@ export default class BaseChart extends Component {
       granularity: null,
       timeframe: null,
       customTimeframe: null,
-
-      focusedInput: null,
     };
   }
 
@@ -172,7 +170,15 @@ export default class BaseChart extends Component {
   }
 
   getCustomTimeframeFromNow(timeframe) {
-    return [this.getStartDate(timeframe), new Date()];
+    return [
+      moment(this.getStartDate(timeframe))
+        .startOf('day')
+        .add(1, 'hours')
+        .toDate(),
+      moment()
+        .endOf('day')
+        .toDate(),
+    ];
   }
 
   setTimeframe(newTimeframe, cb) {
@@ -191,7 +197,7 @@ export default class BaseChart extends Component {
     const timeframes = this.getTimeframes();
     const granularities = this.getGranularities();
 
-    const {customTimeframe, focusedInput, granularity, timeframe} = this.state;
+    const {customTimeframe, granularity, timeframe} = this.state;
 
     const currentTimeframe = this.getCurrentTimeframe();
     const extra = this.renderTimeframeSelectorExtra();
@@ -221,7 +227,6 @@ export default class BaseChart extends Component {
           {currentTimeframe === 'custom' && (
             <DateRangePicker
               endDate={moment(customTimeframe[1])}
-              focusedInput={focusedInput}
               isOutsideRange={day =>
                 moment(customTimeframe[0])
                   .add(365, 'days')
@@ -236,7 +241,6 @@ export default class BaseChart extends Component {
                 }
                 this.setState({customTimeframe: [startDate.toDate(), endDate.toDate()]}, () => this.startLoadingData());
               }}
-              onFocusChange={focusedInput => this.setState({focusedInput})}
               startDate={moment(customTimeframe[0])}
             />
           )}
