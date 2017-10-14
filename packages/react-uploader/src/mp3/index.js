@@ -1,5 +1,5 @@
 import {Buffer} from 'buffer';
-import jsmediatags from 'jsmediatags';
+import jsmediatags from '@mattbasta/jsmediatags';
 
 
 export function getID3Tags(audioFileBuffer) {

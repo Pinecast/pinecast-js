@@ -15,7 +15,7 @@
     "browser-id3-writer": "^3.0.3",
     "canvas-to-blob": "0.0.0",
     "exif": "^0.6.0",
-    "jsmediatags": "^3.6.1",
+    "@mattbasta/jsmediatags": "^3.6.3",
     "pinecast-i18n": "^1.0.0",
     "pinecast-xhr": "^1.0.4",
     "react": "^15.6.1",
