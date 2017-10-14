@@ -1,10 +1,3 @@
-// Must come first.
-// `exif` tries to monkeypatch `Buffer.prototype` but it all goes poorly
-// because of how `blob-to-buffer` does its thing.
-import {Buffer} from 'buffer';
-global.Buffer = Buffer;
-import 'exif/lib/exif/Buffer';
-
 import {ExifImage} from 'exif';
 
 export function getExifData(buff) {

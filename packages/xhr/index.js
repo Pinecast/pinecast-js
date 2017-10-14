@@ -1,4 +1,4 @@
-var xhr = require('xhr');
+import * as xhr from 'xhr';
 
 var CSRF_TOKEN = '';
 if (typeof document !== 'undefined') {
@@ -8,7 +8,7 @@ if (typeof document !== 'undefined') {
   }
 }
 
-module.exports = function pinecastXHR(origOptions, callback) {
+export default function(origOptions, callback) {
   var opts = {};
   for (var k in origOptions) {
     opts[k] = origOptions[k];
@@ -30,8 +30,8 @@ module.exports = function pinecastXHR(origOptions, callback) {
   }
 
   return xhr(opts, callback);
-};
+}
 
-module.exports.setCSRF = function setCSRF(token) {
+export function setCSRF(token) {
   CSRF_TOKEN = token;
-};
+}

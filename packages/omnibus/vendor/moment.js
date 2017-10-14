@@ -1,4 +1,4 @@
-const moment = require('../node_modules/moment/src/moment');
+const moment = require('moment/src/moment');
 
 module.exports = moment.default;
 module.exports.default = moment.default;

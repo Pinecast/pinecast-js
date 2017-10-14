@@ -3,7 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  // devtool: 'source-maps',
+  devtool: 'cheap-source-maps',
   entry: {
     app: [
       // 'babel-polyfill',
@@ -12,7 +12,7 @@ module.exports = {
   },
   resolve: {
     mainFields: ['jsnext:main', 'main'],
-    modules: [path.resolve(__dirname, '../../node_modules'), 'node_modules'],
+    modules: [path.resolve(__dirname, 'vendor'), path.resolve(__dirname, '../../node_modules'), 'node_modules'],
   },
   cache: false,
   output: {
@@ -23,6 +23,9 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"',
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
     }),
     new webpack.LoaderOptionsPlugin({minimize: true}),
     new webpack.optimize.ModuleConcatenationPlugin(),
@@ -35,7 +38,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
       },
