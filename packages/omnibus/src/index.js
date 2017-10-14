@@ -14,33 +14,23 @@ import DateTime from './datetime';
 
 import './reactDatesStyles.css';
 
-
-const components = [
-    AnalyticsDash,
-    BankForm,
-    Categories,
-    DateTime,
-    Importer,
-
-    AudioUploader,
-    ImageUploader,
-];
+const components = [AnalyticsDash, BankForm, Categories, DateTime, Importer, AudioUploader, ImageUploader];
 
 components.forEach(component => {
-    const elements = document.querySelectorAll(component.selector);
-    if (!elements.length) {
-        return;
-    }
-    Array.prototype.slice.call(elements).forEach(elem => {
-        render(
-            createElement(
-                component,
-                Object.keys(component.propExtraction).reduce((acc, cur) => {
-                    acc[cur] = component.propExtraction[cur](elem);
-                    return acc;
-                }, {})
-            ),
-            elem
-        );
-    });
+  const elements = document.querySelectorAll(component.selector);
+  if (!elements.length) {
+    return;
+  }
+  Array.prototype.slice.call(elements).forEach(elem => {
+    render(
+      createElement(
+        component,
+        Object.keys(component.propExtraction).reduce((acc, cur) => {
+          acc[cur] = component.propExtraction[cur](elem);
+          return acc;
+        }, {}),
+      ),
+      elem,
+    );
+  });
 });

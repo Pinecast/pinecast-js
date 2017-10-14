@@ -4,10 +4,10 @@ import {gettext} from 'pinecast-i18n';
 
 import Dropzone from './Dropzone';
 
-
-export default ({onGetFile}) =>
-    <Dropzone
-        accept='audio/mpeg, audio/mp3, audio/aac, audio/m4a, audio/x-m4a'
-        label={gettext('Drop an MP3 file here')}
-        onDrop={onGetFile}
-    />;
+export default ({onGetFile}) => (
+  <Dropzone
+    accept="audio/mpeg, audio/mp3, audio/aac, audio/m4a, audio/x-m4a"
+    label={gettext('Drop an MP3 file here')}
+    onDrop={onGetFile}
+  />
+);
