@@ -15,7 +15,10 @@ package_names = [json.load(open(os.path.join('packages', p, 'package.json')))['n
 dep_map = {}
 
 def found_dep(package, package_json_path):
-    dep = json.load(open(os.path.join(package_json_path)))
+    try:
+        dep = json.load(open(os.path.join(package_json_path)))
+    except IOError:
+        return
     dep_name = (dep['name'], dep['version'])
     dep_map.setdefault(dep_name, []).append(package)
 

@@ -1,7 +1,8 @@
+import DateTimePicker from 'react-datetime';
 import moment from 'moment';
 import React, {Component} from 'react';
-import {SingleDatePicker} from 'react-dates';
-import TimeInput from '@mattbasta/time-input';
+
+import './dateTimePicker.css';
 
 
 export default class DateTime extends Component {
@@ -25,6 +26,8 @@ export default class DateTime extends Component {
 
             option: props.defaultValue ? 'datetime' : 'now',
             selection: props.defaultValue ? new Date(props.defaultValue) : null,
+
+            invalidState: false,
         };
     }
 
@@ -48,7 +51,7 @@ export default class DateTime extends Component {
                 labelTime,
                 name,
             },
-            state: {dateFocused, option, selection},
+            state: {dateFocused, invalidState, option, selection},
         } = this;
 
         return <div className='radio-group half-flush'>
@@ -79,64 +82,24 @@ export default class DateTime extends Component {
                 <span>{labelDateTime}</span>
             </label>
             {option === 'datetime' &&
-                <div>
-                    <label>
-                        <span>{labelDate}</span>
-                        <SingleDatePicker
-                            date={moment(selection)}
-                            focused={dateFocused}
-                            isDayBlocked={() => false}
-                            isOutsideRange={() => false}
-                            onDateChange={d => {
-                                this.setState({
-                                    selection: new Date(
-                                        d.year(),
-                                        d.month(),
-                                        d.date(),
-                                        selection.getHours(),
-                                        selection.getMinutes()
-                                    ),
-                                });
-                            }}
-                            onFocusChange={({focused}) => this.setState({dateFocused: focused})}
-                            required
-                        />
-                    </label>
-                    <label>
-                        <span>{labelTime}</span>
-                        <TimeInput
-                            defaultValue='12:00 AM'
-                            onChange={newVal => {
-                                const parts = /(\d+):(\d+) (AM|PM)/.exec(newVal);
-                                if (!parts) {
-                                    return;
-                                }
-                                const hours = parts[1] | 0;
-                                const minutes = parts[2] | 0;
-                                const isPM = parts[3] === 'PM';
-                                const hours24 = hours === 12 ?
-                                    (isPM ? 12 : 0) :
-                                    hours + (isPM ? 12 : 0);
-
-                                const newDate = new Date(
-                                    selection.getFullYear(),
-                                    selection.getMonth(),
-                                    selection.getDate(),
-                                    hours24,
-                                    minutes
-                                );
-
-                                // Reset the date in case it rolled over
-                                newDate.setDate(selection.getDate());
-                                newDate.setMonth(selection.getMonth());
-                                newDate.setFullYear(selection.getFullYear());
-
-                                this.setState({selection: newDate});
-                            }}
-                            validate={v => /(1[0-2]|[1-9]):[0-5][0-9] (AM|PM)/i.test(v)}
-                            value={this.getSelectionTime()}
-                        />
-                    </label>
+                <div className="omnibus-date-picker">
+                    <DateTimePicker
+                        inputProps={{
+                            style: {
+                                border: '2px solid #222',
+                                borderColor: invalidState ? '#b00' : null,
+                            },
+                        }}
+                        onChange={val => {
+                            if (typeof val === 'string') {
+                                this.setState({invalidState: val});
+                                return;
+                            }
+                            this.setState({invalidState: false, selection: val.toDate()});
+                        }}
+                        open
+                        value={invalidState || moment(selection)}
+                    />
                 </div>}
             <input
                 type='hidden'
