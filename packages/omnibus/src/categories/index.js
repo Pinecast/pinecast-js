@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import {gettext} from 'pinecast-i18n';
+
 const allCats = (window.PODCAST_CATEGORIES || []).sort((a, b) => a.localeCompare(b));
 
 export default class Categories extends Component {
@@ -12,57 +14,54 @@ export default class Categories extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {selectedCats: props.defCats};
+  }
 
-    this.state = {
-      selectedCats: props.defCats,
-      cats: allCats.sort((a, b) => {
-        const leftSelected = props.defCats.indexOf(a) > -1;
-        const rightSelected = props.defCats.indexOf(a) > -1;
-        if (leftSelected && !rightSelected) {
-          return -1;
-        }
-        if (!leftSelected && rightSelected) {
-          return 1;
-        }
-        return a.localeCompare(b);
-      }),
-    };
+  renderCategory(category) {
+    const isSelected = this.state.selectedCats.includes(category);
+    return (
+      <button
+        className={`category${isSelected ? ' is-selected' : ''}`}
+        key={category}
+        onClick={e => {
+          e.preventDefault();
+          if (isSelected) {
+            this.doUnselect(category);
+          } else {
+            this.doSelect(category);
+          }
+        }}
+        type="button"
+      >
+        {category}
+      </button>
+    );
   }
 
   getItems() {
-    return allCats.map(s => {
-      const isSelected = this.state.selectedCats.indexOf(s) > -1;
-      return (
-        <button
-          className={`category${isSelected ? ' is-selected' : ''}`}
-          key={s}
-          onClick={e => {
-            e.preventDefault();
-            if (isSelected) {
-              this.doUnselect(s);
-            } else {
-              this.doSelect(s);
-            }
-          }}
-          type="button"
-        >
-          {s}
-        </button>
-      );
-    });
+    const {selectedCats} = this.state;
+    return allCats.filter(c => !selectedCats.includes(c)).map(c => this.renderCategory(c));
   }
 
   doSelect(s) {
     this.setState({selectedCats: [s].concat(this.state.selectedCats).sort()});
   }
   doUnselect(s) {
-    this.setState({selectedCats: this.state.selectedCats.filter(x => x !== s)});
+    this.setState({
+      selectedCats: this.state.selectedCats.filter(x => x !== s),
+    });
   }
 
   render() {
     return (
       <div className="category-picker">
-        {this.getItems()}
+        {this.state.selectedCats.length > 3 && (
+          <div className="category-error">
+            {gettext('You have selected too many categories! Some categories may be ignored by Apple and Google.')}
+          </div>
+        )}
+        <div className="category-picker-group">{this.state.selectedCats.map(x => this.renderCategory(x))}</div>
+        <div className="category-picker-group">{this.getItems()}</div>
         <input name={this.props.name} type="hidden" value={this.state.selectedCats.join(',')} />
       </div>
     );
