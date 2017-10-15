@@ -21,11 +21,11 @@ module.exports = {
     filename: 'ui-omnibus.js',
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': '"production"',
-    }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"production"',
     }),
     new webpack.LoaderOptionsPlugin({minimize: true}),
     new webpack.optimize.ModuleConcatenationPlugin(),
