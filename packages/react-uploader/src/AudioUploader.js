@@ -12,6 +12,7 @@ import CardAddArtwork from './cards/AddArtwork';
 import CardRemoveArtwork from './cards/RemoveArtwork';
 import CardReplaceArtwork from './cards/ReplaceArtwork';
 import CardStorage from './cards/Storage';
+import {decodeImage, reformatImage} from './images';
 import {detectAudioSize, getID3Tags} from './mp3';
 import ErrorComponent from './Error';
 import ImageFilePreview from './ImageFilePreview';
@@ -131,6 +132,22 @@ export default class AudioUploader extends PureComponent {
     return order;
   }
 
+  async decodeImageFromID3(imgBuffer, type) {
+    imgBuffer.type = type;
+    if (imgBuffer.byteLength < 1024 * 1024) {
+      return imgBuffer;
+    }
+
+    // Resize the image to save space
+    const decodedImage = await guardCallback(this, decodeImage(imgBuffer));
+    imgBuffer = await guardCallback(this, reformatImage(decodedImage));
+    if (imgBuffer.byteLength > 2 * 1024 * 1024) {
+      return null;
+    }
+
+    return imgBuffer;
+  }
+
   gotFileToUpload = async () => {
     const {props: {defImageURL, podcastAuthor, uploadLimit, uploadSurge}, state: {fileObj}} = this;
 
@@ -186,24 +203,34 @@ export default class AudioUploader extends PureComponent {
           phase: 'missing pic',
           metadataScratch: getBaseMetadata(),
         });
-      } else {
-        // -> has id3
-        const imgBuffer = new Uint8Array(id3Tags.tags.picture.data).buffer;
-        imgBuffer.type = id3Tags.tags.picture.format;
-        if (defImageURL) {
-          await this.promiseSetState({
-            imageAsArrayBuffer: imgBuffer,
-            metadataScratch: getBaseMetadata(),
-            phase: 'replace pic',
-          });
-          return;
-        }
-        await this.promiseSetState({imageAsArrayBuffer: imgBuffer});
-        this.startUploading([
-          this.getUploadOrder('audio', fileObj),
-          this.getUploadOrder('image', imgBuffer, getFilenameForImage(imgBuffer)),
-        ]);
+        return;
       }
+
+      const imgBuffer = await this.decodeImageFromID3(
+        new Uint8Array(id3Tags.tags.picture.data).buffer,
+        id3Tags.tags.picture.format,
+      );
+      if (!imgBuffer) {
+        this.setState({
+          phase: 'missing pic',
+          metadataScratch: getBaseMetadata(),
+        });
+        return;
+      }
+
+      if (defImageURL) {
+        await this.promiseSetState({
+          imageAsArrayBuffer: imgBuffer,
+          metadataScratch: getBaseMetadata(),
+          phase: 'replace pic',
+        });
+        return;
+      }
+      await this.promiseSetState({imageAsArrayBuffer: imgBuffer});
+      this.startUploading([
+        this.getUploadOrder('audio', fileObj),
+        this.getUploadOrder('image', imgBuffer, getFilenameForImage(imgBuffer)),
+      ]);
     } catch (e) {
       console.error(e);
       // -> start uploading

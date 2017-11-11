@@ -7,6 +7,9 @@ import {decodeFileObject} from '../legacy/util';
 import {getExifData} from './exif';
 
 export function decodeImage(fileObj) {
+  if (fileObj instanceof ArrayBuffer) {
+    return decodeImage(new Blob([fileObj], {type: fileObj.type}));
+  }
   return new Promise((resolve, reject) => {
     const u = URL.createObjectURL(fileObj);
     const img = new Image();
