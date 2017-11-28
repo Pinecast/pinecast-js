@@ -197,6 +197,7 @@ export default class AudioUploader extends PureComponent {
       if (!id3Tags || !id3Tags.tags.title || (!id3Tags.tags.artist && podcastAuthor) || !id3Tags.tags.album) {
         // -> missing id3
         this.setState({phase: 'missing id3'});
+        return;
       } else if (!id3Tags.tags.picture) {
         // -> has id3, missing artwork
         this.setState({
