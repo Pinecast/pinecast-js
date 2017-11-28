@@ -23,6 +23,7 @@
     "pinecast-analytics-dash": "^2.1.2",
     "pinecast-bank-form": "^1.1.0",
     "pinecast-importer": "^1.1.2",
+    "pinecast-i18n": "^1.0.0",
     "pinecast-uploader": "^1.2.0",
     "react": "^15.6.1",
     "react-addons-shallow-compare": "^15.6.0",
