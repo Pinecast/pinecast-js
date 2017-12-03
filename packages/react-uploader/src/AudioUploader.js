@@ -189,14 +189,24 @@ export default class AudioUploader extends PureComponent {
 
     try {
       const id3Tags = await guardCallback(this, getID3Tags(decoded));
-      const getBaseMetadata = () => ({
-        title: id3Tags.tags.title,
-        artist: id3Tags.tags.artist,
-        album: id3Tags.tags.album,
+      const getBaseMetadata = (tags = id3Tags.tags) => ({
+        title: tags.title,
+        artist: tags.artist,
+        album: tags.album,
+        chapters: tags.CHAP,
+        tableOfContents: tags.CTOC,
       });
+      this.setState({
+        phase: 'missing id3',
+        metadataScratch: getBaseMetadata((id3Tags && id3Tags.tags) || {}),
+      });
+      return;
       if (!id3Tags || !id3Tags.tags.title || (!id3Tags.tags.artist && podcastAuthor) || !id3Tags.tags.album) {
         // -> missing id3
-        this.setState({phase: 'missing id3'});
+        this.setState({
+          phase: 'missing id3',
+          metadataScratch: getBaseMetadata((id3Tags && id3Tags.tags) || {}),
+        });
         return;
       } else if (!id3Tags.tags.picture) {
         // -> has id3, missing artwork
@@ -352,6 +362,7 @@ export default class AudioUploader extends PureComponent {
                 this.setState({
                   phase: 'missing pic',
                   metadataScratch: {
+                    ...this.state.metadataScratch,
                     title: document.querySelector('input[name=title]').value,
                     artist: props.podcastAuthor,
                     album: props.podcastName,

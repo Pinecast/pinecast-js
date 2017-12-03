@@ -13,6 +13,9 @@ module.exports = {
   resolve: {
     mainFields: ['jsnext:main', 'main'],
     modules: [path.resolve(__dirname, 'vendor'), path.resolve(__dirname, '../../node_modules'), 'node_modules'],
+    // alias: {
+    //   '@mattbasta/browser-id3-writer$': '/opt/browser-id3-writer/src/ID3Writer.js',
+    // },
   },
   cache: false,
   output: {
@@ -44,7 +47,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        include: /jsmediatags|monotone\-cubic\-spline/,
+        include: /jsmediatags/,
         loader: 'babel-loader',
         options: {
           presets: ['es2015', 'es2016'],

@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "blob-to-buffer": "^1.2.6",
-    "browser-id3-writer": "^3.0.3",
+    "@mattbasta/browser-id3-writer": "^3.0.4",
     "canvas-to-blob": "0.0.0",
     "exif": "^0.6.0",
     "@mattbasta/jsmediatags": "^3.6.3",

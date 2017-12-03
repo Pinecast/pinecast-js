@@ -1,4 +1,4 @@
-import ID3Writer from 'browser-id3-writer';
+import ID3Writer from '@mattbasta/browser-id3-writer';
 
 export default function(arrayBuffer, metadata) {
   const writer = new ID3Writer(arrayBuffer);
@@ -17,6 +17,46 @@ export default function(arrayBuffer, metadata) {
       type: 3,
       data: metadata.artwork,
       description: 'Episode Artwork',
+    });
+  }
+
+  function destructureSubFrames(subFrames) {
+    return Object.entries(subFrames)
+      .map(([frameId, {data}]) => {
+        if (frameId === 'APIC') {
+          return [frameId, {data: new Uint8Array(data.data), type: data.format, description: data.description}];
+        }
+        if (frameId === 'TIT2' || frameId === 'TIT3') {
+          return [frameId, data];
+        }
+        return null;
+      })
+      .filter(x => x)
+      .reduce((acc, [frameId, value]) => {
+        acc[frameId] = value;
+        return acc;
+      }, {});
+  }
+
+  if (metadata.chapters) {
+    metadata.chapters.forEach(chap => {
+      writer.setFrame('CHAP', {
+        endOffset: chap.data.endOffset,
+        endTime: chap.data.endTime,
+        id: chap.data.id,
+        startOffset: chap.data.startOffset,
+        startTime: chap.data.startTime,
+        subFrames: destructureSubFrames(chap.data.subFrames),
+      });
+    });
+  }
+  if (metadata.tableOfContents) {
+    writer.setFrame('CTOC', {
+      id: metadata.tableOfContents.data.id,
+      ordered: metadata.tableOfContents.data.ordered,
+      topLevel: metadata.tableOfContents.data.topLevel,
+      childElementIds: metadata.tableOfContents.data.childElementIds,
+      subFrames: destructureSubFrames(metadata.tableOfContents.data.subFrames),
     });
   }
   writer.setFrame('TCON', ['Podcast']);
