@@ -1,4 +1,3 @@
-import * as spline from '@yr/monotone-cubic-spline';
 import React, {Component} from 'react';
 
 import renderBalloons from './balloons';
@@ -195,17 +194,14 @@ export default class LineChartBody extends Component {
       <g className="lines">
         {data.datasets.map((dataset, idx) => (
           <g key={idx}>
-            <path
+            <polyline
               className="chart-line"
-              d={spline.svgPath(
-                spline.points(
-                  data.labels.map((_, i) => [
-                    xRange(i),
-                    yRange(dataset.data[i - (data.labels.length - dataset.data.length)] || 0),
-                  ]),
-                ),
-              )}
               fill="none"
+              points={data.labels
+                .map(
+                  (_, i) => `${xRange(i)},${yRange(dataset.data[i - (data.labels.length - dataset.data.length)] || 0)}`,
+                )
+                .join(' ')}
               stroke={dataset.strokeColor}
               strokeWidth={hovering === idx ? 3.5 : 2}
             />
@@ -216,10 +212,10 @@ export default class LineChartBody extends Component {
                   key={i}
                   cx={xRange(i)}
                   cy={yRange(value)}
-                  r={value ? 4.5 : 2.5}
+                  r={value ? 3.5 : 2}
                   fill={dataset.pointColor}
                   stroke={value ? '#fff' : 'transparent'}
-                  strokeWidth="2px"
+                  strokeWidth="1.5px"
                 />
               );
             })}
