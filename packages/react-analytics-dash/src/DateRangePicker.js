@@ -41,6 +41,16 @@ export default class DateRangePicker extends React.Component {
     this._end = null;
   }
   handleChange = (dateName, value) => {
+    const endDate = this.props.endDate.clone().startOf('day');
+    if (
+      dateName === 'startDate' &&
+      value
+        .clone()
+        .startOf('day')
+        .isSameOrAfter(endDate)
+    ) {
+      value = endDate.clone().add(-1, 'days');
+    }
     this.props.onDatesChange({
       startDate: this.props.startDate,
       endDate: this.props.endDate,
@@ -56,7 +66,7 @@ export default class DateRangePicker extends React.Component {
           <span>{gettext('From')}</span>
           <ValidDatePicker
             isValidDate={date => !isOutsideRange(date) && date.isBefore(endDate.clone().subtract(1, 'days'))}
-            onChange={val => this.handleChange('startDate', val.startOf('day').add(1, 'hours'))}
+            onChange={val => this.handleChange('startDate', val.startOf('day'))}
             ref={el => (this._start = el)}
             value={startDate}
           />

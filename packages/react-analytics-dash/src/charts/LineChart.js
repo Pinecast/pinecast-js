@@ -71,11 +71,28 @@ export default class LineChart extends BaseChart {
   }
 
   getGranularities() {
+    const {timeframe} = this.state;
+    if (timeframe === 'custom') {
+      const out = {
+        daily: constants.DEFAULT_GRANULARITIES.daily,
+      };
+      const {customTimeframe: [startDate, endDate]} = this.state;
+      if (endDate - startDate < 86400 * 3 * 1000) {
+        out.hourly = constants.DEFAULT_GRANULARITIES.hourly;
+      }
+      if (endDate - startDate > 86400 * 7 * 1000) {
+        out.weekly = constants.DEFAULT_GRANULARITIES.weekly;
+      }
+      if (endDate - startDate > 86400 * 30 * 1000) {
+        out.monthly = constants.DEFAULT_GRANULARITIES.monthly;
+      }
+      return out;
+    }
+
     const supRaw = super.getGranularities();
     if (!supRaw) {
       return null;
     }
-    const {timeframe} = this.state;
     if (timeframe === 'day') {
       return {hourly: supRaw.hourly};
     }
@@ -83,7 +100,7 @@ export default class LineChart extends BaseChart {
       return {daily: supRaw.daily};
     }
     if (timeframe === 'all') {
-      return {monthly: supRaw.monthly};
+      return {monthly: supRaw.monthly, weekly: supRaw.weekly};
     }
 
     const sup = {...supRaw};

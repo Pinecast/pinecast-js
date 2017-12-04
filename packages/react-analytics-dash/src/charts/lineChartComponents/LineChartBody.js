@@ -24,6 +24,9 @@ const E5 = Math.sqrt(10);
 const E2 = Math.sqrt(2);
 
 function getTickIncrement(min, max) {
+  if (min === max) {
+    return 0;
+  }
   const step = (max - min) / 10;
   const power = Math.floor(Math.log(step) / Math.LN10);
   const error = step / Math.pow(10, power);
@@ -155,15 +158,15 @@ export default class LineChartBody extends Component {
                 <rect
                   className="has-tooltip"
                   data-tooltip={`
-                                <b>${label}</b><br>
-                                ${data.datasets.length > 1
-                                  ? `Total: ${data.datasets.reduce((acc, cur) => acc + cur.data[idx], 0)}<br>`
-                                  : ''}
-                                ${data.datasets
-                                  .filter(x => x.data[idx])
-                                  .map(x => `${x.label}: ${x.data[idx]}`)
-                                  .join('<br>')}
-                            `}
+                    <b>${label}</b><br>
+                    ${data.datasets.length > 1
+                      ? `Total: ${data.datasets.reduce((acc, cur) => acc + (cur.data[idx] || 0), 0)}<br>`
+                      : ''}
+                    ${data.datasets
+                      .filter(x => x.data[idx])
+                      .map(x => `${x.label}: ${x.data[idx]}`)
+                      .join('<br>')}
+                  `}
                   fill="transparent"
                   height={height - marginTop - marginBottom - xAxisHeight}
                   key={idx}

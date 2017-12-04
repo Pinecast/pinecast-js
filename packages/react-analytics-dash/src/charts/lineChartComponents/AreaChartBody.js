@@ -8,8 +8,9 @@ export default class AreaChartBody extends LineChartBody {
     return [
       0,
       Math.max(
+        0,
         ...data.labels.map((_, i) =>
-          data.datasets.reduce((acc, cur) => acc + cur.data[i - (data.labels.length - cur.data.length)] || 0, 0),
+          data.datasets.reduce((acc, cur) => acc + (cur.data[i - (data.labels.length - cur.data.length)] || 0), 0),
         ),
       ),
     ];

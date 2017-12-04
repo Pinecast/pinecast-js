@@ -155,7 +155,7 @@ export const DEFAULT_TIMEFRAMES = {
 };
 export const DEFAULT_TIMEFRAME = 'month';
 
-const DEFAULT_GRANULARITIES = {
+export const DEFAULT_GRANULARITIES = {
   monthly: gettext('Month'),
   weekly: gettext('Week'),
   daily: gettext('Day'),
