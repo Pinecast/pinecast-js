@@ -189,7 +189,7 @@ export default class AudioUploader extends PureComponent {
 
     try {
       const id3Tags = await guardCallback(this, getID3Tags(decoded));
-      const getBaseMetadata = (tags = id3Tags.tags) => ({
+      const getBaseMetadata = (tags = (id3Tags && id3Tags.tags) || {}) => ({
         title: tags.title,
         artist: tags.artist,
         album: tags.album,
@@ -205,7 +205,7 @@ export default class AudioUploader extends PureComponent {
         // -> missing id3
         this.setState({
           phase: 'missing id3',
-          metadataScratch: getBaseMetadata((id3Tags && id3Tags.tags) || {}),
+          metadataScratch: getBaseMetadata(),
         });
         return;
       } else if (!id3Tags.tags.picture) {
