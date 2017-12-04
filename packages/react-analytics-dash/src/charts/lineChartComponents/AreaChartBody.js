@@ -1,5 +1,4 @@
-import * as spline from '@yr/monotone-cubic-spline';
-import React, {Component} from 'react';
+import React from 'react';
 
 import LineChartBody from './LineChartBody';
 
@@ -35,24 +34,22 @@ export default class AreaChartBody extends LineChartBody {
         {data.datasets
           .map((dataset, idx) => {
             return (
-              <path
+              <polyline
                 className="chart-line"
-                d={
-                  spline.svgPath(
-                    spline.points(
-                      data.labels.map((_, i) => {
-                        const start = totals[i];
-                        const value = dataset.data[i - (data.labels.length - dataset.data.length)] || 0;
-                        totals[i] += value;
-                        return [xRange(i), yRange(value + start)];
-                      }),
-                    ),
-                  ) +
-                  `L${width - marginRight}, ${height - marginBottom - xAxisHeight}` +
-                  `L${marginLeft}, ${height - marginBottom - xAxisHeight} Z`
-                }
                 fill={hovering === idx ? dataset.strokeColor : dataset.pointColor}
                 key={idx}
+                points={
+                  data.labels
+                    .map((_, i) => {
+                      const start = totals[i];
+                      const value = dataset.data[i - (data.labels.length - dataset.data.length)] || 0;
+                      totals[i] += value;
+                      return `${xRange(i)},${yRange(value + start)}`;
+                    })
+                    .join(' ') +
+                  ` ${width - marginRight},${height - marginBottom - xAxisHeight} ` +
+                  `${marginLeft},${height - marginBottom - xAxisHeight}`
+                }
                 stroke={dataset.strokeColor}
                 strokeWidth={2}
               />

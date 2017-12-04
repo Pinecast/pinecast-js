@@ -1,5 +1,6 @@
 const path = require('path');
 
+const MinifyPlugin = require('babel-minify-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
@@ -32,11 +33,19 @@ module.exports = {
     }),
     new webpack.LoaderOptionsPlugin({minimize: true}),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      mangle: {
-        except: ['Buffer'],
+    new MinifyPlugin(
+      {
+        mangle: {
+          blacklist: ['Buffer'],
+        },
       },
-    }),
+      {sourceMap: 'cheap-source-maps'},
+    ),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   mangle: {
+    //     except: ['Buffer'],
+    //   },
+    // }),
   ],
   module: {
     rules: [
@@ -44,15 +53,6 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
-      },
-      {
-        test: /\.js$/,
-        include: /jsmediatags/,
-        loader: 'babel-loader',
-        options: {
-          presets: ['es2015', 'es2016'],
-          plugins: [],
-        },
       },
       {
         test: /\.css$/,
