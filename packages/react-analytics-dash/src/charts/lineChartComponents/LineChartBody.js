@@ -27,7 +27,7 @@ function getTickIncrement(min, max) {
   if (min === max) {
     return 0;
   }
-  const step = (max - min) / 10;
+  const step = (max - min) / 5;
   const power = Math.floor(Math.log(step) / Math.LN10);
   const error = step / Math.pow(10, power);
   return power >= 0
@@ -51,8 +51,8 @@ export default class LineChartBody extends Component {
   getYDomain() {
     const {data} = this.props;
     return [
-      Math.min(...data.datasets.map(ds => Math.min(...ds.data))),
-      Math.max(...data.datasets.map(ds => Math.max(...ds.data))),
+      Math.min(0, ...data.datasets.map(ds => Math.min(...ds.data))),
+      Math.max(0, ...data.datasets.map(ds => Math.max(...ds.data))),
     ];
   }
 
@@ -126,11 +126,11 @@ export default class LineChartBody extends Component {
           textAnchor="end"
           transform={`translate(0, ${height - marginBottom - xAxisHeight})`}
         >
-          <line className="domain" stroke="#000" x1={marginLeft} x2={width - marginRight} y1={0} y2={0} />
+          <line className="domain" stroke="#666" x1={marginLeft} x2={width - marginRight} y1={0} y2={0} />
           {xTicks.map((tickValue, i) => {
             return (
               <g className="tick" key={i} transform={`translate(${xRange(tickValue)}, 0)`}>
-                <text dy="0.71em" fill="#000" transform="rotate(-45)" y={0} x={-6}>
+                <text dy="0.71em" fill="#999" transform="rotate(-45)" y={0} x={-6}>
                   {data.labels[tickValue]}
                 </text>
               </g>
@@ -138,12 +138,12 @@ export default class LineChartBody extends Component {
           })}
         </g>
         <g className="yAxis" fill="none" fontSize={12} textAnchor="end" transform={`translate(${marginLeft}, 0)`}>
-          <line className="domain" stroke="#000" x1={0} x2={0} y1={yRangeTop} y2={yRangeBottom} />
+          <line className="domain" stroke="#999" x1={0} x2={0} y1={yRangeTop} y2={yRangeBottom} />
           {yTicks.map((tickValue, i) => {
             return (
               <g className="tick" key={i} transform={`translate(0, ${yRange(tickValue)})`}>
-                <line stroke="#000" x2={-1} />
-                <text dy="0.32em" fill="#000" x={-8}>
+                <line stroke="#666" x2={-1} />
+                <text dy="0.32em" fill="#999" x={-8}>
                   {Math.ceil(tickValue) === Math.floor(tickValue) ? tickValue : ''}
                 </text>
               </g>
@@ -154,16 +154,24 @@ export default class LineChartBody extends Component {
         <g className="tooltips">
           {data.labels.map((label, idx) => {
             return (
-              <g key={idx}>
+              <g className="tooltip-group" key={idx}>
+                <line
+                  className="tooltip-marker"
+                  x1={xRange(idx)}
+                  x2={xRange(idx)}
+                  y1={marginTop}
+                  y2={height - marginBottom - xAxisHeight}
+                />
                 <rect
                   className="has-tooltip"
                   data-tooltip={`
-                    <b>${label}</b><br>
-                    ${data.datasets.length > 1
-                      ? `Total: ${data.datasets.reduce((acc, cur) => acc + (cur.data[idx] || 0), 0)}<br>`
-                      : ''}
+                    <b>${label}</b> · ${data.datasets.length > 1
+                    ? `Total: ${data.datasets.reduce((acc, cur) => acc + (cur.data[idx] || 0), 0)}`
+                    : ''}
+                    <br>
                     ${data.datasets
                       .filter(x => x.data[idx])
+                      .sort((a, b) => b.data[idx] - a.data[idx])
                       .map(x => `${x.label}: ${x.data[idx]}`)
                       .join('<br>')}
                   `}
@@ -196,33 +204,18 @@ export default class LineChartBody extends Component {
     return (
       <g className="lines">
         {data.datasets.map((dataset, idx) => (
-          <g key={idx}>
-            <polyline
-              className="chart-line"
-              fill="none"
-              points={data.labels
-                .map(
-                  (_, i) => `${xRange(i)},${yRange(dataset.data[i - (data.labels.length - dataset.data.length)] || 0)}`,
-                )
-                .join(' ')}
-              stroke={dataset.strokeColor}
-              strokeWidth={hovering === idx ? 3.5 : 2}
-            />
-            {data.labels.map((_, i) => {
-              const value = dataset.data[i - (data.labels.length - dataset.data.length)] || 0;
-              return (
-                <circle
-                  key={i}
-                  cx={xRange(i)}
-                  cy={yRange(value)}
-                  r={value ? 3.5 : 2}
-                  fill={dataset.pointColor}
-                  stroke={value ? '#fff' : 'transparent'}
-                  strokeWidth="1.5px"
-                />
-              );
-            })}
-          </g>
+          <polyline
+            className="chart-line"
+            fill="none"
+            key={idx}
+            points={data.labels
+              .map(
+                (_, i) => `${xRange(i)},${yRange(dataset.data[i - (data.labels.length - dataset.data.length)] || 0)}`,
+              )
+              .join(' ')}
+            stroke={dataset.strokeColor}
+            strokeWidth={hovering === idx ? 3.5 : 2}
+          />
         ))}
       </g>
     );

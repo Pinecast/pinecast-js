@@ -34,26 +34,33 @@ export default class AreaChartBody extends LineChartBody {
       <g className="lines">
         {data.datasets
           .map((dataset, idx) => {
+            const points = data.labels
+              .map((_, i) => {
+                const start = totals[i];
+                const value = dataset.data[i - (data.labels.length - dataset.data.length)] || 0;
+                totals[i] += value;
+                return `${xRange(i)},${yRange(value + start)}`;
+              })
+              .join(' ');
             return (
-              <polyline
-                className="chart-line"
-                fill={hovering === idx ? dataset.strokeColor : dataset.pointColor}
-                key={idx}
-                points={
-                  data.labels
-                    .map((_, i) => {
-                      const start = totals[i];
-                      const value = dataset.data[i - (data.labels.length - dataset.data.length)] || 0;
-                      totals[i] += value;
-                      return `${xRange(i)},${yRange(value + start)}`;
-                    })
-                    .join(' ') +
-                  ` ${width - marginRight},${height - marginBottom - xAxisHeight} ` +
-                  `${marginLeft},${height - marginBottom - xAxisHeight}`
-                }
-                stroke={dataset.strokeColor}
-                strokeWidth={2}
-              />
+              <g key={idx}>
+                <polyline
+                  className="chart-line-stroke"
+                  fill="transparent"
+                  points={points}
+                  stroke={dataset.strokeColor}
+                  strokeWidth={2}
+                />
+                <polyline
+                  className="chart-line-fill"
+                  fill={hovering === idx ? dataset.strokeColor : dataset.pointColor}
+                  points={
+                    points +
+                    ` ${width - marginRight},${height - marginBottom - xAxisHeight} ` +
+                    `${marginLeft},${height - marginBottom - xAxisHeight}`
+                  }
+                />
+              </g>
             );
           })
           .reverse()}

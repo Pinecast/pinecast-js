@@ -196,11 +196,11 @@ export default class AudioUploader extends PureComponent {
         chapters: tags.CHAP,
         tableOfContents: tags.CTOC,
       });
-      this.setState({
-        phase: 'missing id3',
-        metadataScratch: getBaseMetadata((id3Tags && id3Tags.tags) || {}),
-      });
-      return;
+      // this.setState({
+      //   phase: 'missing id3',
+      //   metadataScratch: getBaseMetadata(),
+      // });
+      // return;
       if (!id3Tags || !id3Tags.tags.title || (!id3Tags.tags.artist && podcastAuthor) || !id3Tags.tags.album) {
         // -> missing id3
         this.setState({
@@ -293,6 +293,7 @@ export default class AudioUploader extends PureComponent {
     } catch (e) {
       console.error(e);
       blob = fileAsArrayBuffer;
+      blob.name = fileObj.name;
     }
 
     this.startUploading([

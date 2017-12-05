@@ -29,6 +29,9 @@ export default function(arrayBuffer, metadata) {
         if (frameId === 'TIT2' || frameId === 'TIT3') {
           return [frameId, data];
         }
+        if (frameId === 'WXXX') {
+          return [frameId, {description: data.user_description, value: data.data}];
+        }
         return null;
       })
       .filter(x => x)
