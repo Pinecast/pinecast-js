@@ -1,3 +1,4 @@
+import * as numeral from 'numeral';
 import React, {Component} from 'react';
 
 import renderBalloons from './balloons';
@@ -144,7 +145,7 @@ export default class LineChartBody extends Component {
               <g className="tick" key={i} transform={`translate(0, ${yRange(tickValue)})`}>
                 <line stroke="#666" x2={-1} />
                 <text dy="0.32em" fill="#999" x={-8}>
-                  {Math.ceil(tickValue) === Math.floor(tickValue) ? tickValue : ''}
+                  {Math.ceil(tickValue) === Math.floor(tickValue) ? numeral(tickValue).format('0,0') : ''}
                 </text>
               </g>
             );
@@ -165,14 +166,16 @@ export default class LineChartBody extends Component {
                 <rect
                   className="has-tooltip"
                   data-tooltip={`
-                    <b>${label}</b> · ${data.datasets.length > 1
-                    ? `Total: ${data.datasets.reduce((acc, cur) => acc + (cur.data[idx] || 0), 0)}`
+                    <b>${label}</b>${data.datasets.length > 1
+                    ? ` · Total: ${numeral(data.datasets.reduce((acc, cur) => acc + (cur.data[idx] || 0), 0)).format(
+                        '0,0',
+                      )}`
                     : ''}
                     <br>
                     ${data.datasets
                       .filter(x => x.data[idx])
                       .sort((a, b) => b.data[idx] - a.data[idx])
-                      .map(x => `${x.label}: ${x.data[idx]}`)
+                      .map(x => `${x.label}: ${numeral(x.data[idx]).format('0,0')}`)
                       .join('<br>')}
                   `}
                   fill="transparent"

@@ -1,3 +1,4 @@
+import * as numeral from 'numeral';
 import React, {Component} from 'react';
 
 import {gettext} from 'pinecast-i18n';
@@ -10,12 +11,14 @@ export default class Legend extends Component {
     function getTotal() {
       return (
         gettext('Total: ') +
-        data.datasets.reduce((acc, cur, i) => {
-          if (selectedSeries && !selectedSeries[i]) {
-            return acc;
-          }
-          return acc + cur.data.reduce((acc2, cur2) => acc2 + cur2, 0);
-        }, 0)
+        numeral(
+          data.datasets.reduce((acc, cur, i) => {
+            if (selectedSeries && !selectedSeries[i]) {
+              return acc;
+            }
+            return acc + cur.data.reduce((acc2, cur2) => acc2 + cur2, 0);
+          }, 0),
+        ).format('0,0')
       );
     }
 
