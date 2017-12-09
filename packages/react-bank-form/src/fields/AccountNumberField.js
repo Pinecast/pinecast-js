@@ -5,8 +5,18 @@ import {gettext} from 'pinecast-i18n';
 import {FieldComponent} from './FieldComponent';
 
 export default class AccountNumberField extends FieldComponent {
+  validateAccountNumber(num, country) {
+    num = String.prototype.trim.call(num);
+    switch (country) {
+      case 'US':
+        return /^\d+$/.test(num) && num.length >= 1 && num.length <= 17;
+      default:
+        return true;
+    }
+  }
+
   get isValid() {
-    return super.isValid && Stripe.bankAccount.validateAccountNumber(this.value, this.props.country);
+    return super.isValid && this.validateAccountNumber(this.value, this.props.country);
   }
 
   render() {
