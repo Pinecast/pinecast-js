@@ -140,7 +140,7 @@ export default class Step3 extends Component {
           );
         case 'podbean':
           return (
-            <a href="http://support.podbean.com/customer/en/portal/articles/1350413-podbean-%7C-how-to-set-a-new-feed-url?b_id=4193">
+            <a href="http://help.podbean.com/support/solutions/articles/25000004954-podbean-how-to-set-a-new-feed-url">
               {gettext('Setting up a redirect from PodBean...')}
             </a>
           );
