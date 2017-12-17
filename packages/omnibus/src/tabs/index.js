@@ -1,17 +1,20 @@
-Array.prototype.slice.call(document.querySelectorAll('.tabs.dynamic')).forEach(buildTabs);
+Array.from(document.querySelectorAll('.tabs.dynamic')).forEach(buildTabs);
 
 function hide(elem) {
   elem.style.display = 'none';
 }
 function show(elem) {
   elem.style.display = 'block';
-  Array.prototype.slice.call(elem.querySelectorAll('.CodeMirror')).forEach(cm => {
+  Array.from(elem.querySelectorAll('.CodeMirror')).forEach(cm => {
+    if (!cm.CodeMirror) {
+      return;
+    }
     cm.CodeMirror.refresh();
   });
 }
 
 function buildTabs(tabBar) {
-  const allTabs = Array.prototype.slice.call(tabBar.querySelectorAll('li a[data-tab]'));
+  const allTabs = Array.from(tabBar.querySelectorAll('li a[data-tab]'));
 
   function select(a, initial) {
     allTabs.forEach(tab => {
@@ -51,16 +54,27 @@ function buildTabs(tabBar) {
     select(target);
   });
 
+  const hashPos = Number(tabBar.getAttribute('data-hash-pos')) || 0;
+
   let selected = null;
   if (window.location.hash) {
-    const hash = window.location.hash.substr(1).split(',')[tabBar.getAttribute('data-hash-pos') || 0];
-    selected =
-      tabBar.querySelector('a[data-tab=".tab-' + hash + '"]') || tabBar.querySelector('a[data-tab=".' + hash + '"]');
+    const hash = window.location.hash.substr(1).split(',')[hashPos];
+    selected = tabBar.querySelector(`a[data-tab=".tab-${hash}"]`) || tabBar.querySelector(`a[data-tab=".${hash}"]`);
   }
   if (!selected) {
     selected = tabBar.querySelector('li a[data-tab]');
   }
   select(selected, true);
+
+  window.addEventListener('hashchange', () => {
+    const hash = window.location.hash.substr(1).split(',')[hashPos];
+    const selected =
+      tabBar.querySelector(`a[data-tab=".tab-${hash}"]`) || tabBar.querySelector(`a[data-tab=".${hash}"]`);
+    if (!selected) {
+      return;
+    }
+    select(selected, false);
+  });
 }
 
 export {};
