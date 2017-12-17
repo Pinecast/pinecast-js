@@ -138,7 +138,7 @@ export default class NewAccountForm extends React.Component {
 
         <hr />
 
-        <div style={{position: 'relative'}}>
+        <div style={{position: 'relative', marginBottom: '-1em'}}>
           <aside className="aside--secure">
             <strong>{gettext('Personal Details')}</strong>
             <p>{gettext('Stripe uses these details to verify your identity and prevent fraud.')}</p>
@@ -156,7 +156,7 @@ export default class NewAccountForm extends React.Component {
 
         <div>
           <button className="btn" type="submit">
-            {gettext('Set Bank Account')}
+            {gettext('Create tip jar')}
           </button>
         </div>
       </form>
