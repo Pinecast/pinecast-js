@@ -13,13 +13,28 @@ export default class LEDOBField extends BaseFieldComponent {
     return new Date(this.refs['year-field'].value, this.refs['month-field'].value - 1, this.refs['day-field'].value);
   }
 
+  handleInput = () => {
+    const year = parseInt(this.refs['year-field'].value, 10);
+    if (this.props.onInput) {
+      if (year) {
+        this.props.onInput({
+          year: year || 0,
+          month: parseInt(this.refs['month-field'].value, 10) || 1,
+          day: parseInt(this.refs['day-field'].value, 10) || 1,
+        });
+      } else {
+        this.props.onInput(undefined);
+      }
+    }
+  };
+
   render() {
     return (
       <label className="ledob-label" style={{flex: '1 1 100%'}}>
-        <span>{gettext('Date of Birth')}</span>
+        <span>{gettext('Date of birth')}</span>
         <div style={{display: 'flex'}}>
-          <div className="select" style={{flex: '1 1 50%', marginRight: '15px'}}>
-            <select ref="month-field">
+          <div className="select" style={{flex: '1 1 45%', marginRight: '15px'}}>
+            <select ref="month-field" onInput={this.handleInput}>
               <option value={1}>{gettext('January')}</option>
               <option value={2}>{gettext('February')}</option>
               <option value={3}>{gettext('March')}</option>
@@ -41,9 +56,10 @@ export default class LEDOBField extends BaseFieldComponent {
             defaultValue="1"
             max={31}
             min={1}
+            onInput={this.handleInput}
             ref="day-field"
             required={true}
-            style={{flex: '1 1 30%', marginRight: '25px'}}
+            style={{flex: '1 1 30%', marginRight: '15px', textAlign: 'center'}}
           />
 
           <input
@@ -55,12 +71,13 @@ export default class LEDOBField extends BaseFieldComponent {
                             ${e.target.value ? '' : 'is-empty'}
                             ${e.target.checkValidity() ? 'is-valid' : 'is-invalid'}
                         `;
+              this.handleInput();
             }}
             pattern="[12][90]\d\d"
             placeholder="1990"
             ref="year-field"
             required={true}
-            style={{flex: '1 1 25%'}}
+            style={{flex: '1 1 25%', textAlign: 'center'}}
           />
         </div>
       </label>

@@ -13,8 +13,9 @@
   "dependencies": {
     "pinecast-i18n": "^1.0.0",
     "pinecast-xhr": "^1.0.4",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "pinecast-spinner": "^1.2.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "react-select": "^1.0.0-rc.5"
   },
   "devDependencies": {

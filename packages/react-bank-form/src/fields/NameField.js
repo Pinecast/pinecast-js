@@ -3,6 +3,12 @@ import React from 'react';
 import {FieldComponent} from './FieldComponent';
 
 export default class NameField extends FieldComponent {
+  handleInput = e => {
+    this.setEmpty(`${this.fieldName}-field`, e);
+    if (this.props.onInput) {
+      this.props.onInput(e.target.value);
+    }
+  };
   render() {
     return (
       <label className={`${this.fieldName}-label`} style={{flex: '1 1 100%'}}>
@@ -12,7 +18,7 @@ export default class NameField extends FieldComponent {
           className={`${this.fieldName}-field is-empty`}
           ref="field"
           required={true}
-          onInput={this.setEmpty.bind(this, `${this.fieldName}-field`)}
+          onInput={this.handleInput}
         />
       </label>
     );

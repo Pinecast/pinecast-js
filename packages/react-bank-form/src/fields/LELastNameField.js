@@ -9,6 +9,6 @@ export default class LEFirstNameField extends NameField {
     return 'leflastname';
   }
   get labelText() {
-    return gettext('Last Name');
+    return gettext('Last name');
   }
 }

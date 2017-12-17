@@ -19,6 +19,7 @@ export default class Spinner extends Component {
             </linearGradient>
           </defs>
           <g clipPath="url(#spinner-clip)">
+            <rect x="0" y="0" width="36" height="36" style={{fill: 'rgba(0, 0, 0, 0.15)'}} />
             <rect x="0" y="0" width="100" height="100" className="spinner-layer spinner-layer2" />
             <rect x="0" y="0" width="100" height="100" className="spinner-layer spinner-layer1" />
           </g>

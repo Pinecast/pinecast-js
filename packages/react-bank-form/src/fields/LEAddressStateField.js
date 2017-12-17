@@ -5,6 +5,12 @@ import {gettext} from 'pinecast-i18n';
 import {FieldComponent} from './FieldComponent';
 
 export default class LEAddressStateField extends FieldComponent {
+  handleInput = e => {
+    this.setEmpty('leaddressstate-field', e);
+    if (this.props.onInput) {
+      this.props.onInput(e.target.value);
+    }
+  };
   getLabel() {
     switch (this.props.entityCountry) {
       case 'au':
@@ -26,7 +32,7 @@ export default class LEAddressStateField extends FieldComponent {
           className={`leaddressstate-field is-empty`}
           maxLength={3}
           minLength={2}
-          onInput={this.setEmpty.bind(this, `leaddressstate-field`)}
+          onInput={this.handleInput}
           pattern="[a-zA-Z][a-zA-Z][a-zA-Z]?"
           ref="field"
           required={true}
