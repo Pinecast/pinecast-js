@@ -42,7 +42,7 @@ export default class TimeRemainingIndicator extends PureComponent {
   };
 
   render() {
-    const body = this.state.timeRemaining || gettext('Calculating time remaining...');
+    const body = this.state.timeRemaining || gettext('Calculating time remaining…');
     if (this.props.renderer) {
       return this.props.renderer(body);
     }
