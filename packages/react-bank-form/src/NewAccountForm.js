@@ -1,6 +1,8 @@
 import * as React from 'react';
 
 import {gettext} from 'pinecast-i18n';
+import Spinner from 'pinecast-spinner';
+import xhr from 'pinecast-xhr';
 
 import {countryOptions} from './constants';
 import ExternalAccount from './ExternalAccount';
@@ -22,6 +24,7 @@ export default class NewAccountForm extends React.Component {
       country: 'us',
       legalEntity: {},
 
+      error: null,
       saving: false,
     };
 
@@ -36,14 +39,35 @@ export default class NewAccountForm extends React.Component {
       return;
     }
 
-    this.setState({saving: true});
+    this.setState({saving: true, error: null});
 
-    const [acctToken, bankToken] = await Promise.all([
+    const [{token: {id: acctToken}}, {token: {id: bankToken}}] = await Promise.all([
       stripe.createToken('account', {legal_entity: this.state.legalEntity, tos_shown_and_accepted: true}),
       this.externalAccount.getToken(),
     ]);
 
-    //
+    xhr(
+      {
+        method: 'post',
+        url: '/payments/services/tip_jar/create',
+        form: {
+          country: this.state.country,
+          account_token: acctToken,
+          bank_token: bankToken,
+        },
+      },
+      (err, res, body) => {
+        if (err || res.statusCode !== 200) {
+          this.setState({
+            error: gettext('There was a problem creating your account.'),
+            saving: false,
+          });
+          return;
+        }
+
+        this.props.onAccountCreated();
+      },
+    );
   };
 
   handleChangeCountry = country => {
@@ -99,67 +123,76 @@ export default class NewAccountForm extends React.Component {
   };
 
   render() {
-    const {state: {country}} = this;
+    const {state: {country, error, saving}} = this;
+
     return (
-      <form
-        className="bank-form"
-        onSubmit={this.handleSubmit}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          paddingTop: 0,
-        }}
-      >
-        <label>
-          <span>{gettext('Country')}</span>
-          <Select onChange={this.handleChangeCountry} options={countryOptions} value={country} />
-        </label>
+      <React.Fragment>
+        {saving && (
+          <div style={{padding: 40, display: 'flex', justifyContent: 'center'}}>
+            <Spinner />
+          </div>
+        )}
+        <form
+          className="bank-form"
+          onSubmit={this.handleSubmit}
+          style={{
+            display: saving ? 'none' : 'flex',
+            flexDirection: 'column',
+            paddingTop: 0,
+          }}
+        >
+          {error && <div className="error">{error}</div>}
+          <label>
+            <span>{gettext('Country')}</span>
+            <Select onChange={this.handleChangeCountry} options={countryOptions} value={country} />
+          </label>
 
-        <hr />
+          <hr />
 
-        <aside>
-          <p>
-            {gettext(
-              'This information should reflect the owner of the podcast. These details will be used for tax purposes, if necessary.',
-            )}
-          </p>
-        </aside>
-
-        <LEFirstNameField onInput={this.handleFirstName} />
-        <LELastNameField onInput={this.handleLastName} />
-
-        <hr />
-
-        <LEAddressStreetField onInput={this.handleAddressLine1} />
-        <LEAddressSecondField onInput={this.handleAddressLine2} />
-        <LEAddressCityField onInput={this.handleAddressCity} />
-        <LEAddressStateField onInput={this.handleAddressState} country={country} />
-        <LEAddressZipField onInput={this.handleAddressPostalCode} country={country} />
-
-        <hr />
-
-        <div style={{position: 'relative', marginBottom: '-1em'}}>
-          <aside className="aside--secure">
-            <strong>{gettext('Personal Details')}</strong>
-            <p>{gettext('Stripe uses these details to verify your identity and prevent fraud.')}</p>
+          <aside>
+            <p>
+              {gettext(
+                'This information should reflect the owner of the podcast. These details will be used for tax purposes, if necessary.',
+              )}
+            </p>
           </aside>
 
-          <LEDOBField onInput={this.handleDob} />
-          {country === 'us' && <LESSNLastFourField onInput={this.handleSSNLast4} />}
-        </div>
+          <LEFirstNameField onInput={this.handleFirstName} />
+          <LELastNameField onInput={this.handleLastName} />
 
-        <hr />
+          <hr />
 
-        <ExternalAccount country={country} ref={this.handleEARef} />
+          <LEAddressStreetField onInput={this.handleAddressLine1} />
+          <LEAddressSecondField onInput={this.handleAddressLine2} />
+          <LEAddressCityField onInput={this.handleAddressCity} />
+          <LEAddressStateField onInput={this.handleAddressState} country={country} />
+          <LEAddressZipField onInput={this.handleAddressPostalCode} country={country} />
 
-        <hr />
+          <hr />
 
-        <div>
-          <button className="btn" type="submit">
-            {gettext('Create tip jar')}
-          </button>
-        </div>
-      </form>
+          <div style={{position: 'relative', marginBottom: '-1em'}}>
+            <aside className="aside--secure">
+              <strong>{gettext('Personal details')}</strong>
+              <p>{gettext('Stripe uses these details to verify your identity and prevent fraud.')}</p>
+            </aside>
+
+            <LEDOBField onInput={this.handleDob} />
+            {country === 'us' && <LESSNLastFourField onInput={this.handleSSNLast4} />}
+          </div>
+
+          <hr />
+
+          <ExternalAccount country={country} ref={this.handleEARef} />
+
+          <hr />
+
+          <div>
+            <button className="btn" type="submit">
+              {gettext('Create tip jar')}
+            </button>
+          </div>
+        </form>
+      </React.Fragment>
     );
   }
 }

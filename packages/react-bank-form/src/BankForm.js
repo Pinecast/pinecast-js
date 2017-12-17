@@ -4,8 +4,6 @@ import {gettext} from 'pinecast-i18n';
 import Spinner from 'pinecast-spinner';
 import xhr from 'pinecast-xhr';
 
-import LegalEntityForm from './LegalEntityForm';
-
 import BankDetails from './BankDetails';
 import NewAccountForm from './NewAccountForm';
 
@@ -69,7 +67,7 @@ export default class BankForm extends React.Component {
     if (!settings.setup) {
       return (
         <React.Fragment>
-          <strong>{gettext('Add tip jar information')}</strong>
+          <strong style={{display: 'block', marginBottom: '1em'}}>{gettext('Add tip jar information')}</strong>
           <p>
             {gettext(
               'Adding a bank account will allow your podcasts to begin accepting tips. All information provided will stored securely by our payment processor and will never pass through Pinecast servers.',
@@ -82,7 +80,7 @@ export default class BankForm extends React.Component {
 
     return (
       <React.Fragment>
-        <strong>{gettext('Existing tip jar information')}</strong>
+        <strong style={{display: 'block', marginBottom: '1em'}}>{gettext('Existing tip jar information')}</strong>
         <p>
           {gettext(
             'A payout account is already linked to your Pinecast account. You are all set to accept tips for your podcast!',
@@ -90,7 +88,7 @@ export default class BankForm extends React.Component {
         </p>
         <BankDetails externalAccount={settings.external_account} />
         <hr />
-        <strong>{gettext('Update account information')}</strong>
+        <strong style={{display: 'block', marginBottom: '1em'}}>{gettext('Update account information')}</strong>
         <p>{gettext('New account details can be provided at any time.')}</p>
       </React.Fragment>
     );

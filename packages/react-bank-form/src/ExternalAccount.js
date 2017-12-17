@@ -53,7 +53,7 @@ export default class ExternalAccount extends React.Component {
             <span>{gettext('Debit card')}</span>
           </label>
         </div>
-        {type === 'debit_card' && <DebitCard ref={this.handleRefDebit} />}
+        {type === 'debit_card' && <DebitCard country={this.props.country} ref={this.handleRefDebit} />}
         <div className="radio-group half-flush">
           <label className="radio">
             <input checked={type === 'bank_account'} onChange={this.handleSetBank} type="radio" />

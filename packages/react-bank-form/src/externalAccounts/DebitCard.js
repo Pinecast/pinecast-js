@@ -2,11 +2,15 @@ import * as React from 'react';
 
 import {gettext} from 'pinecast-i18n';
 
+import * as currencies from '../currencies';
+import Select from '../Select';
+
 export default class DebitCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       complete: false,
+      currency: currencies.countriesToCurrencies[props.country][0],
     };
 
     this.elements = stripe.elements();
@@ -27,14 +31,18 @@ export default class DebitCard extends React.Component {
   }
 
   getToken() {
-    return stripe.createToken(this.card);
+    return stripe.createToken(this.card, {currency: this.state.currency});
   }
 
   handleCardRef = ref => {
     this.cardEl = ref;
   };
+  handleChangeCurrency = currency => {
+    this.setState({currency});
+  };
 
   render() {
+    const availableCurrencies = currencies.countriesToCurrencies[this.props.country];
     return (
       <div style={{position: 'relative'}}>
         <aside style={{top: '-3em'}}>
@@ -45,6 +53,16 @@ export default class DebitCard extends React.Component {
           <span>{gettext('Card details')}</span>
           <div ref={this.handleCardRef} />
         </label>
+        {availableCurrencies.length > 1 && (
+          <label>
+            <span>{gettext('Currency')}</span>
+            <Select
+              onChange={this.handleChangeCurrency}
+              options={availableCurrencies.map(cur => ({label: currencies.names[cur], value: cur}))}
+              value={this.state.currency}
+            />
+          </label>
+        )}
       </div>
     );
   }
