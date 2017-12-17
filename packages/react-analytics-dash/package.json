@@ -17,10 +17,10 @@
     "pinecast-i18n": "^1.0.0",
     "pinecast-spinner": "^1.2.0",
     "pinecast-xhr": "^1.0.4",
-    "react": "^15.6.1",
+    "react": "^16.2.0",
     "react-addons-shallow-compare": "^15.6.0",
     "react-dates": "^10.1.1",
-    "react-dom": "^15.6.1",
+    "react-dom": "^16.2.0",
     "react-google-charts": "^1.2.1",
     "react-select": "^1.0.0-rc.5",
     "react-simple-pie-chart": "^0.4.0"
