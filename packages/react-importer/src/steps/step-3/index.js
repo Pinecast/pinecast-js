@@ -129,25 +129,25 @@ export default class Step3 extends Component {
         case 'libsyn':
           return (
             <a href="https://support.libsyn.com/kb/changing-your-feed-url-in-itunes/">
-              {gettext('Setting up a redirect from LibSyn...')}
+              {gettext('Setting up a redirect from LibSyn…')}
             </a>
           );
         case 'soundcloud':
           return (
             <a href="http://podcasting.help.soundcloud.com/customer/portal/articles/2162171-redirecting-your-rss-feed-to-another-host">
-              {gettext('Setting up a redirect from SoundCloud...')}
+              {gettext('Setting up a redirect from SoundCloud…')}
             </a>
           );
         case 'podbean':
           return (
             <a href="http://help.podbean.com/support/solutions/articles/25000004954-podbean-how-to-set-a-new-feed-url">
-              {gettext('Setting up a redirect from PodBean...')}
+              {gettext('Setting up a redirect from PodBean…')}
             </a>
           );
         case 'buzzsprout':
           return (
             <a href="https://www.buzzsprout.com/help/9-transfer-away-from-buzzsprout">
-              {gettext('Setting up a redirect from Buzzsprout...')}
+              {gettext('Setting up a redirect from Buzzsprout…')}
             </a>
           );
       }
@@ -202,7 +202,7 @@ export default class Step3 extends Component {
         {progress === 1 && (
           <p>
             <a href={`/dashboard/podcast/${encodeURIComponent(this.props.feed.slug)}`}>
-              {gettext('Visit podcast dashboard...')}
+              {gettext('Visit podcast dashboard…')}
             </a>
           </p>
         )}
@@ -245,7 +245,7 @@ export default class Step3 extends Component {
   render() {
     return (
       <div>
-        <strong>{gettext('Importing...')}</strong>
+        <strong>{gettext('Importing…')}</strong>
 
         {this.state.error && <p className="error">{this.state.error}</p>}
 

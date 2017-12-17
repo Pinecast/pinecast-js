@@ -119,7 +119,7 @@ export default class Step1 extends Component {
     if (this.state.loading) {
       return (
         <div>
-          <strong>{gettext('Loading podcast content...')}</strong>
+          <strong>{gettext('Loading podcast content…')}</strong>
 
           <p>{gettext('We are downloading the contents of your RSS feed. This may take a few moments to complete.')}</p>
 
