@@ -5,6 +5,12 @@ import {gettext} from 'pinecast-i18n';
 import * as currencies from '../currencies';
 import Select from '../Select';
 
+const cardStyle = {
+  base: {
+    flex: '1 1',
+  },
+};
+
 export default class DebitCard extends React.Component {
   constructor(props) {
     super(props);
@@ -19,11 +25,12 @@ export default class DebitCard extends React.Component {
   }
 
   componentDidMount() {
-    this.card = this.elements.create('card');
+    this.card = this.elements.create('card', {style: cardStyle});
     this.card.mount(this.cardEl);
     this.card.on('change', e => {
       this.setState({complete: e.complete});
     });
+    this.cardEl.firstChild.style.flex = '1 1';
   }
 
   isReady() {

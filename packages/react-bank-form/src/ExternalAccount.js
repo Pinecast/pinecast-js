@@ -42,10 +42,14 @@ export default class ExternalAccount extends React.Component {
   };
 
   render() {
-    const {error, type} = this.state;
+    const {props: {country, isUpdate}, state: {error, type}} = this;
     return (
       <React.Fragment>
-        <strong style={{display: 'block', marginBottom: '1em'}}>{gettext('Where should we send your tips?')}</strong>
+        {isUpdate ? (
+          <p>{gettext('What type of account would you like to send tip payouts to?')}</p>
+        ) : (
+          <strong style={{display: 'block', marginBottom: '1em'}}>{gettext('Where should we send your tips?')}</strong>
+        )}
         {error && <div className="error">{error}</div>}
         <div className="radio-group half-flush">
           <label className="radio">
@@ -53,14 +57,14 @@ export default class ExternalAccount extends React.Component {
             <span>{gettext('Debit card')}</span>
           </label>
         </div>
-        {type === 'debit_card' && <DebitCard country={this.props.country} ref={this.handleRefDebit} />}
+        {type === 'debit_card' && <DebitCard country={country} ref={this.handleRefDebit} />}
         <div className="radio-group half-flush">
           <label className="radio">
             <input checked={type === 'bank_account'} onChange={this.handleSetBank} type="radio" />
             <span>{gettext('Bank account')}</span>
           </label>
         </div>
-        {type === 'bank_account' && <BankAccount country={this.props.country} ref={this.handleRefBank} />}
+        {type === 'bank_account' && <BankAccount country={country} ref={this.handleRefBank} />}
       </React.Fragment>
     );
   }

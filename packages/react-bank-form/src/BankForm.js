@@ -5,6 +5,7 @@ import Spinner from 'pinecast-spinner';
 import xhr from 'pinecast-xhr';
 
 import BankDetails from './BankDetails';
+import ExternalAccount from './ExternalAccount';
 import NewAccountForm from './NewAccountForm';
 
 export default class BankForm extends React.Component {
@@ -17,7 +18,12 @@ export default class BankForm extends React.Component {
     this.state = {
       settings: null,
       settingsError: null,
+
+      savingExtAcct: false,
+      updateExtAcctError: null,
+      extAccountSuccess: false,
     };
+    this.updateExtAcct = null;
   }
 
   componentDidMount() {
@@ -45,8 +51,71 @@ export default class BankForm extends React.Component {
     );
   };
 
+  handleUpdateExtAcctRef = el => {
+    this.updateExtAcct = el;
+  };
+
+  handleUpdateExtAcctSubmit = async e => {
+    e.preventDefault();
+    if (!this.updateExtAcct || this.state.savingExtAcct) {
+      return;
+    }
+    this.setState({updateExtAcctError: null, savingExtAcct: true, extAccountSuccess: false});
+
+    let token;
+    try {
+      token = await this.updateExtAcct.getToken();
+    } catch (e) {
+      console.error(e);
+      this.setState({
+        updateExtAcctError: gettext('There was a problem sending your account information to Stripe.'),
+        savingExtAcct: false,
+      });
+      return;
+    }
+
+    xhr(
+      {
+        method: 'post',
+        url: '/payments/services/tip_jar/update/external_account',
+        form: {
+          token: token.token.id,
+        },
+      },
+      (err, res, body) => {
+        if (err || res.statusCode !== 200) {
+          let error = gettext('There was a problem adding your bank account to Pinecast.');
+          if (!err && body) {
+            try {
+              error = JSON.parse(body).error;
+            } catch (e) {}
+          }
+          this.setState({
+            updateExtAcctError: error,
+            savingExtAcct: false,
+          });
+          return;
+        }
+
+        this.setState({
+          updateExtAcctError: null,
+          savingExtAcct: false,
+          extAccountSuccess: true,
+        });
+      },
+    );
+  };
+
+  renderSpinner() {
+    return (
+      <div style={{padding: 40, display: 'flex', justifyContent: 'center'}}>
+        <Spinner />
+      </div>
+    );
+  }
+
   render() {
-    const {settings, settingsError} = this.state;
+    const {extAccountSuccess, savingExtAcct, settings, settingsError, updateExtAcctError} = this.state;
     if (settingsError) {
       return (
         <React.Fragment>
@@ -57,11 +126,7 @@ export default class BankForm extends React.Component {
     }
 
     if (!settings) {
-      return (
-        <div style={{padding: 40, display: 'flex', justifyContent: 'center'}}>
-          <Spinner />
-        </div>
-      );
+      return this.renderSpinner();
     }
 
     if (!settings.setup) {
@@ -88,8 +153,18 @@ export default class BankForm extends React.Component {
         </p>
         <BankDetails externalAccount={settings.external_account} />
         <hr />
-        <strong style={{display: 'block', marginBottom: '1em'}}>{gettext('Update account information')}</strong>
-        <p>{gettext('New account details can be provided at any time.')}</p>
+        <form onSubmit={this.handleUpdateExtAcctSubmit}>
+          <strong style={{display: 'block', marginBottom: '1em'}}>{gettext('Update payout account')}</strong>
+          {extAccountSuccess && <div className="success">{gettext('Your account was updated successfully')}</div>}
+          {updateExtAcctError && <div className="error">{updateExtAcctError}</div>}
+          {savingExtAcct && this.renderSpinner()}
+          <div style={{display: savingExtAcct || extAccountSuccess ? 'none' : null}}>
+            <ExternalAccount country={settings.country.toLowerCase()} isUpdate ref={this.handleUpdateExtAcctRef} />
+            <button className="btn" type="submit">
+              {gettext('Save')}
+            </button>
+          </div>
+        </form>
       </React.Fragment>
     );
   }
