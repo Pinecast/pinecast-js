@@ -84,7 +84,7 @@ export default class BankForm extends React.Component {
       },
       (err, res, body) => {
         if (err || res.statusCode !== 200) {
-          let error = gettext('There was a problem adding your bank account to Pinecast.');
+          let error = gettext('There was a problem adding your payout account to Pinecast.');
           if (!err && body) {
             try {
               error = JSON.parse(body).error;

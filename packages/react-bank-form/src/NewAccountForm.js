@@ -58,8 +58,14 @@ export default class NewAccountForm extends React.Component {
       },
       (err, res, body) => {
         if (err || res.statusCode !== 200) {
+          let error = gettext('There was a problem adding your payout account to Pinecast.');
+          if (!err && body) {
+            try {
+              error = JSON.parse(body).error;
+            } catch (e) {}
+          }
           this.setState({
-            error: gettext('There was a problem creating your account.'),
+            error,
             saving: false,
           });
           return;
