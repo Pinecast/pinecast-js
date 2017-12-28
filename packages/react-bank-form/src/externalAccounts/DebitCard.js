@@ -6,9 +6,7 @@ import * as currencies from '../currencies';
 import Select from '../Select';
 
 const cardStyle = {
-  base: {
-    flex: '1 1',
-  },
+  base: {},
 };
 
 export default class DebitCard extends React.Component {
@@ -31,6 +29,9 @@ export default class DebitCard extends React.Component {
       this.setState({complete: e.complete});
     });
     this.cardEl.firstChild.style.flex = '1 1';
+    setTimeout(() => {
+      this.card.update({style: {base: {fontSize: '13px'}}});
+    }, 0);
   }
 
   isReady() {

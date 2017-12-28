@@ -1,10 +1,14 @@
 Array.from(document.querySelectorAll('.tabs.dynamic')).forEach(buildTabs);
 
 function hide(elem) {
-  elem.style.display = 'none';
+  elem.style.visibility = 'hidden';
+  elem.style.position = 'absolute';
+  elem.style.top = '-10000px';
 }
 function show(elem) {
-  elem.style.display = 'block';
+  elem.style.visibility = 'visible';
+  elem.style.position = 'relative';
+  elem.style.top = 'inherit';
   Array.from(elem.querySelectorAll('.CodeMirror')).forEach(cm => {
     if (!cm.CodeMirror) {
       return;
