@@ -5,12 +5,8 @@ This is all of the Pinecast JavaScript components.
 ## Setup
 
 ```sh
-# Install lerna
 npm install
-
-# Bootstrap and install
 lerna bootstrap
-python lerna_hoist.py
 ```
 
 ## Packaging the omnibus:
@@ -18,6 +14,7 @@ python lerna_hoist.py
 ```sh
 cd packages/omnibus
 npm run build
+# use `npm run dev` instead to start a watcher
 ```
 
 Note that you don't need to run `prepublish` on any of the packages, since omnibus's webpack is configured to use `jsnext:main` in the `package.json` files, which references the ES6 sources.
@@ -27,5 +24,11 @@ The output will be in `packages/omnibus/build/` and can be copied to the `pineca
 ## Rebuilding dependencies:
 
 ```sh
-rm packages/*/package-lock.json && lerna clean && lerna bootstrap && python lerna_hoist.py
+rm packages/*/package-lock.json && lerna clean && lerna bootstrap
+```
+
+## Hard-rebuilding dependencies:
+
+```sh
+rm packages/*/package-lock.json && lerna clean && rm -rf node_mododules && npm i && lerna bootstrap
 ```
