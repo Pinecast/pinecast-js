@@ -33,14 +33,14 @@ module.exports = {
     }),
     new webpack.LoaderOptionsPlugin({minimize: true}),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    // new MinifyPlugin(
-    //   {
-    //     mangle: {
-    //       blacklist: ['Buffer'],
-    //     },
-    //   },
-    //   {sourceMap: 'cheap-source-maps'},
-    // ),
+    new MinifyPlugin(
+      {
+        mangle: {
+          blacklist: ['Buffer'],
+        },
+      },
+      {sourceMap: 'cheap-source-maps'},
+    ),
   ],
   module: {
     rules: [
