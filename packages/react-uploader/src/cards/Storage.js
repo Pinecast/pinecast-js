@@ -1,8 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 
 import {gettext} from 'pinecast-i18n';
 
-import Button from '../Button';
 import Card from '../Card';
 import prettyBytes from '../formatSize';
 import ProgressBar from '../legacy/ProgressBar';

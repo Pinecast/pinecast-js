@@ -1,5 +1,5 @@
 import {Force, Node, Renderer} from 'labella';
-import React from 'react';
+import * as React from 'react';
 
 const NODE_SIZE = 8;
 
@@ -23,13 +23,13 @@ export default function draw(startDate, endDate, data, rawEpisodeData, innerWidt
     nodeHeight: NODE_SIZE,
     direction: 'up',
   });
-  const force = new Force({minPos: 0, maxPos: innerWidth}).nodes(nodes).compute();
+  new Force({minPos: 0, maxPos: innerWidth}).nodes(nodes).compute();
   renderer.layout(nodes);
 
   return (
     <g className="labella" transform={transform}>
       <g className="link-layer">
-        {nodes.map((node, i) => (
+        {nodes.map(node => (
           <path
             className="link"
             d={renderer.generatePath(node)}
@@ -41,7 +41,7 @@ export default function draw(startDate, endDate, data, rawEpisodeData, innerWidt
         ))}
       </g>
       <g className="label-layer">
-        {nodes.map((node, i) => (
+        {nodes.map(node => (
           <a
             className="has-tooltip"
             data-tooltip={`<b>${escapeTextContentForBrowser(node.data.title)}</b>`}

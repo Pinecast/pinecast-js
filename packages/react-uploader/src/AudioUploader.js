@@ -71,8 +71,6 @@ export default class AudioUploader extends PureComponent {
 
   constructor(props) {
     super(props);
-
-    const hasDef = !!props.defURL;
     this.state = {
       instance: getInstance(),
       error: null,
@@ -310,7 +308,7 @@ export default class AudioUploader extends PureComponent {
   };
 
   renderAudioPreview() {
-    const {state: {duration, fileObj, fileAsArrayBuffer, fileSourceURL, fileSize, phase, uploadOrders}} = this;
+    const {state: {duration, fileSourceURL, fileSize, phase, uploadOrders}} = this;
     return (
       <AudioFilePreview
         duration={duration}
@@ -324,7 +322,7 @@ export default class AudioUploader extends PureComponent {
   }
 
   renderImagePreview() {
-    const {state: {imageFileObj, imageAsArrayBuffer, imageSourceURL}} = this;
+    const {state: {fileObj, imageFileObj, imageAsArrayBuffer, imageSourceURL}} = this;
     if (!(imageFileObj || imageAsArrayBuffer || imageSourceURL)) {
       return null;
     }
@@ -339,7 +337,7 @@ export default class AudioUploader extends PureComponent {
   }
 
   renderBody() {
-    const {props, state: {duration, fileObj, imageAsArrayBuffer, metadataScratch, phase, uploadOrders}} = this;
+    const {props, state: {fileObj, imageAsArrayBuffer, metadataScratch, phase, uploadOrders}} = this;
     switch (phase) {
       case 'ready':
         return (

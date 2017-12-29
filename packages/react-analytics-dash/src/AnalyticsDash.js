@@ -47,7 +47,7 @@ export default class AnalyticsDash extends Component {
       endpoint: constants.TYPES_ENDPOINTS[typeType][type],
       episode,
       network,
-      podcast: this.props.podcast,
+      podcast,
       type,
       typeType,
     };

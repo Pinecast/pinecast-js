@@ -3,7 +3,7 @@ import jsmediatags from '@mattbasta/jsmediatags';
 
 export function getID3Tags(audioFileBuffer) {
   return new Promise((resolve, reject) => {
-    const reader = jsmediatags.read(Buffer.from(audioFileBuffer), {
+    jsmediatags.read(Buffer.from(audioFileBuffer), {
       onSuccess: resolve,
       onError: e => {
         if (e && e.type && e.type === 'tagFormat') {

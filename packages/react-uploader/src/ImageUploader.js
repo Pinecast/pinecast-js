@@ -52,8 +52,6 @@ export default class ImageUploader extends PureComponent {
 
   constructor(props) {
     super(props);
-
-    const hasDef = !!props.defURL;
     this.state = {
       instance: getInstance(),
       error: null,
@@ -100,7 +98,7 @@ export default class ImageUploader extends PureComponent {
   }
 
   gotFileToUpload = async () => {
-    const {props: {defImageURL, noiTunesSizeCheck, uploadSurge}, state: {fileObj}} = this;
+    const {props: {noiTunesSizeCheck}, state: {fileObj}} = this;
 
     if (fileObj.size > 1024 * 1024 * 2) {
       this.clearFile({error: gettext('That image is too large. Images may be up to 2MB.')});
@@ -170,7 +168,7 @@ export default class ImageUploader extends PureComponent {
   }
 
   renderBody() {
-    const {props, state: {fileObj, phase, problems, uploadOrders}} = this;
+    const {state: {phase, problems, uploadOrders}} = this;
     switch (phase) {
       case 'ready':
         return (

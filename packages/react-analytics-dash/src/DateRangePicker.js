@@ -1,5 +1,5 @@
 import DateTimePicker from 'react-datetime';
-import React from 'react';
+import * as React from 'react';
 
 import {gettext} from 'pinecast-i18n';
 

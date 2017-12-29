@@ -1,5 +1,5 @@
 import {Buffer} from 'buffer';
-import React from 'react';
+import * as React from 'react';
 import stringify from 'csv-stringify/lib/sync';
 
 const CSVLink = ({children, data}) => (

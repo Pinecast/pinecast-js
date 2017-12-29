@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import LineChartBody from './LineChartBody';
 
@@ -20,15 +20,7 @@ export default class AreaChartBody extends LineChartBody {
     const {height, hovering, width} = this.props;
     const {marginBottom, marginLeft, marginRight, xAxisHeight} = this.getMargins();
 
-    const keys = data.datasets.map((_, i) => `key_${i}`);
-    const blob = data.labels.map((_, i) =>
-      data.datasets.reduce((acc, cur, idx) => {
-        acc[`key_${idx}`] = cur.data[i];
-        return acc;
-      }, {}),
-    );
-
-    const totals = data.labels.map(_ => 0);
+    const totals = data.labels.map(() => 0);
 
     return (
       <g className="lines">

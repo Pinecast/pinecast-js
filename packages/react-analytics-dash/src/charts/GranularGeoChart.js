@@ -1,5 +1,5 @@
 import {Chart} from 'react-google-charts';
-import React from 'react';
+import * as React from 'react';
 
 import BaseChart from './BaseChart';
 import ChartEmptyState from './ChartEmptyState';

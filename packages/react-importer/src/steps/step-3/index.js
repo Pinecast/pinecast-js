@@ -25,6 +25,7 @@ export default class Step3 extends Component {
 
   filterFeedItems() {
     const {__ignored_items, items, ...rest} = this.props.feed;
+    void __ignored_items;
     return {...rest, items: JSON.stringify(items)};
   }
 

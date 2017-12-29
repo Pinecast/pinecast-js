@@ -1,6 +1,5 @@
-import React from 'react';
+import * as React from 'react';
 
-import * as constants from '../constants';
 import GeoChart from './GeoChart';
 import GranularGeoChart from './GranularGeoChart';
 import LineChart from './LineChart';

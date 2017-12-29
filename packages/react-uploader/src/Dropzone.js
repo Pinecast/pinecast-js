@@ -1,5 +1,5 @@
 import Dropzone from 'react-dropzone';
-import React from 'react';
+import * as React from 'react';
 
 const defaultStyle = {
   border: '2px dashed #777',

@@ -4,3 +4,10 @@ export function gettext(text) {
 export function ngettext(text, plural, n) {
   return n === 1 ? text : plural;
 }
+
+export function interpolate(...args) {
+  if (typeof window.interpolate !== 'function') {
+    throw new Error('Django interpolate not loaded');
+  }
+  return window.interpolate(...args);
+}

@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 
-import {gettext} from 'pinecast-i18n';
+import {gettext, interpolate} from 'pinecast-i18n';
 
 const VisibilityWrapper = props => {
-  const {children, isOwner, meetsRequirement, requirement, upgradeURL, ...commonProps} = props;
+  const {children, isOwner, meetsRequirement, requirement, upgradeURL} = props;
   if (meetsRequirement) {
     return children;
   }

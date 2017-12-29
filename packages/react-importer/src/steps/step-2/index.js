@@ -1,9 +1,7 @@
 import moment from 'moment';
 import React, {Component} from 'react';
 
-import {gettext} from 'pinecast-i18n';
-import Spinner from 'pinecast-spinner';
-import xhr from 'pinecast-xhr';
+import {gettext, ngettext} from 'pinecast-i18n';
 
 import {LOCALES} from '../../locales';
 import SlugField from './SlugField';

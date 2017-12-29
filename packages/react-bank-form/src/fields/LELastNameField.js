@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {gettext} from 'pinecast-i18n';
 
 import NameField from './NameField';

@@ -1,5 +1,4 @@
-import {Buffer} from 'buffer';
-import React from 'react';
+import * as React from 'react';
 
 export default class ImageViewer extends React.PureComponent {
   constructor(props) {
@@ -34,6 +33,7 @@ export default class ImageViewer extends React.PureComponent {
 
   render() {
     const {props: {source, ...props}, state: {url}} = this;
+    void source;
     return <img alt="" {...props} src={url} />;
   }
 }

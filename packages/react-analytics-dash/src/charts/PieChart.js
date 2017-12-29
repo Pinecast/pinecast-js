@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import SimplePieChart from 'react-simple-pie-chart';
 
 import {gettext} from 'pinecast-i18n';
@@ -9,7 +9,7 @@ import CSVLink from '../CSVLink';
 
 export default class PieChart extends BaseChart {
   renderTimeframeSelectorExtra() {
-    const data = [['Type', 'Count'], ...this.state.data.map((d, i) => [d.label, d.value])];
+    const data = [['Type', 'Count'], ...this.state.data.map(d => [d.label, d.value])];
     return <CSVLink data={data}>{gettext('CSV')}</CSVLink>;
   }
 

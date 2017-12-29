@@ -12,17 +12,12 @@ export default class DateTime extends Component {
     name: e => e.getAttribute('data-name'),
     labelNow: e => e.getAttribute('data-label-now'),
     labelDateTime: e => e.getAttribute('data-label-datetime'),
-
-    labelDate: e => e.getAttribute('data-label-date'),
-    labelTime: e => e.getAttribute('data-label-time'),
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      dateFocused: false,
-
       option: props.defaultValue ? 'datetime' : 'now',
       selection: props.defaultValue ? new Date(props.defaultValue) : null,
 
@@ -42,10 +37,7 @@ export default class DateTime extends Component {
   }
 
   render() {
-    const {
-      props: {labelNow, labelDate, labelDateTime, labelTime, name},
-      state: {dateFocused, invalidState, option, selection},
-    } = this;
+    const {props: {labelNow, labelDateTime, name}, state: {invalidState, option, selection}} = this;
 
     return (
       <div className="radio-group half-flush">
