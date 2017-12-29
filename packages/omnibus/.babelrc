@@ -1,19 +1,23 @@
 {
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    ["@babel/plugin-transform-runtime", {"polyfill": false, "regenerator": true}]
+  ],
   "presets": [
-    ["env", {
+    ["@babel/preset-env", {
+      "loose": true,
       "modules": false,
+      "shippedProposals": true,
       "targets": {
         "chrome": 59,
         "safari": "10.1",
         "firefox": 55,
         "edge": 15
       },
-      "debug": true
+      "debug": true,
+      "exclude": ["transform-regenerator"]
     }],
-    "stage-2",
-    "react"
-  ],
-  "plugins": [
-    ["transform-runtime", {"polyfill": false, "regenerator": true}]
+    "@babel/preset-stage-3",
+    "@babel/preset-react"
   ]
 }

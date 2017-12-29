@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/Pinecast/omnibus#readme",
   "dependencies": {
-    "babel-runtime": "^6.23.0",
+    "@babel/runtime": "^7.0.0-beta.36",
     "moment": "^2.18.1",
     "pinecast-analytics-dash": "^2.1.2",
     "pinecast-bank-form": "^1.1.0",
@@ -26,22 +26,22 @@
     "pinecast-i18n": "^1.0.0",
     "pinecast-uploader": "^1.2.0",
     "react": "^16.2.0",
-    "react-addons-shallow-compare": "^15.6.0",
     "react-datetime": "^2.10.3",
     "react-dom": "^16.2.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-loader": "^7.1.1",
+    "@babel/core": "7.0.0-beta.36",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.36",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.36",
+    "@babel/preset-env": "^7.0.0-beta.36",
+    "@babel/preset-react": "^7.0.0-beta.36",
+    "@babel/preset-stage-3": "^7.0.0-beta.36",
+    "babel-loader": "^8.0.0-beta.0",
     "babel-minify-webpack-plugin": "^0.2.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^0.28.4",
     "json-loader": "^0.5.4",
     "style-loader": "^0.18.2",
-    "webpack": "^3.7.0",
-    "webpack-bundle-analyzer": "^2.8.2"
+    "webpack": "^3.10.0",
+    "webpack-bundle-analyzer": "^2.9.1"
   }
 }

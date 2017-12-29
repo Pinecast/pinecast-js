@@ -4,10 +4,6 @@
   "description": "",
   "main": "dist/AnalyticsDash.js",
   "jsnext:main": "src/AnalyticsDash.js",
-  "scripts": {
-    "_prepublish": "rm -rf dist/* && npm run transpile",
-    "transpile": "babel src --out-dir dist --source-maps"
-  },
   "author": "Matt Basta <me@mattbasta.com>",
   "license": "MIT",
   "dependencies": {
@@ -18,7 +14,6 @@
     "pinecast-spinner": "^1.2.0",
     "pinecast-xhr": "^1.0.4",
     "react": "^16.2.0",
-    "react-addons-shallow-compare": "^15.6.0",
     "react-dates": "^10.1.1",
     "react-dom": "^16.2.0",
     "react-google-charts": "^1.2.1",

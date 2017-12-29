@@ -4,10 +4,6 @@
   "description": "",
   "main": "dist/Importer.js",
   "jsnext:main": "src/Importer.js",
-  "scripts": {
-    "_prepublish": "rm -rf dist/* && npm run transpile",
-    "transpile": "babel src --out-dir dist --source-maps"
-  },
   "author": "Matt Basta <me@mattbasta.com>",
   "license": "MIT",
   "dependencies": {
@@ -17,15 +13,5 @@
     "pinecast-xhr": "^1.0.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-loader": "^7.1.1",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-es2016": "^6.24.1",
-    "babel-preset-es2017": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1"
   }
 }
