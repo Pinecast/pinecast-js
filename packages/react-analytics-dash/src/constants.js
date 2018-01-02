@@ -12,12 +12,14 @@ export const TYPE_GEO_GRAN_SUBS = 'subscribers_geo_gran';
 export const TYPE_GEO_GRAN_LISTENS = 'listen_geo_gran';
 export const TYPE_TOP_EPISODES = 'top_episodes';
 export const TYPE_TOP_CITIES = 'top_cities';
+export const TYPE_GROWTH = 'network_growth';
 
 export const TYPES = {
   episode: [TYPE_LISTENS, TYPE_BY_SOURCE, TYPE_GEO_LISTENS, TYPE_GEO_GRAN_LISTENS, TYPE_TOP_CITIES],
   network: [
     TYPE_LISTENS,
     TYPE_SUBS,
+    TYPE_GROWTH,
     TYPE_GEO_LISTENS,
     TYPE_GEO_GRAN_LISTENS,
     TYPE_GEO_SUBS,
@@ -43,16 +45,17 @@ export const TYPES = {
 export const TYPES_NAMES = {
   [TYPE_LISTENS]: gettext('Listens'),
   [TYPE_SUBS]: gettext('Subscribers'),
-  [TYPE_BY_EPISODE]: gettext('Listens by Episode'),
-  [TYPE_BY_SOURCE]: gettext('Listens by Source'),
-  [TYPE_BY_AGENT]: gettext('Listens by Agent'),
+  [TYPE_GROWTH]: gettext('Growth (by listen)'),
+  [TYPE_BY_EPISODE]: gettext('Listens by episode'),
+  [TYPE_BY_SOURCE]: gettext('Listens by source'),
+  [TYPE_BY_AGENT]: gettext('Listens by agent'),
   [TYPE_BY_OS]: gettext('Listens by OS'),
-  [TYPE_GEO_SUBS]: gettext('Subscriber Locations'),
-  [TYPE_GEO_GRAN_SUBS]: gettext('Subscriber Locations By City'),
+  [TYPE_GEO_SUBS]: gettext('Subscriber locations'),
+  [TYPE_GEO_GRAN_SUBS]: gettext('Subscriber locations by city'),
   [TYPE_GEO_LISTENS]: gettext('Listener Locations'),
-  [TYPE_GEO_GRAN_LISTENS]: gettext('Listener Locations By City'),
-  [TYPE_TOP_EPISODES]: gettext('Top Episodes'),
-  [TYPE_TOP_CITIES]: gettext('Top Cities (by listen)'),
+  [TYPE_GEO_GRAN_LISTENS]: gettext('Listener locations by city'),
+  [TYPE_TOP_EPISODES]: gettext('Top episodes'),
+  [TYPE_TOP_CITIES]: gettext('Top cities (by listen)'),
 };
 
 export const TYPES_ENDPOINTS = {
@@ -65,6 +68,7 @@ export const TYPES_ENDPOINTS = {
   },
   network: {
     [TYPE_LISTENS]: 'network/listens',
+    [TYPE_GROWTH]: 'network/growth',
     [TYPE_GEO_LISTENS]: 'network/listens/location',
     [TYPE_GEO_GRAN_LISTENS]: 'network/listens/location/options',
     [TYPE_SUBS]: 'network/subscribers',
@@ -117,6 +121,7 @@ export const TYPES_CHART_TYPES = {
   [TYPE_GEO_GRAN_LISTENS]: 'menu',
   [TYPE_TOP_EPISODES]: 'table',
   [TYPE_TOP_CITIES]: 'menu',
+  [TYPE_GROWTH]: 'line',
 };
 export const TYPES_CHART_MENU_TYPES = {
   [TYPE_GEO_GRAN_SUBS]: 'geo_gran',
@@ -137,6 +142,7 @@ export const TYPES_CHART_REQUIRES = {
   [TYPE_GEO_GRAN_LISTENS]: 'pro',
   [TYPE_TOP_EPISODES]: 'pro',
   [TYPE_TOP_CITIES]: 'pro',
+  [TYPE_GROWTH]: 'pro',
 };
 
 export const TYPES_SHOW_TOTAL = {
@@ -161,8 +167,11 @@ export const DEFAULT_GRANULARITIES = {
   daily: gettext('Day'),
   hourly: gettext('Hour'),
 };
-const ALL_TIMEFRAMES_WITHOUT_CUSTOM = {
+const ONLY_ALL_TIMEFRAME = {
   all: gettext('All'),
+};
+const ALL_TIMEFRAMES_WITHOUT_CUSTOM = {
+  ...ONLY_ALL_TIMEFRAME,
   ...DEFAULT_TIMEFRAMES,
 };
 const ALL_TIMEFRAMES = {
@@ -184,6 +193,7 @@ export const TYPE_TIMEFRAMES = {
     day: gettext('Day'),
   },
   [TYPE_TOP_EPISODES]: ALL_TIMEFRAMES_WITHOUT_CUSTOM,
+  [TYPE_GROWTH]: ONLY_ALL_TIMEFRAME,
 };
 export const TYPE_GRANULARITIES = {
   [TYPE_LISTENS]: DEFAULT_GRANULARITIES,

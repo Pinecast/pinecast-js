@@ -121,6 +121,10 @@ export default class LineChart extends BaseChart {
       this.state.episodeListXHR.abort();
     }
 
+    if (!this.canRenderEpisodes()) {
+      return;
+    }
+
     const {podcast, network} = this.props;
     const startDate = this.getStartDate();
     const currentTimeframe = this.getCurrentTimeframe();
@@ -164,12 +168,12 @@ export default class LineChart extends BaseChart {
           datasets: data.datasets.filter((_, i) => selectedSeries[i]),
         };
     return (
-      <div>
+      <React.Fragment>
         {displayType === 'line' && (
           <LineChartBody
             data={filteredData}
             endDate={endDate}
-            episodeList={showEpisodes ? episodeList : null}
+            episodeList={showEpisodes && this.canRenderEpisodes() ? episodeList : null}
             hovering={hoveringSeries}
             height={300}
             startDate={startDate}
@@ -180,14 +184,14 @@ export default class LineChart extends BaseChart {
           <AreaChartBody
             data={filteredData}
             endDate={endDate}
-            episodeList={showEpisodes ? episodeList : null}
+            episodeList={showEpisodes && this.canRenderEpisodes() ? episodeList : null}
             hovering={hoveringSeries}
             height={300}
             startDate={startDate}
             width={width || 0}
           />
         )}
-      </div>
+      </React.Fragment>
     );
   }
 
@@ -200,6 +204,17 @@ export default class LineChart extends BaseChart {
     return <CSVLink data={data}>{gettext('CSV')}</CSVLink>;
   }
 
+  canRenderEpisodes() {
+    return this.props.type !== constants.TYPE_GROWTH;
+  }
+
+  handleShowEpisodesChange = e => {
+    this.setState({showEpisodes: e.target.checked});
+  };
+  handleChartOptionSelectorChange = value => {
+    this.setState({displayType: value});
+  };
+
   renderTimeframeSelectorExtra() {
     const {state: {data, displayType, showEpisodes}} = this;
 
@@ -207,57 +222,66 @@ export default class LineChart extends BaseChart {
       return null;
     }
 
-    const out = [
-      <label
-        key="eptog"
-        style={{
-          display: 'inline-block',
-        }}
-      >
-        <input
-          checked={showEpisodes}
-          onChange={e => this.setState({showEpisodes: e.target.checked})}
-          style={{
-            border: '1px solid #ccc',
-            borderRadius: 3,
-            display: 'inline-block',
-            float: 'none',
-            height: 13,
-            margin: 0,
-            verticalAlign: 'middle',
-            width: 13,
-          }}
-          type="checkbox"
-        />
-        <span
-          style={{
-            display: 'inline-block',
-            marginLeft: 5,
-          }}
-        >
-          {gettext('Episodes')}
-        </span>
-      </label>,
-      Boolean(data) && React.cloneElement(this.renderCSVLink(), {key: 'csv-link'}),
-    ];
+    const out = (
+      <React.Fragment>
+        {this.canRenderEpisodes() && (
+          <label style={{display: 'inline-block'}}>
+            <input
+              checked={showEpisodes}
+              onChange={this.handleShowEpisodesChange}
+              style={{
+                border: '1px solid #ccc',
+                borderRadius: 3,
+                display: 'inline-block',
+                float: 'none',
+                height: 13,
+                margin: 0,
+                verticalAlign: 'middle',
+                width: 13,
+              }}
+              type="checkbox"
+            />
+            <span
+              style={{
+                display: 'inline-block',
+                marginLeft: 5,
+              }}
+            >
+              {gettext('Episodes')}
+            </span>
+          </label>
+        )}
+        {Boolean(data) && this.renderCSVLink()}
+      </React.Fragment>
+    );
 
-    if (!data || data.datasets.length < 2) {
+    if (!data || data.datasets.length < 2 || this.props.type === constants.TYPE_GROWTH) {
       return out;
     }
 
-    return [
-      <ChartOptionSelector
-        defaultSelection={displayType}
-        key="tfsel"
-        onChange={value => this.setState({displayType: value})}
-        options={{
-          area: gettext('Area'),
-          line: gettext('line'),
-        }}
-      />,
-      ...out,
-    ];
+    return (
+      <React.Fragment>
+        <ChartOptionSelector
+          defaultSelection={displayType}
+          onChange={this.handleChartOptionSelectorChange}
+          options={{
+            area: gettext('Area'),
+            line: gettext('line'),
+          }}
+        />
+        {out}
+      </React.Fragment>
+    );
   }
+
+  handleLegendHover = i => {
+    this.setState({hoveringSeries: i});
+  };
+  handleLegendToggle = i => {
+    const newSelection = [...this.state.selectedSeries];
+    newSelection[i] = !newSelection[i];
+    this.setState({selectedSeries: newSelection});
+  };
 
   renderBody() {
     const {props: {type}, state: {data, hoveringSeries, selectedSeries}} = this;
@@ -274,14 +298,8 @@ export default class LineChart extends BaseChart {
         <Legend
           data={data}
           hovering={hoveringSeries}
-          onHover={i => {
-            this.setState({hoveringSeries: i});
-          }}
-          onToggle={i => {
-            const newSelection = [...selectedSeries];
-            newSelection[i] = !newSelection[i];
-            this.setState({selectedSeries: newSelection});
-          }}
+          onHover={this.handleLegendHover}
+          onToggle={this.handleLegendToggle}
           selectedSeries={selectedSeries}
           type={type}
         />

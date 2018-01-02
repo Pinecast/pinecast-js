@@ -85,7 +85,7 @@ export default class BaseChart extends Component {
       return null;
     }
 
-    if (keys.indexOf(constants.DEFAULT_TIMEFRAME) !== -1) {
+    if (keys.includes(constants.DEFAULT_TIMEFRAME)) {
       return constants.DEFAULT_TIMEFRAME;
     }
 
@@ -173,7 +173,6 @@ export default class BaseChart extends Component {
     return [
       moment(this.getStartDate(timeframe))
         .startOf('day')
-        .add(1, 'hours')
         .toDate(),
       moment()
         .endOf('day')
@@ -193,54 +192,63 @@ export default class BaseChart extends Component {
     );
   }
 
+  handleTimeframeChanged = value => {
+    this.setTimeframe(value, () => this.startLoadingData());
+  };
+  handleGranularityChanged = value => {
+    this.setState({data: null, granularity: value}, () => this.startLoadingData());
+  };
+
+  isDateOutsideRange = day =>
+    moment(this.state.customTimeframe[0])
+      .add(365, 'days')
+      .isBefore(day) ||
+    moment(this.state.customTimeframe[1])
+      .subtract(365, 'days')
+      .isAfter(day) ||
+    day.isAfter(
+      moment()
+        .startOf('day')
+        .add(1, 'days'),
+    );
+  handleCustomDatesChanged = ({startDate, endDate}) => {
+    if (!startDate || !endDate) {
+      return;
+    }
+    this.setState({customTimeframe: [startDate.toDate(), endDate.toDate()]}, () => this.startLoadingData());
+  };
+
   renderTimeframeSelector() {
     const timeframes = this.getTimeframes();
     const granularities = this.getGranularities();
 
     const {customTimeframe, granularity, timeframe} = this.state;
 
-    const currentTimeframe = this.getCurrentTimeframe();
     const extra = this.renderTimeframeSelectorExtra();
 
     return (
-      (timeframes || granularities || extra) && (
+      Boolean(timeframes || granularities || extra) && (
         <div style={{marginTop: 30, textAlign: 'center'}}>
           {timeframes && (
             <ChartOptionSelector
               defaultSelection={timeframe}
-              onChange={value => {
-                this.setTimeframe(value, () => this.startLoadingData());
-              }}
+              onChange={this.handleTimeframeChanged}
               options={timeframes}
             />
           )}
           {granularities && (
             <ChartOptionSelector
               defaultSelection={granularity}
-              onChange={value => {
-                this.setState({data: null, granularity: value}, () => this.startLoadingData());
-              }}
+              onChange={this.handleGranularityChanged}
               options={granularities}
             />
           )}
           {extra}
-          {currentTimeframe === 'custom' && (
+          {this.getCurrentTimeframe() === 'custom' && (
             <DateRangePicker
               endDate={moment(customTimeframe[1])}
-              isOutsideRange={day =>
-                moment(customTimeframe[0])
-                  .add(365, 'days')
-                  .isBefore(day) ||
-                moment(customTimeframe[1])
-                  .subtract(365, 'days')
-                  .isAfter(day) ||
-                day.isAfter(moment().add(1, 'days'))}
-              onDatesChange={({startDate, endDate}) => {
-                if (!startDate || !endDate) {
-                  return;
-                }
-                this.setState({customTimeframe: [startDate.toDate(), endDate.toDate()]}, () => this.startLoadingData());
-              }}
+              isOutsideRange={this.isDateOutsideRange}
+              onDatesChange={this.handleCustomDatesChanged}
               startDate={moment(customTimeframe[0])}
             />
           )}
@@ -251,9 +259,11 @@ export default class BaseChart extends Component {
 
   renderTimeframeSelectorExtra() {}
 
+  handleTooltipRef = e => this.bindTooltips(e);
+
   render() {
     return this.state.data ? (
-      <div ref={e => this.bindTooltips(e)}>
+      <div ref={this.handleTooltipRef}>
         {this.renderBody()}
         <div
           ref="tooltip"
