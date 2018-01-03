@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import LineChartBody from './LineChartBody';
+import TimeSeriesChartBody from './TimeSeriesChartBody';
 
-export default class AreaChartBody extends LineChartBody {
+export default class AreaChartBody extends TimeSeriesChartBody {
   getYDomain() {
     const {data} = this.props;
     return [

@@ -1,7 +1,5 @@
 import * as numeral from 'numeral';
-import React, {Component} from 'react';
-
-import renderBalloons from './balloons';
+import * as React from 'react';
 
 const gridlineStyle = {stroke: 'rgba(0, 0, 0, 0.075)', strokeWidth: 0.5};
 
@@ -48,20 +46,16 @@ function getTickValues(min, max) {
   }
 }
 
-export default class LineChartBody extends Component {
+export default class BaseChartBody extends React.Component {
   getYDomain() {
-    const {data} = this.props;
-    return [
-      Math.min(0, ...data.datasets.map(ds => Math.min(...ds.data))),
-      Math.max(0, ...data.datasets.map(ds => Math.max(...ds.data))),
-    ];
+    throw new Error('Not implemented');
   }
 
   getMargins() {
     const {data} = this.props;
     return {
       marginBottom: 15,
-      marginLeft: 30 + Math.max(...data.datasets.map(ds => measureText(Math.max(ds.data).toString()))),
+      marginLeft: 30 + Math.max(0, 0, ...data.datasets.map(ds => measureText(Math.max(ds.data).toString()))),
       marginRight: 15,
       marginTop: 30,
 
@@ -70,7 +64,7 @@ export default class LineChartBody extends Component {
   }
 
   render() {
-    const {data, endDate, episodeList, height, startDate, width} = this.props;
+    const {data, height, width} = this.props;
 
     const {marginBottom, marginLeft, marginRight, marginTop, xAxisHeight} = this.getMargins();
 
@@ -189,38 +183,16 @@ export default class LineChartBody extends Component {
             );
           })}
         </g>
-        {episodeList &&
-          renderBalloons(
-            startDate,
-            endDate,
-            data,
-            episodeList,
-            innerWidth,
-            `translate(${marginLeft}, ${height - marginBottom - xAxisHeight})`,
-          )}
+        {this.renderChartExtra(data)}
       </svg>
     );
   }
 
-  renderLines(data, xRange, yRange) {
-    const {hovering} = this.props;
-    return (
-      <g className="lines">
-        {data.datasets.map((dataset, idx) => (
-          <polyline
-            className="chart-line"
-            fill="none"
-            key={idx}
-            points={data.labels
-              .map(
-                (_, i) => `${xRange(i)},${yRange(dataset.data[i - (data.labels.length - dataset.data.length)] || 0)}`,
-              )
-              .join(' ')}
-            stroke={dataset.strokeColor}
-            strokeWidth={hovering === idx ? 3.5 : 2}
-          />
-        ))}
-      </g>
-    );
+  renderLines() {
+    throw new Error('Not implemented');
+  }
+
+  renderChartExtra() {
+    throw new Error('Not implemented');
   }
 }

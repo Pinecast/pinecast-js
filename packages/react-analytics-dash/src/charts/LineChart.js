@@ -10,7 +10,7 @@ import ChartOptionSelector from '../optionSelector';
 import * as constants from '../constants';
 import CSVLink from '../CSVLink';
 import Legend from './lineChartComponents/Legend';
-import LineChartBody from './lineChartComponents/LineChartBody';
+import TimeSeriesChartBody from './lineChartComponents/TimeSeriesChartBody';
 
 export default class LineChart extends BaseChart {
   constructor(...args) {
@@ -167,32 +167,26 @@ export default class LineChart extends BaseChart {
           ...data,
           datasets: data.datasets.filter((_, i) => selectedSeries[i]),
         };
-    return (
-      <React.Fragment>
-        {displayType === 'line' && (
-          <LineChartBody
-            data={filteredData}
-            endDate={endDate}
-            episodeList={showEpisodes && this.canRenderEpisodes() ? episodeList : null}
-            hovering={hoveringSeries}
-            height={300}
-            startDate={startDate}
-            width={width || 0}
-          />
-        )}
-        {displayType === 'area' && (
-          <AreaChartBody
-            data={filteredData}
-            endDate={endDate}
-            episodeList={showEpisodes && this.canRenderEpisodes() ? episodeList : null}
-            hovering={hoveringSeries}
-            height={300}
-            startDate={startDate}
-            width={width || 0}
-          />
-        )}
-      </React.Fragment>
-    );
+
+    const props = {
+      data: filteredData,
+      endDate: endDate,
+      episodeList: showEpisodes && this.canRenderEpisodes() ? episodeList : null,
+      hovering: hoveringSeries,
+      height: 300,
+      startDate: startDate,
+      width: width || 0,
+    };
+    switch (displayType) {
+      case 'line':
+        return <TimeSeriesChartBody {...props} />;
+      case 'area':
+        return <AreaChartBody {...props} />;
+      // case 'growth':
+      //   return <TimeSeriesChartBody {...props} />;
+      default:
+        throw new Error(`Unknown chart type "${displayType}"`);
+    }
   }
 
   renderCSVLink() {
