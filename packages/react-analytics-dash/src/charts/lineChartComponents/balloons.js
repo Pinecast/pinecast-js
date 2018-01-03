@@ -36,7 +36,7 @@ export default function draw(startDate, endDate, data, rawEpisodeData, innerWidt
             fill="none"
             key={node.data.id}
             stroke="rgba(0, 0, 0, 0.3)"
-            strokeWidth={1}
+            strokeWidth={1.5}
           />
         ))}
       </g>
