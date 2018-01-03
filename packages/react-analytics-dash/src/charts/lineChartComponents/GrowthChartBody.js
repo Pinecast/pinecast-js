@@ -1,9 +1,8 @@
 import * as React from 'react';
 
-import renderBalloons from './balloons';
 import BaseChartBody from './BaseChartBody';
 
-export default class TimeSeriesChartBody extends BaseChartBody {
+export default class GrowthChartBody extends BaseChartBody {
   getYDomain() {
     const {data} = this.props;
     return [
@@ -14,6 +13,7 @@ export default class TimeSeriesChartBody extends BaseChartBody {
 
   renderLines(data, xRange, yRange) {
     const {hovering} = this.props;
+    // TODO: calculate trendlines?
     return (
       <g className="lines">
         {data.datasets.map((dataset, idx) => (
@@ -22,6 +22,7 @@ export default class TimeSeriesChartBody extends BaseChartBody {
             fill="none"
             key={idx}
             points={data.labels
+              .slice(0, dataset.data.length)
               .map(
                 (_, i) => `${xRange(i)},${yRange(dataset.data[i - (data.labels.length - dataset.data.length)] || 0)}`,
               )
@@ -31,25 +32,6 @@ export default class TimeSeriesChartBody extends BaseChartBody {
           />
         ))}
       </g>
-    );
-  }
-
-  renderChartExtra(data) {
-    const {endDate, episodeList, height, startDate, width} = this.props;
-    if (!episodeList) {
-      return null;
-    }
-
-    const {marginBottom, marginLeft, marginRight, xAxisHeight} = this.getMargins();
-    const innerWidth = width - marginLeft - marginRight;
-
-    return renderBalloons(
-      startDate,
-      endDate,
-      data,
-      episodeList,
-      innerWidth,
-      `translate(${marginLeft}, ${height - marginBottom - xAxisHeight})`,
     );
   }
 }
