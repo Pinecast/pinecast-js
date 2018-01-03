@@ -1,11 +1,11 @@
 import * as numeral from 'numeral';
-import React, {Component} from 'react';
+import * as React from 'react';
 
 import {gettext} from 'pinecast-i18n';
 
 import {TYPES_SHOW_TOTAL} from '../../constants';
 
-export default class Legend extends Component {
+export default class Legend extends React.PureComponent {
   render() {
     const {data, hovering, onHover, onToggle, selectedSeries, type} = this.props;
     function getTotal() {
@@ -30,6 +30,12 @@ export default class Legend extends Component {
       }
     }
 
+    const totals = new Map();
+    data.datasets.forEach(ds => {
+      const total = ds.data.reduce((acc, cur) => acc + cur, 0);
+      totals.set(ds, total);
+    });
+
     return (
       <div
         className="dash-legend"
@@ -39,7 +45,7 @@ export default class Legend extends Component {
         }}
       >
         {TYPES_SHOW_TOTAL[type] && <div style={{flex: '1 1 100%', fontSize: '0.8em'}}>{getTotal()}</div>}
-        {data.datasets.map((x, i) => (
+        {data.datasets.sort((a, b) => totals.get(b) - totals.get(a)).map((x, i) => (
           <div
             className="dash-legend-item"
             key={i}
@@ -73,7 +79,7 @@ export default class Legend extends Component {
               }}
             />
             <span style={{opacity: !selectedSeries || selectedSeries[i] ? 1 : 0.5}}>
-              {TYPES_SHOW_TOTAL[type] ? `${x.label} (${x.data.reduce((acc, cur) => acc + cur, 0)})` : x.label}
+              {TYPES_SHOW_TOTAL[type] ? `${x.label} (${totals.get(x)})` : x.label}
             </span>
           </div>
         ))}
