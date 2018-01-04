@@ -14,7 +14,7 @@ function measureText(text, font = '14px sans-serif') {
 function scaleLinearLight(rangeMin, rangeMax, domainMin, domainMax) {
   return domainValue => {
     const domainPercent = (domainValue - domainMin) / (domainMax - domainMin);
-    return (rangeMax - rangeMin) * domainPercent + rangeMin;
+    return Math.ceil((rangeMax - rangeMin) * domainPercent + rangeMin);
   };
 }
 
@@ -146,43 +146,43 @@ export default class BaseChartBody extends React.Component {
           })}
         </g>
         {this.renderLines(data, xRange, yRange)}
-        <g className="tooltips">
-          {data.labels.map((label, idx) => {
-            return (
-              <g className="tooltip-group" key={idx}>
-                <line
-                  className="tooltip-marker"
-                  x1={xRange(idx)}
-                  x2={xRange(idx)}
-                  y1={marginTop}
-                  y2={height - marginBottom - xAxisHeight}
-                />
-                <rect
-                  className="has-tooltip"
-                  data-tooltip={`
+        {data.labels.map((label, idx) => {
+          return (
+            <g class="tooltip-group" key={idx}>
+              <line
+                className="tooltip-marker"
+                x1={xRange(idx)}
+                x2={xRange(idx)}
+                y1={marginTop}
+                y2={height - marginBottom - xAxisHeight}
+              />
+              <rect
+                className="has-tooltip"
+                data-tooltip={`
                     <b>${label}</b>${data.datasets.length > 1
-                    ? ` · Total: ${numeral(data.datasets.reduce((acc, cur) => acc + (cur.data[idx] || 0), 0)).format(
-                        '0,0',
-                      )}`
-                    : ''}
+                  ? ` · Total: ${numeral(data.datasets.reduce((acc, cur) => acc + (cur.data[idx] || 0), 0)).format(
+                      '0,0',
+                    )}`
+                  : ''}
                     <br>
                     ${data.datasets
                       .filter(x => x.data[idx])
                       .sort((a, b) => b.data[idx] - a.data[idx])
                       .map(x => `${x.label}: ${numeral(x.data[idx]).format('0,0')}`)
                       .join('<br>')}
-                  `}
-                  fill="transparent"
-                  height={height - marginTop - marginBottom - xAxisHeight}
-                  key={idx}
-                  width={Math.ceil(innerWidth / data.labels.length)}
-                  x={Math.floor((xRange(idx) + xRange(idx - 1)) / 2 + 1)}
-                  y={marginTop}
-                />
-              </g>
-            );
-          })}
-        </g>
+                  `
+                  .trim()
+                  .replace(/\s+/g, ' ')}
+                fill="transparent"
+                height={height - marginTop - marginBottom - xAxisHeight}
+                key={idx}
+                width={Math.ceil(innerWidth / data.labels.length)}
+                x={Math.floor((xRange(idx) + xRange(idx - 1)) / 2 + 1)}
+                y={marginTop}
+              />
+            </g>
+          );
+        })}
         {this.renderChartExtra(data)}
       </svg>
     );

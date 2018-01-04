@@ -17,12 +17,15 @@ export default class AreaChartBody extends TimeSeriesChartBody {
   }
 
   renderLines(data, xRange, yRange) {
-    const {height, hovering, width} = this.props;
+    const {height, hovering, selectedSeries, width} = this.props;
     const {marginBottom, marginLeft, marginRight, xAxisHeight} = this.getMargins();
 
     const totals = data.labels.map(() => 0);
 
-    const dsPoints = data.datasets.map(dataset =>
+    const taggedDatasets = data.datasets.map((d, i) => [d, i]);
+    const filteredDatasets = taggedDatasets.filter(x => selectedSeries[x[1]]);
+
+    const points = filteredDatasets.map(([dataset]) =>
       data.labels.map((_, i) => {
         const start = totals[i];
         const value = dataset.data[i - (data.labels.length - dataset.data.length)] || 0;
@@ -38,38 +41,34 @@ export default class AreaChartBody extends TimeSeriesChartBody {
           `${marginLeft},${height - marginBottom - xAxisHeight}`
         );
       }
-      return dsPoints[idx - 1]
+      return points[idx - 1]
         .slice()
         .reverse()
         .join(' ');
     }
 
-    return (
-      <g className="lines">
-        {data.datasets
-          .map((dataset, idx) => {
-            const points = dsPoints[idx].join(' ');
-            const active = hovering === idx;
-            return (
-              <g key={idx}>
-                <polyline
-                  className="chart-line-stroke"
-                  fill="transparent"
-                  points={points}
-                  stroke={dataset.strokeColor}
-                  strokeWidth={2}
-                />
-                <polyline
-                  className="chart-line-fill"
-                  fill={active ? dataset.strokeColor : dataset.pointColor}
-                  fillOpacity={active ? 0.8 : 0.4}
-                  points={points + ' ' + getPathRemainder(idx)}
-                />
-              </g>
-            );
-          })
-          .reverse()}
-      </g>
-    );
+    return filteredDatasets
+      .map(([dataset, idx], i) => {
+        const renderedPoints = points[i].join(' ');
+        const active = hovering === idx;
+        return (
+          <React.Fragment key={idx}>
+            <polyline
+              className="chart-line-stroke"
+              fill="transparent"
+              points={renderedPoints}
+              stroke={dataset.strokeColor}
+              strokeWidth={2}
+            />
+            <polyline
+              className="chart-line-fill"
+              fill={active ? dataset.strokeColor : dataset.pointColor}
+              fillOpacity={active ? 0.8 : 0.4}
+              points={renderedPoints + ' ' + getPathRemainder(i)}
+            />
+          </React.Fragment>
+        );
+      })
+      .reverse();
   }
 }

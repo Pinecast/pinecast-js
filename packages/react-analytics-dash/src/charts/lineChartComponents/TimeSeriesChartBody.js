@@ -13,10 +13,10 @@ export default class TimeSeriesChartBody extends BaseChartBody {
   }
 
   renderLines(data, xRange, yRange) {
-    const {hovering} = this.props;
-    return (
-      <g className="lines">
-        {data.datasets.map((dataset, idx) => (
+    const {hovering, selectedSeries} = this.props;
+    return data.datasets.map(
+      (dataset, idx) =>
+        selectedSeries[idx] && (
           <polyline
             className="chart-line"
             fill="none"
@@ -29,8 +29,7 @@ export default class TimeSeriesChartBody extends BaseChartBody {
             stroke={dataset.strokeColor}
             strokeWidth={hovering === idx ? 3.5 : 2}
           />
-        ))}
-      </g>
+        ),
     );
   }
 

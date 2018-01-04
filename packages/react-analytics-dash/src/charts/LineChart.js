@@ -42,7 +42,7 @@ export default class LineChart extends BaseChart {
   }
 
   gotData(data) {
-    this.setState({selectedSeries: data.datasets.map(() => true)});
+    return {selectedSeries: data.datasets.map(() => true)};
   }
 
   handleLegendHover = i => {

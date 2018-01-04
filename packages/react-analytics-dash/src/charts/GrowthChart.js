@@ -11,13 +11,14 @@ export default class GrowthChart extends LineChart {
       return <ChartEmptyState />;
     }
 
-    const filteredData = (selectedSeries || []).every(x => x)
-      ? data
-      : {
-          ...data,
-          datasets: data.datasets.filter((_, i) => selectedSeries[i]),
-        };
-
-    return <GrowthChartBody data={filteredData} height={300} hovering={hoveringSeries} width={width || 0} />;
+    return (
+      <GrowthChartBody
+        data={data}
+        height={300}
+        hovering={hoveringSeries}
+        selectedSeries={selectedSeries}
+        width={width || 0}
+      />
+    );
   }
 }

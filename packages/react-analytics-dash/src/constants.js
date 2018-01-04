@@ -47,7 +47,7 @@ export const TYPES_NAMES = {
   [TYPE_LISTENS]: gettext('Listens'),
   [TYPE_SUBS]: gettext('Subscribers'),
   [TYPE_GROWTH]: gettext('Growth (by listen)'),
-  [TYPE_BY_EPISODE]: gettext('Listens by episode'),
+  [TYPE_BY_EPISODE]: gettext('Listens by episode (truncated)'),
   [TYPE_BY_SOURCE]: gettext('Listens by source'),
   [TYPE_BY_AGENT]: gettext('Listens by agent'),
   [TYPE_BY_OS]: gettext('Listens by OS'),

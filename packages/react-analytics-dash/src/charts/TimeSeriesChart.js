@@ -127,20 +127,15 @@ export default class TimeSeriesChart extends LineChart {
 
     const startDate = this.getStartDate();
     const endDate = this.getCurrentTimeframe() === 'custom' ? this.state.customTimeframe[1] : new Date();
-    const filteredData = (selectedSeries || []).every(x => x)
-      ? data
-      : {
-          ...data,
-          datasets: data.datasets.filter((_, i) => selectedSeries[i]),
-        };
 
     const props = {
-      data: filteredData,
-      endDate: endDate,
+      data,
+      endDate,
       episodeList: showEpisodes ? episodeList : null,
       hovering: hoveringSeries,
       height: 300,
-      startDate: startDate,
+      selectedSeries,
+      startDate,
       width: width || 0,
     };
     switch (displayType) {

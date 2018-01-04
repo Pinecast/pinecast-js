@@ -141,8 +141,8 @@ export default class BaseChart extends Component {
           granularity,
           timeframe,
           xhr: null,
+          ...this.gotData(data),
         });
-        this.gotData(data);
       },
     );
     this.setState({xhr: req});

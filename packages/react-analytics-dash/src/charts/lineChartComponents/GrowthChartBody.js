@@ -12,25 +12,29 @@ export default class GrowthChartBody extends BaseChartBody {
   }
 
   renderLines(data, xRange, yRange) {
-    const {hovering} = this.props;
+    const {hovering, selectedSeries} = this.props;
     // TODO: calculate trendlines?
     return (
       <g className="lines">
-        {data.datasets.map((dataset, idx) => (
-          <polyline
-            className="chart-line"
-            fill="none"
-            key={idx}
-            points={data.labels
-              .slice(0, dataset.data.length)
-              .map(
-                (_, i) => `${xRange(i)},${yRange(dataset.data[i - (data.labels.length - dataset.data.length)] || 0)}`,
-              )
-              .join(' ')}
-            stroke={dataset.strokeColor}
-            strokeWidth={hovering === idx ? 3.5 : 2}
-          />
-        ))}
+        {data.datasets.map(
+          (dataset, idx) =>
+            selectedSeries[idx] && (
+              <polyline
+                className="chart-line"
+                fill="none"
+                key={idx}
+                points={data.labels
+                  .slice(0, dataset.data.length)
+                  .map(
+                    (_, i) =>
+                      `${xRange(i)},${yRange(dataset.data[i - (data.labels.length - dataset.data.length)] || 0)}`,
+                  )
+                  .join(' ')}
+                stroke={dataset.strokeColor}
+                strokeWidth={hovering === idx ? 3.5 : 2}
+              />
+            ),
+        )}
       </g>
     );
   }

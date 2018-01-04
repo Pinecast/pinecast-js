@@ -45,44 +45,48 @@ export default class Legend extends React.PureComponent {
         }}
       >
         {TYPES_SHOW_TOTAL[type] && <div style={{flex: '1 1 100%', fontSize: '0.8em'}}>{getTotal()}</div>}
-        {data.datasets.sort((a, b) => totals.get(b) - totals.get(a)).map((x, i) => (
-          <div
-            className="dash-legend-item"
-            key={i}
-            onClick={() => {
-              if (!selectedSeries || selectedSeries.every((selected, idx) => !selected || i === idx)) {
-                return;
-              }
-              onToggle(i);
-            }}
-            onMouseOver={() => onHover(i)}
-            onMouseLeave={() => {
-              if (hovering !== i) {
-                return;
-              }
-              onHover(null);
-            }}
-            style={{
-              flex: '1 1 50%',
-              minWidth: 400,
-            }}
-          >
-            <b
-              style={{
-                background: !selectedSeries || selectedSeries[i] ? x.strokeColor : '#fff',
-                border: `1px solid ${x.strokeColor}`,
-                borderRadius: 2,
-                display: 'inline-block',
-                height: 8,
-                marginRight: 10,
-                width: 8,
+        {data.datasets
+          .map((d, i) => [d, i])
+          .sort(([a], [b]) => totals.get(b) - totals.get(a))
+          .map(([x, i]) => (
+            <div
+              className="dash-legend-item"
+              data-orig-idx={i}
+              key={i}
+              onClick={() => {
+                if (!selectedSeries || selectedSeries.every((selected, idx) => !selected || i === idx)) {
+                  return;
+                }
+                onToggle(i);
               }}
-            />
-            <span style={{opacity: !selectedSeries || selectedSeries[i] ? 1 : 0.5}}>
-              {TYPES_SHOW_TOTAL[type] ? `${x.label} (${totals.get(x)})` : x.label}
-            </span>
-          </div>
-        ))}
+              onMouseOver={() => onHover(i)}
+              onMouseLeave={() => {
+                if (hovering !== i) {
+                  return;
+                }
+                onHover(null);
+              }}
+              style={{
+                flex: '1 1 50%',
+                minWidth: 400,
+              }}
+            >
+              <b
+                style={{
+                  background: !selectedSeries || selectedSeries[i] ? x.strokeColor : '#fff',
+                  border: `1px solid ${x.strokeColor}`,
+                  borderRadius: 2,
+                  display: 'inline-block',
+                  height: 8,
+                  marginRight: 10,
+                  width: 8,
+                }}
+              />
+              <span style={{opacity: !selectedSeries || selectedSeries[i] ? 1 : 0.5}}>
+                {TYPES_SHOW_TOTAL[type] ? `${x.label} (${totals.get(x)})` : x.label}
+              </span>
+            </div>
+          ))}
       </div>
     );
   }
