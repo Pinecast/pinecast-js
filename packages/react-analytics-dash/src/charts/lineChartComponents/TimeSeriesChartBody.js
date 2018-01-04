@@ -5,10 +5,15 @@ import BaseChartBody from './BaseChartBody';
 
 export default class TimeSeriesChartBody extends BaseChartBody {
   getYDomain() {
-    const {data} = this.props;
+    const {data, selectedSeries} = this.props;
     return [
-      Math.min(0, ...data.datasets.map(ds => Math.min(...ds.data))),
-      Math.max(0, ...data.datasets.map(ds => Math.max(...ds.data))),
+      0,
+      Math.max(
+        0,
+        ...data.datasets
+          .filter((_, i) => selectedSeries[i])
+          .map(ds => Math.max(0, 0, ...ds.data)),
+      ),
     ];
   }
 
