@@ -259,14 +259,17 @@ export default class BaseChart extends Component {
 
   renderTimeframeSelectorExtra() {}
 
-  handleTooltipRef = e => this.bindTooltips(e);
+  handleTooltipWrapperRef = e => this.bindTooltips(e);
+  handleTooltipRef = e => {
+    this.tooltip = e;
+  };
 
   render() {
     return this.state.data ? (
-      <div ref={this.handleTooltipRef}>
+      <div ref={this.handleTooltipWrapperRef}>
         {this.renderBody()}
         <div
-          ref="tooltip"
+          ref={this.handleTooltipRef}
           style={{
             background: 'rgba(255, 255, 255, 0.85)',
             borderRadius: '3px',
@@ -299,7 +302,7 @@ export default class BaseChart extends Component {
         if (e.target.getAttribute('class') !== 'has-tooltip') {
           return;
         }
-        const tooltip = this.refs.tooltip;
+        const tooltip = this.tooltip;
         tooltip.style.display = 'block';
         tooltip.innerHTML = e.target.getAttribute('data-tooltip');
         shown = true;
@@ -311,7 +314,7 @@ export default class BaseChart extends Component {
       'mouseout',
       e => {
         let node = e.target;
-        while (true) {
+        do {
           if (node === document.body) {
             return;
           }
@@ -319,8 +322,8 @@ export default class BaseChart extends Component {
             break;
           }
           node = node.parentNode;
-        }
-        this.refs.tooltip.style.display = 'none';
+        } while (node);
+        this.tooltip.style.display = 'none';
         shown = false;
       },
       true,
@@ -332,13 +335,12 @@ export default class BaseChart extends Component {
         if (!shown) {
           return;
         }
-        const {tooltip} = this.refs;
-        if (e.clientX + tooltip.clientWidth + 16 > document.body.clientWidth) {
-          tooltip.style.left = `${e.clientX - tooltip.clientWidth - 10}px`;
+        if (e.clientX + this.tooltip.clientWidth + 16 > document.body.clientWidth) {
+          this.tooltip.style.left = `${e.clientX - this.tooltip.clientWidth - 10}px`;
         } else {
-          tooltip.style.left = `${e.clientX + 16}px`;
+          this.tooltip.style.left = `${e.clientX + 16}px`;
         }
-        tooltip.style.top = `${e.clientY}px`;
+        this.tooltip.style.top = `${e.clientY}px`;
       },
       true,
     );

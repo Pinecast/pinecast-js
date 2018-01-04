@@ -95,10 +95,6 @@ export default class TimeSeriesChart extends LineChart {
       this.state.episodeListXHR.abort();
     }
 
-    if (!this.canRenderEpisodes()) {
-      return;
-    }
-
     const {podcast, network} = this.props;
     const startDate = this.getStartDate();
     const currentTimeframe = this.getCurrentTimeframe();
@@ -141,7 +137,7 @@ export default class TimeSeriesChart extends LineChart {
     const props = {
       data: filteredData,
       endDate: endDate,
-      episodeList: showEpisodes && this.canRenderEpisodes() ? episodeList : null,
+      episodeList: showEpisodes ? episodeList : null,
       hovering: hoveringSeries,
       height: 300,
       startDate: startDate,

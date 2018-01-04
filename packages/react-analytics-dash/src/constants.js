@@ -15,7 +15,7 @@ export const TYPE_TOP_CITIES = 'top_cities';
 export const TYPE_GROWTH = 'network_growth';
 
 export const TYPES = {
-  episode: [TYPE_LISTENS, TYPE_BY_SOURCE, TYPE_GEO_LISTENS, TYPE_GEO_GRAN_LISTENS, TYPE_TOP_CITIES],
+  episode: [TYPE_LISTENS, TYPE_BY_SOURCE, TYPE_GROWTH, TYPE_GEO_LISTENS, TYPE_GEO_GRAN_LISTENS, TYPE_TOP_CITIES],
   network: [
     TYPE_LISTENS,
     TYPE_SUBS,
@@ -63,6 +63,7 @@ export const TYPES_ENDPOINTS = {
   episode: {
     [TYPE_LISTENS]: 'episode/listens',
     [TYPE_BY_SOURCE]: 'episode/listens/breakdown',
+    [TYPE_GROWTH]: 'episode/growth',
     [TYPE_GEO_LISTENS]: 'episode/listens/location',
     [TYPE_GEO_GRAN_LISTENS]: 'episode/listens/location/options',
     [TYPE_TOP_CITIES]: 'episode/listens/location/options',
@@ -111,10 +112,10 @@ export const TYPES_ENDPOINTS_MENU = {
 };
 
 export const TYPES_CHART_TYPES = {
-  [TYPE_LISTENS]: 'line',
-  [TYPE_SUBS]: 'line',
-  [TYPE_BY_EPISODE]: 'line',
-  [TYPE_BY_SOURCE]: 'line',
+  [TYPE_LISTENS]: 'timeseries',
+  [TYPE_SUBS]: 'timeseries',
+  [TYPE_BY_EPISODE]: 'timeseries',
+  [TYPE_BY_SOURCE]: 'timeseries',
   [TYPE_BY_AGENT]: 'pie',
   [TYPE_BY_OS]: 'pie',
   [TYPE_GEO_SUBS]: 'geo',

@@ -1,18 +1,37 @@
 import moment from 'moment';
-import React, {Component} from 'react';
+import * as React from 'react';
 
 import {gettext, ngettext} from 'pinecast-i18n';
 
 import {LOCALES} from '../../locales';
 import SlugField from './SlugField';
 
-export default class Step2 extends Component {
+export default class Step2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isExplicit: null,
     };
   }
+
+  handleSubmit = e => {
+    e.preventDefault();
+    if (!e.target.checkValidity() || !this.refs.slug.isValid) {
+      return;
+    }
+    this.props.onNextStep({
+      ...this.props.feed,
+      author_name: this.refs.author.value,
+      copyright: this.refs.copyright.value,
+      description: this.refs.description.value,
+      is_explicit: this.state.isExplicit === null ? this.props.feed.explicit : this.state.isExplicit,
+      homepage: this.refs.homepage.value,
+      language: this.refs.language.value,
+      name: this.refs.name.value,
+      slug: this.refs.slug.value,
+      subtitle: this.refs.subtitle.value,
+    });
+  };
 
   render() {
     const {
@@ -31,28 +50,8 @@ export default class Step2 extends Component {
     } = this.props.feed;
 
     return (
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          if (!e.target.checkValidity() || !this.refs.slug.isValid) {
-            return;
-          }
-          this.props.onNextStep({
-            ...this.props.feed,
-            author_name: this.refs.author.value,
-            copyright: this.refs.copyright.value,
-            description: this.refs.description.value,
-            is_explicit: this.state.isExplicit === null ? explicit : this.state.isExplicit,
-            homepage: this.refs.homepage.value,
-            language: this.refs.language.value,
-            name: this.refs.name.value,
-            slug: this.refs.slug.value,
-            subtitle: this.refs.subtitle.value,
-          });
-        }}
-        style={{padding: 0}}
-      >
-        <strong>{gettext('Review Podcast Details')}</strong>
+      <form onSubmit={this.handleSubmit} style={{padding: 0}}>
+        <strong>{gettext('Review podcast details')}</strong>
 
         <p>
           {gettext(
@@ -62,7 +61,7 @@ export default class Step2 extends Component {
 
         <hr />
 
-        <strong>{gettext('Cover Image')}</strong>
+        <strong>{gettext('Cover art')}</strong>
 
         <div className="panel">
           <img
@@ -154,10 +153,10 @@ export default class Step2 extends Component {
 
         <hr />
 
-        <strong>{gettext('Feed Items')}</strong>
+        <strong>{gettext('Feed items')}</strong>
 
         <p>
-          {ngettextf(
+          {ngettext(
             'There is %d episode available in the feed to import.',
             'There are %d episodes available in the feed to import.',
             items.length,
@@ -165,7 +164,7 @@ export default class Step2 extends Component {
         </p>
         {Boolean(ignoredItems) && (
           <p style={{color: '#b00'}}>
-            {ngettextf(
+            {ngettext(
               'There is %d episode in your feed that we cannot import.',
               'There are %d episodes in your feed that we cannot import.',
               ignoredItems,
@@ -179,8 +178,8 @@ export default class Step2 extends Component {
         <table>
           <thead>
             <tr>
-              <th>{gettext('Episode Name')}</th>
-              <th>{gettext('Publish Date')}</th>
+              <th>{gettext('Episode name')}</th>
+              <th>{gettext('Publish date')}</th>
             </tr>
           </thead>
           <tbody>
@@ -212,8 +211,4 @@ export default class Step2 extends Component {
       </form>
     );
   }
-}
-
-function ngettextf(singular, plural, count) {
-  return ngettext(singular, plural, count).replace(/%d/g, count);
 }

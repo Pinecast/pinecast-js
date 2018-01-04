@@ -3,7 +3,7 @@ import * as React from 'react';
 import GeoChart from './GeoChart';
 import GranularGeoChart from './GranularGeoChart';
 import GrowthChart from './GrowthChart';
-import LineChart from './LineChart';
+import TimeSeriesChart from './TimeSeriesChart';
 import Menu from './Menu';
 import PieChart from './PieChart';
 import Table from './Table';
@@ -16,8 +16,8 @@ export default function render(chartType, commonProps) {
       return <GranularGeoChart {...commonProps} />;
     case 'growth':
       return <GrowthChart {...commonProps} />;
-    case 'line':
-      return <LineChart {...commonProps} />;
+    case 'timeseries':
+      return <TimeSeriesChart {...commonProps} />;
     case 'menu':
       return <Menu {...commonProps} />;
     case 'pie':

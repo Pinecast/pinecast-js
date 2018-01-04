@@ -22,18 +22,34 @@ export default class AreaChartBody extends TimeSeriesChartBody {
 
     const totals = data.labels.map(() => 0);
 
+    const dsPoints = data.datasets.map(dataset =>
+      data.labels.map((_, i) => {
+        const start = totals[i];
+        const value = dataset.data[i - (data.labels.length - dataset.data.length)] || 0;
+        totals[i] += value;
+        return `${xRange(i)},${yRange(value + start)}`;
+      }),
+    );
+
+    function getPathRemainder(idx) {
+      if (!idx) {
+        return (
+          `${width - marginRight},${height - marginBottom - xAxisHeight} ` +
+          `${marginLeft},${height - marginBottom - xAxisHeight}`
+        );
+      }
+      return dsPoints[idx - 1]
+        .slice()
+        .reverse()
+        .join(' ');
+    }
+
     return (
       <g className="lines">
         {data.datasets
           .map((dataset, idx) => {
-            const points = data.labels
-              .map((_, i) => {
-                const start = totals[i];
-                const value = dataset.data[i - (data.labels.length - dataset.data.length)] || 0;
-                totals[i] += value;
-                return `${xRange(i)},${yRange(value + start)}`;
-              })
-              .join(' ');
+            const points = dsPoints[idx].join(' ');
+            const active = hovering === idx;
             return (
               <g key={idx}>
                 <polyline
@@ -45,12 +61,9 @@ export default class AreaChartBody extends TimeSeriesChartBody {
                 />
                 <polyline
                   className="chart-line-fill"
-                  fill={hovering === idx ? dataset.strokeColor : dataset.pointColor}
-                  points={
-                    points +
-                    ` ${width - marginRight},${height - marginBottom - xAxisHeight} ` +
-                    `${marginLeft},${height - marginBottom - xAxisHeight}`
-                  }
+                  fill={active ? dataset.strokeColor : dataset.pointColor}
+                  fillOpacity={active ? 0.8 : 0.4}
+                  points={points + ' ' + getPathRemainder(idx)}
                 />
               </g>
             );

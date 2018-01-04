@@ -193,6 +193,6 @@ export default class BaseChartBody extends React.Component {
   }
 
   renderChartExtra() {
-    throw new Error('Not implemented');
+    return null;
   }
 }
