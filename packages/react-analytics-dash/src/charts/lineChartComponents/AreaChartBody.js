@@ -4,13 +4,16 @@ import TimeSeriesChartBody from './TimeSeriesChartBody';
 
 export default class AreaChartBody extends TimeSeriesChartBody {
   getYDomain() {
-    const {data} = this.props;
+    const {data, selectedSeries} = this.props;
     return [
       0,
       Math.max(
         0,
+        0,
         ...data.labels.map((_, i) =>
-          data.datasets.reduce((acc, cur) => acc + (cur.data[i - (data.labels.length - cur.data.length)] || 0), 0),
+          data.datasets
+            .filter((_, i) => selectedSeries[i])
+            .reduce((acc, cur) => acc + (cur.data[i - (data.labels.length - cur.data.length)] || 0), 0),
         ),
       ),
     ];
