@@ -33,6 +33,7 @@ export const TYPES = {
     TYPE_BY_SOURCE,
     TYPE_BY_AGENT,
     TYPE_BY_OS,
+    TYPE_GROWTH,
     TYPE_GEO_LISTENS,
     TYPE_GEO_GRAN_LISTENS,
     TYPE_GEO_SUBS,
@@ -78,6 +79,7 @@ export const TYPES_ENDPOINTS = {
   },
   podcast: {
     [TYPE_LISTENS]: 'podcast/listens',
+    [TYPE_GROWTH]: 'podcast/growth',
     [TYPE_BY_EPISODE]: 'podcast/listens/episode',
     [TYPE_BY_SOURCE]: 'podcast/listens/breakdown',
     [TYPE_BY_AGENT]: 'podcast/listens/agent',
@@ -121,7 +123,7 @@ export const TYPES_CHART_TYPES = {
   [TYPE_GEO_GRAN_LISTENS]: 'menu',
   [TYPE_TOP_EPISODES]: 'table',
   [TYPE_TOP_CITIES]: 'menu',
-  [TYPE_GROWTH]: 'line',
+  [TYPE_GROWTH]: 'growth',
 };
 export const TYPES_CHART_MENU_TYPES = {
   [TYPE_GEO_GRAN_SUBS]: 'geo_gran',
