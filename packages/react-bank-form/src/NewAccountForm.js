@@ -31,9 +31,7 @@ export default class NewAccountForm extends React.Component {
     this.externalAccount = null;
   }
 
-  handleSubmit = async e => {
-    e.preventDefault();
-
+  async submit() {
     if (!this.externalAccount.isReady()) {
       this.externalAccount.setError(gettext('You must fill out all fields completely.'));
       return;
@@ -41,10 +39,28 @@ export default class NewAccountForm extends React.Component {
 
     this.setState({saving: true, error: null});
 
-    const [{token: {id: acctToken}}, {token: {id: bankToken}}] = await Promise.all([
+    const [{error: acctError, token: acctToken}, {error: bankError, token: bankToken}] = await Promise.all([
       stripe.createToken('account', {legal_entity: this.state.legalEntity, tos_shown_and_accepted: true}),
       this.externalAccount.getToken(),
     ]);
+
+    if (bankError) {
+      this.externalAccount.setError(
+        bankError.message || gettext('There was a problem submitting your payout account details.'),
+      );
+      this.setState({saving: false});
+      return;
+    }
+
+    if (acctError) {
+      this.setState({
+        saving: false,
+        error:
+          acctError.message ||
+          gettext('Your identity information could not be submitted. Please contact Pinecast support.'),
+      });
+      return;
+    }
 
     xhr(
       {
@@ -74,8 +90,12 @@ export default class NewAccountForm extends React.Component {
         this.props.onAccountCreated();
       },
     );
-  };
+  }
 
+  handleSubmit = e => {
+    e.preventDefault();
+    this.submit();
+  };
   handleChangeCountry = country => {
     this.setState({country});
   };
