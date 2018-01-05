@@ -45,6 +45,7 @@ export default class NewAccountForm extends React.Component {
     ]);
 
     if (bankError) {
+      Rollbar.warning('Error during tip jar signup', bankError);
       this.externalAccount.setError(
         bankError.message || gettext('There was a problem submitting your payout account details.'),
       );
@@ -53,6 +54,7 @@ export default class NewAccountForm extends React.Component {
     }
 
     if (acctError) {
+      Rollbar.warning('Error during tip jar signup', acctError);
       this.setState({
         saving: false,
         error:
@@ -62,15 +64,16 @@ export default class NewAccountForm extends React.Component {
       return;
     }
 
+    const formData = {
+      country: this.state.country,
+      account_token: acctToken,
+      bank_token: bankToken,
+    };
     xhr(
       {
         method: 'post',
         url: '/payments/services/tip_jar/create',
-        form: {
-          country: this.state.country,
-          account_token: acctToken,
-          bank_token: bankToken,
-        },
+        form: formData,
       },
       (err, res, body) => {
         if (err || res.statusCode !== 200) {
@@ -78,7 +81,9 @@ export default class NewAccountForm extends React.Component {
           if (!err && body) {
             try {
               error = JSON.parse(body).error;
-            } catch (e) {}
+            } catch (e) {
+              Rollbar.error('Invalid response returned from tip jar API', {formData, error: e});
+            }
           }
           this.setState({
             error,
