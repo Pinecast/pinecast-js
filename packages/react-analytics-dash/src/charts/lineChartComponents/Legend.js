@@ -83,7 +83,9 @@ export default class Legend extends React.PureComponent {
                 }}
               />
               <span style={{opacity: !selectedSeries || selectedSeries[i] ? 1 : 0.5}}>
-                {TYPES_SHOW_TOTAL[type] ? `${x.label} (${totals.get(x)})` : x.label}
+                {TYPES_SHOW_TOTAL[type]
+                  ? `${x.label} (${numeral(totals.get(x)).format('0,0')})`
+                  : x.label}
               </span>
             </div>
           ))}
