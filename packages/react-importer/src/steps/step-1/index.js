@@ -27,7 +27,9 @@ export default class Step1 extends Component {
       (err, res, body) => {
         if (err || res.statusCode !== 200) {
           this.setState({
-            error: gettext('There was a problem communicating with Pinecast. Please try again later.'),
+            error: gettext(
+              'There was a problem communicating with Pinecast. Please try again later.',
+            ),
             loading: false,
           });
           return;
@@ -40,7 +42,9 @@ export default class Step1 extends Component {
         xhr(
           {
             method: 'get',
-            url: `${this.props.rssFetch}?token=${encodeURIComponent(token)}&url=${encodeURIComponent(url)}`,
+            url: `${this.props.rssFetch}?token=${encodeURIComponent(
+              token,
+            )}&url=${encodeURIComponent(url)}`,
             noCSRFToken: true,
           },
           (err, res, body) => {
@@ -121,7 +125,11 @@ export default class Step1 extends Component {
         <div>
           <strong>{gettext('Loading podcast content…')}</strong>
 
-          <p>{gettext('We are downloading the contents of your RSS feed. This may take a few moments to complete.')}</p>
+          <p>
+            {gettext(
+              'We are downloading the contents of your RSS feed. This may take a few moments to complete.',
+            )}
+          </p>
 
           <ProgressBar progress={this.state.progress} />
 

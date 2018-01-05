@@ -13,7 +13,10 @@ export default class AreaChartBody extends TimeSeriesChartBody {
         ...data.labels.map((_, i) =>
           data.datasets
             .filter((_, i) => selectedSeries[i])
-            .reduce((acc, cur) => acc + (cur.data[i - (data.labels.length - cur.data.length)] || 0), 0),
+            .reduce(
+              (acc, cur) => acc + (cur.data[i - (data.labels.length - cur.data.length)] || 0),
+              0,
+            ),
         ),
       ),
     ];

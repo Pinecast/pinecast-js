@@ -20,7 +20,12 @@ export default class BankAccount extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.country !== this.props.country) {
-      this.setState({values: {...this.state.values, currency: currencies.countriesToCurrencies[newProps.country][0]}});
+      this.setState({
+        values: {
+          ...this.state.values,
+          currency: currencies.countriesToCurrencies[newProps.country][0],
+        },
+      });
     }
   }
 
@@ -31,7 +36,11 @@ export default class BankAccount extends React.Component {
 
   getToken() {
     const {country} = this.props;
-    return stripe.createToken('bank_account', {...this.state.values, country, account_holder_type: 'individual'});
+    return stripe.createToken('bank_account', {
+      ...this.state.values,
+      country,
+      account_holder_type: 'individual',
+    });
   }
 
   updateValue(key, value) {
@@ -67,7 +76,11 @@ export default class BankAccount extends React.Component {
       <React.Fragment>
         <label>
           <span>{gettext('Account holder name')}</span>
-          <input type="text" onChange={this.handleAcctHolderChange} value={values.account_holder_name || ''} />
+          <input
+            type="text"
+            onChange={this.handleAcctHolderChange}
+            value={values.account_holder_name || ''}
+          />
         </label>
         {availableCurrencies.length > 1 && (
           <label>
@@ -80,7 +93,10 @@ export default class BankAccount extends React.Component {
           </label>
         )}
         <div>
-          <CheckImage highlightAcctNum={selected === 'acct'} highlightRoutingNum={selected === 'routing'} />
+          <CheckImage
+            highlightAcctNum={selected === 'acct'}
+            highlightRoutingNum={selected === 'routing'}
+          />
         </div>
         <label>
           <span>{gettext('Account number')}</span>

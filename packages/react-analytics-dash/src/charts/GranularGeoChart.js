@@ -35,7 +35,11 @@ export default class GranularGeoChart extends BaseChart {
     if (!this.state.data || !this.state.data.length) {
       return null;
     }
-    return <CSVLink data={[header, ...this.state.data.sort((a, b) => b.count - a.count).map(extractor)]}>CSV</CSVLink>;
+    return (
+      <CSVLink data={[header, ...this.state.data.sort((a, b) => b.count - a.count).map(extractor)]}>
+        CSV
+      </CSVLink>
+    );
   }
 
   renderBody() {

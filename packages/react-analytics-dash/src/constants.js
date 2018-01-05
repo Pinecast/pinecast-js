@@ -15,7 +15,14 @@ export const TYPE_TOP_CITIES = 'top_cities';
 export const TYPE_GROWTH = 'network_growth';
 
 export const TYPES = {
-  episode: [TYPE_LISTENS, TYPE_BY_SOURCE, TYPE_GROWTH, TYPE_GEO_LISTENS, TYPE_GEO_GRAN_LISTENS, TYPE_TOP_CITIES],
+  episode: [
+    TYPE_LISTENS,
+    TYPE_BY_SOURCE,
+    TYPE_GROWTH,
+    TYPE_GEO_LISTENS,
+    TYPE_GEO_GRAN_LISTENS,
+    TYPE_TOP_CITIES,
+  ],
   network: [
     TYPE_LISTENS,
     TYPE_SUBS,

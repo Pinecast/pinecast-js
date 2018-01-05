@@ -31,7 +31,12 @@ export default class Importer extends Component {
           />
         );
       case 2:
-        return <Step2 onNextStep={updatedFeed => this.setState({step: 3, feed: updatedFeed})} feed={this.state.feed} />;
+        return (
+          <Step2
+            onNextStep={updatedFeed => this.setState({step: 3, feed: updatedFeed})}
+            feed={this.state.feed}
+          />
+        );
       case 3:
         return <Step3 feed={this.state.feed} feedURL={this.state.feedURL} />;
     }

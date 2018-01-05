@@ -28,7 +28,9 @@ export default class Table extends BaseChart {
         <thead>
           {data
             .slice(1)
-            .map((row, i) => <tr key={i}>{row.map((value, i) => <td key={i}>{this.renderCell(value)}</td>)}</tr>)}
+            .map((row, i) => (
+              <tr key={i}>{row.map((value, i) => <td key={i}>{this.renderCell(value)}</td>)}</tr>
+            ))}
         </thead>
       </table>
     );

@@ -154,7 +154,9 @@ export default class AudioUploader extends PureComponent {
       return;
     }
     if (fileObj.size === 0) {
-      this.clearFile({error: gettext('When we tried to read the file you chose, we got back no data.')});
+      this.clearFile({
+        error: gettext('When we tried to read the file you chose, we got back no data.'),
+      });
       return;
     }
 
@@ -199,7 +201,12 @@ export default class AudioUploader extends PureComponent {
       //   metadataScratch: getBaseMetadata(),
       // });
       // return;
-      if (!id3Tags || !id3Tags.tags.title || (!id3Tags.tags.artist && podcastAuthor) || !id3Tags.tags.album) {
+      if (
+        !id3Tags ||
+        !id3Tags.tags.title ||
+        (!id3Tags.tags.artist && podcastAuthor) ||
+        !id3Tags.tags.album
+      ) {
         // -> missing id3
         this.setState({
           phase: 'missing id3',
@@ -296,14 +303,18 @@ export default class AudioUploader extends PureComponent {
 
     this.startUploading([
       this.getUploadOrder('audio', blob),
-      metadataScratch.artwork && !noImageUpload && this.getUploadOrder('image', metadataScratch.artwork),
+      metadataScratch.artwork &&
+        !noImageUpload &&
+        this.getUploadOrder('image', metadataScratch.artwork),
     ]);
   };
 
   startUploading = orders => {
     this.setState({
       phase: 'uploading',
-      uploadOrders: orders ? orders.filter(x => x) : [this.getUploadOrder('audio', this.state.fileObj)],
+      uploadOrders: orders
+        ? orders.filter(x => x)
+        : [this.getUploadOrder('audio', this.state.fileObj)],
     });
   };
 
@@ -316,7 +327,9 @@ export default class AudioUploader extends PureComponent {
         name="Episode Audio"
         onCancel={this.clearFile}
         size={fileSize}
-        url={unsign(uploadOrders ? uploadOrders.find(x => x.type === 'audio').getURL() : fileSourceURL)}
+        url={unsign(
+          uploadOrders ? uploadOrders.find(x => x.type === 'audio').getURL() : fileSourceURL,
+        )}
       />
     );
   }
@@ -330,20 +343,26 @@ export default class AudioUploader extends PureComponent {
       <ImageFilePreview
         name="Episode Artwork"
         onRemove={() => this.setState({phase: 'confirm remove artwork'})}
-        size={imageSourceURL ? null : imageAsArrayBuffer ? imageAsArrayBuffer.byteLength : fileObj.size}
+        size={
+          imageSourceURL ? null : imageAsArrayBuffer ? imageAsArrayBuffer.byteLength : fileObj.size
+        }
         source={imageAsArrayBuffer || imageFileObj || (imageSourceURL && unsign(imageSourceURL))}
       />
     );
   }
 
   renderBody() {
-    const {props, state: {fileObj, imageAsArrayBuffer, metadataScratch, phase, uploadOrders}} = this;
+    const {
+      props,
+      state: {fileObj, imageAsArrayBuffer, metadataScratch, phase, uploadOrders},
+    } = this;
     switch (phase) {
       case 'ready':
         return (
           <div>
             <AudioFilePicker
-              onGetFile={file => this.setState({fileObj: file, phase: 'waiting'}, this.gotFileToUpload)}
+              onGetFile={file =>
+                this.setState({fileObj: file, phase: 'waiting'}, this.gotFileToUpload)}
             />
             <CardStorage limit={props.uploadLimit} plan={props.plan} surge={props.uploadSurge} />
           </div>
@@ -415,7 +434,11 @@ export default class AudioUploader extends PureComponent {
                 this.setState({metadataScratch: null}, () => {
                   this.startUploading([
                     this.getUploadOrder('audio', fileObj),
-                    this.getUploadOrder('image', imageAsArrayBuffer, getFilenameForImage(imageAsArrayBuffer)),
+                    this.getUploadOrder(
+                      'image',
+                      imageAsArrayBuffer,
+                      getFilenameForImage(imageAsArrayBuffer),
+                    ),
                   ]);
                 });
               }}
@@ -461,7 +484,9 @@ export default class AudioUploader extends PureComponent {
   }
 
   renderFields() {
-    const {state: {duration, fileSize, fileSourceURL, fileType, imageSourceURL, phase, uploadOrders}} = this;
+    const {
+      state: {duration, fileSize, fileSourceURL, fileType, imageSourceURL, phase, uploadOrders},
+    } = this;
 
     if (!uploadedPhases[phase]) {
       return null;

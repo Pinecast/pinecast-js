@@ -24,7 +24,10 @@ export default function(arrayBuffer, metadata) {
     return Object.entries(subFrames)
       .map(([frameId, {data}]) => {
         if (frameId === 'APIC') {
-          return [frameId, {data: new Uint8Array(data.data), type: data.format, description: data.description}];
+          return [
+            frameId,
+            {data: new Uint8Array(data.data), type: data.format, description: data.description},
+          ];
         }
         if (frameId === 'TIT2' || frameId === 'TIT3') {
           return [frameId, data];

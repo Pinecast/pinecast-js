@@ -12,7 +12,9 @@ export default ({existingSource, newSource, onChooseExisting, onChooseNew}) => (
     <ReplaceImage width={46} height={42} style={{margin: '0 auto'}} />
     <b style={{display: 'block', marginBottom: '0.25em'}}>{gettext('Replace episode artwork?')}</b>
     <span style={{display: 'block', marginBottom: '0.75em'}}>
-      {gettext('This MP3 contains artwork, but this episode has artwork already. Should we use the new image?')}
+      {gettext(
+        'This MP3 contains artwork, but this episode has artwork already. Should we use the new image?',
+      )}
     </span>
     <div
       style={{
@@ -22,11 +24,21 @@ export default ({existingSource, newSource, onChooseExisting, onChooseNew}) => (
       }}
     >
       <div style={{marginRight: 15}}>
-        <ImageViewer height={50} width={50} source={existingSource} style={{display: 'block', margin: '0 auto'}} />
+        <ImageViewer
+          height={50}
+          width={50}
+          source={existingSource}
+          style={{display: 'block', margin: '0 auto'}}
+        />
         <b>{gettext('Existing')}</b>
       </div>
       <div>
-        <ImageViewer height={50} width={50} source={newSource} style={{display: 'block', margin: '0 auto'}} />
+        <ImageViewer
+          height={50}
+          width={50}
+          source={newSource}
+          style={{display: 'block', margin: '0 auto'}}
+        />
         <b>{gettext('New')}</b>
       </div>
     </div>

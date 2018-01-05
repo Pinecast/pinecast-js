@@ -48,7 +48,9 @@ export default class ExternalAccount extends React.Component {
         {isUpdate ? (
           <p>{gettext('What type of account would you like to send tip payouts to?')}</p>
         ) : (
-          <strong style={{display: 'block', marginBottom: '1em'}}>{gettext('Where should we send your tips?')}</strong>
+          <strong style={{display: 'block', marginBottom: '1em'}}>
+            {gettext('Where should we send your tips?')}
+          </strong>
         )}
         {error && <div className="error">{error}</div>}
         <div className="radio-group half-flush">

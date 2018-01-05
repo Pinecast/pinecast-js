@@ -2,7 +2,9 @@ import {Component} from 'react';
 
 export class BaseFieldComponent extends Component {
   setEmpty(className, e) {
-    e.target.className = `${className} ${e.target.value ? '' : 'is-empty'} ${this.isValid ? '' : 'is-invalid'}`;
+    e.target.className = `${className} ${e.target.value ? '' : 'is-empty'} ${this.isValid
+      ? ''
+      : 'is-invalid'}`;
   }
 }
 

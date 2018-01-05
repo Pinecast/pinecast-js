@@ -186,7 +186,8 @@ export default class BaseChart extends Component {
       {
         data: null,
         timeframe: newTimeframe,
-        customTimeframe: newTimeframe === 'custom' ? this.getCustomTimeframeFromNow(timeframe) : null,
+        customTimeframe:
+          newTimeframe === 'custom' ? this.getCustomTimeframeFromNow(timeframe) : null,
       },
       cb,
     );
@@ -215,7 +216,9 @@ export default class BaseChart extends Component {
     if (!startDate || !endDate) {
       return;
     }
-    this.setState({customTimeframe: [startDate.toDate(), endDate.toDate()]}, () => this.startLoadingData());
+    this.setState({customTimeframe: [startDate.toDate(), endDate.toDate()]}, () =>
+      this.startLoadingData(),
+    );
   };
 
   renderTimeframeSelector() {

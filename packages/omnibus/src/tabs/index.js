@@ -63,7 +63,9 @@ function buildTabs(tabBar) {
   let selected = null;
   if (window.location.hash) {
     const hash = window.location.hash.substr(1).split(',')[hashPos];
-    selected = tabBar.querySelector(`a[data-tab=".tab-${hash}"]`) || tabBar.querySelector(`a[data-tab=".${hash}"]`);
+    selected =
+      tabBar.querySelector(`a[data-tab=".tab-${hash}"]`) ||
+      tabBar.querySelector(`a[data-tab=".${hash}"]`);
   }
   if (!selected) {
     selected = tabBar.querySelector('li a[data-tab]');
@@ -73,7 +75,8 @@ function buildTabs(tabBar) {
   window.addEventListener('hashchange', () => {
     const hash = window.location.hash.substr(1).split(',')[hashPos];
     const selected =
-      tabBar.querySelector(`a[data-tab=".tab-${hash}"]`) || tabBar.querySelector(`a[data-tab=".${hash}"]`);
+      tabBar.querySelector(`a[data-tab=".tab-${hash}"]`) ||
+      tabBar.querySelector(`a[data-tab=".${hash}"]`);
     if (!selected) {
       return;
     }

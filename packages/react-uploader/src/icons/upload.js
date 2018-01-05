@@ -11,7 +11,12 @@ export default ({width = 23, height = 23, ...props}) => (
         strokeLinejoin="round"
         d="M14.5 8.5h5l3 8H.5l3.5-8h4.5m-8 8v6h22v-6M8 4L11.5.5 15 4M11.5.5v11"
       />
-      <path stroke="#8D52D1" strokeLinecap="round" strokeLinejoin="round" d="M18.5 18L17 19.5l1.5 1.5 1.5-1.5z" />
+      <path
+        stroke="#8D52D1"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M18.5 18L17 19.5l1.5 1.5 1.5-1.5z"
+      />
     </g>
   </svg>
 );

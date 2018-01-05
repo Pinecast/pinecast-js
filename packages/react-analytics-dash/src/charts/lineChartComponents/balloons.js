@@ -13,7 +13,8 @@ export default function draw(startDate, endDate, data, rawEpisodeData, innerWidt
 
   const startDateTicks = startDate.getTime();
   const endDateTicks = endDate.getTime();
-  const timeScale = date => (date.getTime() - startDateTicks) / (endDateTicks - startDateTicks) * innerWidth;
+  const timeScale = date =>
+    (date.getTime() - startDateTicks) / (endDateTicks - startDateTicks) * innerWidth;
   const nodes = episodeData.map(
     ep => new Node(timeScale(ep.parsedDate), NODE_SIZE, {...ep, h: NODE_SIZE, w: NODE_SIZE}),
   );
@@ -47,9 +48,9 @@ export default function draw(startDate, endDate, data, rawEpisodeData, innerWidt
             data-tooltip={`<b>${escapeTextContentForBrowser(node.data.title)}</b>`}
             key={node.data.id}
             transform={`translate(${node.x}, ${node.y + NODE_SIZE * 0.6})`}
-            xlinkHref={`/dashboard/podcast/${encodeURIComponent(node.data.podcastSlug)}/episode/${encodeURIComponent(
-              node.data.id,
-            )}`}
+            xlinkHref={`/dashboard/podcast/${encodeURIComponent(
+              node.data.podcastSlug,
+            )}/episode/${encodeURIComponent(node.data.id)}`}
           >
             <circle
               className="flag"

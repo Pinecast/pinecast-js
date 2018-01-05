@@ -39,8 +39,14 @@ export default class NewAccountForm extends React.Component {
 
     this.setState({saving: true, error: null});
 
-    const [{error: acctError, token: acctToken}, {error: bankError, token: bankToken}] = await Promise.all([
-      stripe.createToken('account', {legal_entity: this.state.legalEntity, tos_shown_and_accepted: true}),
+    const [
+      {error: acctError, token: acctToken},
+      {error: bankError, token: bankToken},
+    ] = await Promise.all([
+      stripe.createToken('account', {
+        legal_entity: this.state.legalEntity,
+        tos_shown_and_accepted: true,
+      }),
       this.externalAccount.getToken(),
     ]);
 
@@ -59,7 +65,9 @@ export default class NewAccountForm extends React.Component {
         saving: false,
         error:
           acctError.message ||
-          gettext('Your identity information could not be submitted. Please contact Pinecast support.'),
+          gettext(
+            'Your identity information could not be submitted. Please contact Pinecast support.',
+          ),
       });
       return;
     }
@@ -136,7 +144,8 @@ export default class NewAccountForm extends React.Component {
   handleAddressLine2 = value => this.updateLegalEntitySubkeyValue('address', 'line2', value);
   handleAddressCity = value => this.updateLegalEntitySubkeyValue('address', 'city', value);
   handleAddressState = value => this.updateLegalEntitySubkeyValue('address', 'state', value);
-  handleAddressPostalCode = value => this.updateLegalEntitySubkeyValue('address', 'postal_code', value);
+  handleAddressPostalCode = value =>
+    this.updateLegalEntitySubkeyValue('address', 'postal_code', value);
 
   handleDob = value => {
     this.setState({
@@ -204,7 +213,9 @@ export default class NewAccountForm extends React.Component {
           <div style={{position: 'relative', marginBottom: '-1em'}}>
             <aside className="aside--secure">
               <strong>{gettext('Personal details')}</strong>
-              <p>{gettext('Stripe uses these details to verify your identity and prevent fraud.')}</p>
+              <p>
+                {gettext('Stripe uses these details to verify your identity and prevent fraud.')}
+              </p>
             </aside>
 
             <LEDOBField onInput={this.handleDob} />

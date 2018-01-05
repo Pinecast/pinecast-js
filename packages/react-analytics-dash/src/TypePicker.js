@@ -11,7 +11,9 @@ const TypePicker = ({onChange, type, typeType}) => (
     onChange={({value}) => onChange(value)}
     optionRenderer={({showProTag, label}) => (
       <span>
-        {showProTag && <i className="pro-tag" style={{position: 'relative', top: -1, marginRight: 5}} />}
+        {showProTag && (
+          <i className="pro-tag" style={{position: 'relative', top: -1, marginRight: 5}} />
+        )}
         {label}
       </span>
     )}
@@ -24,7 +26,9 @@ const TypePicker = ({onChange, type, typeType}) => (
     value={type}
     valueRenderer={({showProTag, label}) => (
       <strong>
-        {showProTag && <i className="pro-tag" style={{position: 'relative', top: -1, marginRight: 5}} />}
+        {showProTag && (
+          <i className="pro-tag" style={{position: 'relative', top: -1, marginRight: 5}} />
+        )}
         {label}
       </strong>
     )}

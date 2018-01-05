@@ -10,9 +10,7 @@ export default class TimeSeriesChartBody extends BaseChartBody {
       0,
       Math.max(
         0,
-        ...data.datasets
-          .filter((_, i) => selectedSeries[i])
-          .map(ds => Math.max(0, 0, ...ds.data)),
+        ...data.datasets.filter((_, i) => selectedSeries[i]).map(ds => Math.max(0, 0, ...ds.data)),
       ),
     ];
   }
@@ -28,7 +26,10 @@ export default class TimeSeriesChartBody extends BaseChartBody {
             key={idx}
             points={data.labels
               .map(
-                (_, i) => `${xRange(i)},${yRange(dataset.data[i - (data.labels.length - dataset.data.length)] || 0)}`,
+                (_, i) =>
+                  `${xRange(i)},${yRange(
+                    dataset.data[i - (data.labels.length - dataset.data.length)] || 0,
+                  )}`,
               )
               .join(' ')}
             stroke={dataset.strokeColor}

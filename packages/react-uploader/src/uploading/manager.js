@@ -18,7 +18,9 @@ class UploadManager {
   }
 
   unloadHandler = e => {
-    e.returnValue = gettext('A file is currently uploading. Are you sure you wish to leave this page?');
+    e.returnValue = gettext(
+      'A file is currently uploading. Are you sure you wish to leave this page?',
+    );
   };
   setUnloadHandler() {
     window.addEventListener('beforeunload', this.unloadHandler);
@@ -55,7 +57,8 @@ class UploadManager {
       {
         method: 'get',
         url:
-          `/dashboard/services/getUploadURL/${encodeURIComponent(this.order.podcast)}/${this.order.type}?` +
+          `/dashboard/services/getUploadURL/${encodeURIComponent(this.order.podcast)}/${this.order
+            .type}?` +
           `type=${encodeURIComponent(this.order.blob.type)}&name=${encodeURIComponent(safeName)}`,
       },
       (err, res, body) => {

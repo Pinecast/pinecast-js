@@ -24,7 +24,8 @@ export default class Step2 extends React.Component {
       author_name: this.refs.author.value,
       copyright: this.refs.copyright.value,
       description: this.refs.description.value,
-      is_explicit: this.state.isExplicit === null ? this.props.feed.explicit : this.state.isExplicit,
+      is_explicit:
+        this.state.isExplicit === null ? this.props.feed.explicit : this.state.isExplicit,
       homepage: this.refs.homepage.value,
       language: this.refs.language.value,
       name: this.refs.name.value,
@@ -76,7 +77,11 @@ export default class Step2 extends React.Component {
           />
           <div style={{flex: '1 1'}}>
             <p>{gettext('This is the image that will show in podcast directories.')}</p>
-            <p>{gettext('You can upload a new cover photo after you have finished importing your podcast.')}</p>
+            <p>
+              {gettext(
+                'You can upload a new cover photo after you have finished importing your podcast.',
+              )}
+            </p>
           </div>
         </div>
 
@@ -184,14 +189,21 @@ export default class Step2 extends React.Component {
           </thead>
           <tbody>
             {items.map((item, i) => {
-              const date = new Date(item.publish[0], item.publish[1] - 1, item.publish[2], ...item.publish.slice(3));
+              const date = new Date(
+                item.publish[0],
+                item.publish[1] - 1,
+                item.publish[2],
+                ...item.publish.slice(3),
+              );
               return (
                 <tr key={i}>
                   <td>
                     <b>{item.title}</b>
                   </td>
                   <td>
-                    <abbr title={date.toISOString()}>{moment(date).format('ddd, MMM Do YYYY')}</abbr>
+                    <abbr title={date.toISOString()}>
+                      {moment(date).format('ddd, MMM Do YYYY')}
+                    </abbr>
                   </td>
                 </tr>
               );

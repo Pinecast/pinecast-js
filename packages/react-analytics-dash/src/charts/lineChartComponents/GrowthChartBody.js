@@ -10,9 +10,7 @@ export default class GrowthChartBody extends BaseChartBody {
       Math.max(
         0,
         0,
-        ...data.datasets
-          .filter((_, i) => selectedSeries[i])
-          .map(ds => Math.max(0, 0, ...ds.data)),
+        ...data.datasets.filter((_, i) => selectedSeries[i]).map(ds => Math.max(0, 0, ...ds.data)),
       ),
     ];
   }
@@ -33,7 +31,9 @@ export default class GrowthChartBody extends BaseChartBody {
                   .slice(0, dataset.data.length)
                   .map(
                     (_, i) =>
-                      `${xRange(i)},${yRange(dataset.data[i - (data.labels.length - dataset.data.length)] || 0)}`,
+                      `${xRange(i)},${yRange(
+                        dataset.data[i - (data.labels.length - dataset.data.length)] || 0,
+                      )}`,
                   )
                   .join(' ')}
                 stroke={dataset.strokeColor}

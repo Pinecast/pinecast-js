@@ -10,7 +10,11 @@ export default class LEDOBField extends BaseFieldComponent {
   }
 
   get value() {
-    return new Date(this.refs['year-field'].value, this.refs['month-field'].value - 1, this.refs['day-field'].value);
+    return new Date(
+      this.refs['year-field'].value,
+      this.refs['month-field'].value - 1,
+      this.refs['day-field'].value,
+    );
   }
 
   handleInput = () => {

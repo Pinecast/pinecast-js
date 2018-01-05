@@ -68,7 +68,9 @@ export default class BankForm extends React.Component {
     } catch (e) {
       console.error(e);
       this.setState({
-        updateExtAcctError: gettext('There was a problem sending your account information to Stripe.'),
+        updateExtAcctError: gettext(
+          'There was a problem sending your account information to Stripe.',
+        ),
         savingExtAcct: false,
       });
       return;
@@ -115,7 +117,13 @@ export default class BankForm extends React.Component {
   }
 
   render() {
-    const {extAccountSuccess, savingExtAcct, settings, settingsError, updateExtAcctError} = this.state;
+    const {
+      extAccountSuccess,
+      savingExtAcct,
+      settings,
+      settingsError,
+      updateExtAcctError,
+    } = this.state;
     if (settingsError) {
       return (
         <React.Fragment>
@@ -132,7 +140,9 @@ export default class BankForm extends React.Component {
     if (!settings.setup) {
       return (
         <React.Fragment>
-          <strong style={{display: 'block', marginBottom: '1em'}}>{gettext('Add tip jar information')}</strong>
+          <strong style={{display: 'block', marginBottom: '1em'}}>
+            {gettext('Add tip jar information')}
+          </strong>
           <p>
             {gettext(
               'Adding a bank account will allow your podcasts to begin accepting tips. All information provided will stored securely by our payment processor and will never pass through Pinecast servers.',
@@ -145,7 +155,9 @@ export default class BankForm extends React.Component {
 
     return (
       <React.Fragment>
-        <strong style={{display: 'block', marginBottom: '1em'}}>{gettext('Existing tip jar information')}</strong>
+        <strong style={{display: 'block', marginBottom: '1em'}}>
+          {gettext('Existing tip jar information')}
+        </strong>
         <p>
           {gettext(
             'A payout account is already linked to your Pinecast account. You are all set to accept tips for your podcast!',
@@ -154,12 +166,20 @@ export default class BankForm extends React.Component {
         <BankDetails externalAccount={settings.external_account} />
         <hr />
         <form onSubmit={this.handleUpdateExtAcctSubmit}>
-          <strong style={{display: 'block', marginBottom: '1em'}}>{gettext('Update payout account')}</strong>
-          {extAccountSuccess && <div className="success">{gettext('Your account was updated successfully')}</div>}
+          <strong style={{display: 'block', marginBottom: '1em'}}>
+            {gettext('Update payout account')}
+          </strong>
+          {extAccountSuccess && (
+            <div className="success">{gettext('Your account was updated successfully')}</div>
+          )}
           {updateExtAcctError && <div className="error">{updateExtAcctError}</div>}
           {savingExtAcct && this.renderSpinner()}
           <div style={{display: savingExtAcct || extAccountSuccess ? 'none' : null}}>
-            <ExternalAccount country={settings.country.toLowerCase()} isUpdate ref={this.handleUpdateExtAcctRef} />
+            <ExternalAccount
+              country={settings.country.toLowerCase()}
+              isUpdate
+              ref={this.handleUpdateExtAcctRef}
+            />
             <button className="btn" type="submit">
               {gettext('Save')}
             </button>

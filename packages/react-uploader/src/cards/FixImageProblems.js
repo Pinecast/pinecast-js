@@ -28,7 +28,9 @@ export default ({onAccept, onIgnore, problems}) => (
           'We detected some issues with the image you chose. We can fix these problems for you, if you would like.',
         )}
       </span>
-      <ul style={{marginBottom: '1em'}}>{problems.map(problem => <li key={problem}>{getProblemName(problem)}</li>)}</ul>
+      <ul style={{marginBottom: '1em'}}>
+        {problems.map(problem => <li key={problem}>{getProblemName(problem)}</li>)}
+      </ul>
       <div>
         <Button onClick={onAccept} primary>
           {gettext('Fix Problems')}

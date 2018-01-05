@@ -44,7 +44,9 @@ export default class Legend extends React.PureComponent {
           flexWrap: 'wrap',
         }}
       >
-        {TYPES_SHOW_TOTAL[type] && <div style={{flex: '1 1 100%', fontSize: '0.8em'}}>{getTotal()}</div>}
+        {TYPES_SHOW_TOTAL[type] && (
+          <div style={{flex: '1 1 100%', fontSize: '0.8em'}}>{getTotal()}</div>
+        )}
         {data.datasets
           .map((d, i) => [d, i])
           .sort(([a], [b]) => totals.get(b) - totals.get(a))
@@ -54,7 +56,10 @@ export default class Legend extends React.PureComponent {
               data-orig-idx={i}
               key={i}
               onClick={() => {
-                if (!selectedSeries || selectedSeries.every((selected, idx) => !selected || i === idx)) {
+                if (
+                  !selectedSeries ||
+                  selectedSeries.every((selected, idx) => !selected || i === idx)
+                ) {
                   return;
                 }
                 onToggle(i);

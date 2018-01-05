@@ -14,7 +14,15 @@ import DateTime from './datetime';
 
 import './reactDatesStyles.css';
 
-const components = [AnalyticsDash, BankForm, Categories, DateTime, Importer, AudioUploader, ImageUploader];
+const components = [
+  AnalyticsDash,
+  BankForm,
+  Categories,
+  DateTime,
+  Importer,
+  AudioUploader,
+  ImageUploader,
+];
 
 components.forEach(component => {
   const elements = document.querySelectorAll(component.selector);

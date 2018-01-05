@@ -120,13 +120,16 @@ export default class TimeSeriesChart extends LineChart {
   }
 
   renderData() {
-    const {state: {data, displayType, episodeList, hoveringSeries, selectedSeries, showEpisodes, width}} = this;
+    const {
+      state: {data, displayType, episodeList, hoveringSeries, selectedSeries, showEpisodes, width},
+    } = this;
     if (!data || data.datasets.every(ds => !ds.data.length)) {
       return <ChartEmptyState />;
     }
 
     const startDate = this.getStartDate();
-    const endDate = this.getCurrentTimeframe() === 'custom' ? this.state.customTimeframe[1] : new Date();
+    const endDate =
+      this.getCurrentTimeframe() === 'custom' ? this.state.customTimeframe[1] : new Date();
 
     const props = {
       data,
@@ -152,7 +155,10 @@ export default class TimeSeriesChart extends LineChart {
     const {data: {datasets, labels}} = this.state;
     const data = [
       ['Timestamp', ...datasets.map(d => d.label)],
-      ...labels.map((label, i) => [label, ...datasets.map(d => d.data[labels.length - d.data.length + i])]),
+      ...labels.map((label, i) => [
+        label,
+        ...datasets.map(d => d.data[labels.length - d.data.length + i]),
+      ]),
     ];
     return <CSVLink data={data}>{gettext('CSV')}</CSVLink>;
   }

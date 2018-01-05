@@ -13,7 +13,11 @@ module.exports = {
   },
   resolve: {
     mainFields: ['jsnext:main', 'main'],
-    modules: [path.resolve(__dirname, 'vendor'), path.resolve(__dirname, '../../node_modules'), 'node_modules'],
+    modules: [
+      path.resolve(__dirname, 'vendor'),
+      path.resolve(__dirname, '../../node_modules'),
+      'node_modules',
+    ],
     // alias: {
     //   '@mattbasta/browser-id3-writer$': '/opt/browser-id3-writer/src/ID3Writer.js',
     // },
@@ -85,7 +89,10 @@ module.exports = {
         case 'object-assign':
           return callback(null, 'Object.assign');
         case 'object-keys':
-          return callback(null, '(function() {var x = Object.keys.bind(Object); x.shim = x; return x;}())');
+          return callback(
+            null,
+            '(function() {var x = Object.keys.bind(Object); x.shim = x; return x;}())',
+          );
 
         default:
           return callback();

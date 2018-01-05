@@ -55,7 +55,8 @@ export default class BaseChartBody extends React.Component {
     const {data} = this.props;
     return {
       marginBottom: 15,
-      marginLeft: 30 + Math.max(0, 0, ...data.datasets.map(ds => measureText(Math.max(ds.data).toString()))),
+      marginLeft:
+        30 + Math.max(0, 0, ...data.datasets.map(ds => measureText(Math.max(ds.data).toString()))),
       marginRight: 15,
       marginTop: 30,
 
@@ -93,10 +94,25 @@ export default class BaseChartBody extends React.Component {
       >
         <g className="grid">
           <g className="gridlines-x">
-            <line style={gridlineStyle} x1={marginLeft} x2={width - marginRight} y1={marginTop} y2={marginTop} />
+            <line
+              style={gridlineStyle}
+              x1={marginLeft}
+              x2={width - marginRight}
+              y1={marginTop}
+              y2={marginTop}
+            />
             {yTicks.map(tickVal => {
               const y = yRange(tickVal);
-              return <line key={y} style={gridlineStyle} x1={marginLeft} x2={width - marginRight} y1={y} y2={y} />;
+              return (
+                <line
+                  key={y}
+                  style={gridlineStyle}
+                  x1={marginLeft}
+                  x2={width - marginRight}
+                  y1={y}
+                  y2={y}
+                />
+              );
             })}
           </g>
           <g className="gridlines-y">
@@ -109,7 +125,9 @@ export default class BaseChartBody extends React.Component {
             />
             {xTicks.map(tickVal => {
               const x = xRange(tickVal);
-              return <line key={x} style={gridlineStyle} x1={x} x2={x} y1={marginTop} y2={yRangeTop} />;
+              return (
+                <line key={x} style={gridlineStyle} x1={x} x2={x} y1={marginTop} y2={yRangeTop} />
+              );
             })}
           </g>
         </g>
@@ -121,7 +139,14 @@ export default class BaseChartBody extends React.Component {
           textAnchor="end"
           transform={`translate(0, ${height - marginBottom - xAxisHeight})`}
         >
-          <line className="domain" stroke="#666" x1={marginLeft} x2={width - marginRight} y1={0} y2={0} />
+          <line
+            className="domain"
+            stroke="#666"
+            x1={marginLeft}
+            x2={width - marginRight}
+            y1={0}
+            y2={0}
+          />
           {xTicks.map((tickValue, i) => {
             return (
               <g className="tick" key={i} transform={`translate(${xRange(tickValue)}, 0)`}>
@@ -132,14 +157,22 @@ export default class BaseChartBody extends React.Component {
             );
           })}
         </g>
-        <g className="yAxis" fill="none" fontSize={12} textAnchor="end" transform={`translate(${marginLeft}, 0)`}>
+        <g
+          className="yAxis"
+          fill="none"
+          fontSize={12}
+          textAnchor="end"
+          transform={`translate(${marginLeft}, 0)`}
+        >
           <line className="domain" stroke="#999" x1={0} x2={0} y1={yRangeTop} y2={yRangeBottom} />
           {yTicks.map((tickValue, i) => {
             return (
               <g className="tick" key={i} transform={`translate(0, ${yRange(tickValue)})`}>
                 <line stroke="#666" x2={-1} />
                 <text dy="0.32em" fill="#999" x={-8}>
-                  {Math.ceil(tickValue) === Math.floor(tickValue) ? numeral(tickValue).format('0,0') : ''}
+                  {Math.ceil(tickValue) === Math.floor(tickValue)
+                    ? numeral(tickValue).format('0,0')
+                    : ''}
                 </text>
               </g>
             );
@@ -160,9 +193,9 @@ export default class BaseChartBody extends React.Component {
                 className="has-tooltip"
                 data-tooltip={`
                     <b>${label}</b>${data.datasets.length > 1
-                  ? ` · Total: ${numeral(data.datasets.reduce((acc, cur) => acc + (cur.data[idx] || 0), 0)).format(
-                      '0,0',
-                    )}`
+                  ? ` · Total: ${numeral(
+                      data.datasets.reduce((acc, cur) => acc + (cur.data[idx] || 0), 0),
+                    ).format('0,0')}`
                   : ''}
                     <br>
                     ${data.datasets

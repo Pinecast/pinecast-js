@@ -36,11 +36,16 @@ export default class AnalyticsDash extends Component {
   }
 
   renderBody() {
-    const {props: {episode, isOwner, isPro, isStarter, network, podcast, upgradeURL}, state: {type}} = this;
+    const {
+      props: {episode, isOwner, isPro, isStarter, network, podcast, upgradeURL},
+      state: {type},
+    } = this;
 
     const requires = constants.TYPES_CHART_REQUIRES[type];
     const meetsRequirement =
-      (requires === 'pro' && isPro) || (requires === 'starter' && (isPro || isStarter)) || !requires;
+      (requires === 'pro' && isPro) ||
+      (requires === 'starter' && (isPro || isStarter)) ||
+      !requires;
 
     const typeType = this.typeType;
     const commonProps = {
@@ -58,7 +63,9 @@ export default class AnalyticsDash extends Component {
     }
 
     return (
-      <VisibilityWrapper {...{...commonProps, isOwner, meetsRequirement, requirement: requires, upgradeURL}}>
+      <VisibilityWrapper
+        {...{...commonProps, isOwner, meetsRequirement, requirement: requires, upgradeURL}}
+      >
         {render(constants.TYPES_CHART_TYPES[type], commonProps)}
       </VisibilityWrapper>
     );

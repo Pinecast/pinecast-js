@@ -54,7 +54,11 @@ export default class DebitCard extends React.Component {
     return (
       <div style={{position: 'relative'}}>
         <aside style={{top: '-3em'}}>
-          <p>{gettext('We can send tips as credit to your debit card, arriving faster than bank transfers.')}</p>
+          <p>
+            {gettext(
+              'We can send tips as credit to your debit card, arriving faster than bank transfers.',
+            )}
+          </p>
           <p>{gettext('Credit cards are not supported.')}</p>
         </aside>
         <label>

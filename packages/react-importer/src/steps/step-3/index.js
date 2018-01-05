@@ -38,7 +38,9 @@ export default class Step3 extends Component {
       },
       (err, res, body) => {
         if (err || res.statusCode !== 200) {
-          this.setState({error: gettext('There was an error starting the import process with Pinecast.')});
+          this.setState({
+            error: gettext('There was an error starting the import process with Pinecast.'),
+          });
           return;
         }
 
@@ -75,7 +77,9 @@ export default class Step3 extends Component {
           elements: parsed.elems,
         });
 
-        if (!Object.keys(parsed.elems).every(e => parsed.elems[e].resolved || parsed.elems[e].failed)) {
+        if (
+          !Object.keys(parsed.elems).every(e => parsed.elems[e].resolved || parsed.elems[e].failed)
+        ) {
           reset();
         }
       },
@@ -164,7 +168,11 @@ export default class Step3 extends Component {
         }}
       >
         <b>{gettext("What's Next")}</b>
-        <p>{gettext('Next, you should set up a redirect from your old feed to your new Pinecast feed.')}</p>
+        <p>
+          {gettext(
+            'Next, you should set up a redirect from your old feed to your new Pinecast feed.',
+          )}
+        </p>
         <p>
           {gettext("You can find instructions on your provider's website:")}
           <br />
@@ -197,7 +205,11 @@ export default class Step3 extends Component {
       }, 0) / elemKeys.length;
     return (
       <div>
-        {progress < 1 && <p>{gettext('The import process has started. This may take a few minutes to complete.')}</p>}
+        {progress < 1 && (
+          <p>
+            {gettext('The import process has started. This may take a few minutes to complete.')}
+          </p>
+        )}
         {progress < 1 && <ProgressBar progress={10 + progress * 90} />}
         {progress === 1 && <p>{gettext('The import process is complete!')}</p>}
         {progress === 1 && (

@@ -57,10 +57,14 @@ export default class Categories extends Component {
       <div className="category-picker">
         {this.state.selectedCats.length > 3 && (
           <div className="category-error">
-            {gettext('You have selected too many categories! Some categories may be ignored by Apple and Google.')}
+            {gettext(
+              'You have selected too many categories! Some categories may be ignored by Apple and Google.',
+            )}
           </div>
         )}
-        <div className="category-picker-group">{this.state.selectedCats.map(x => this.renderCategory(x))}</div>
+        <div className="category-picker-group">
+          {this.state.selectedCats.map(x => this.renderCategory(x))}
+        </div>
         <div className="category-picker-group">{this.getItems()}</div>
         <input name={this.props.name} type="hidden" value={this.state.selectedCats.join(',')} />
       </div>

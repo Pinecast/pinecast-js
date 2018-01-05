@@ -53,7 +53,9 @@ export default class Menu extends BaseChart {
     return (
       <div style={{marginTop: 10}}>
         <div style={{alignItems: 'center', display: 'flex'}}>
-          <strong style={{lineHeight: '1em', marginRight: 10}}>{constants.MENU_LABELS[type]}</strong>
+          <strong style={{lineHeight: '1em', marginRight: 10}}>
+            {constants.MENU_LABELS[type]}
+          </strong>
           <Select
             clearable={false}
             onChange={({value}) => this.setState({choice: value})}

@@ -61,16 +61,31 @@ export default class Storage extends React.PureComponent {
         </div>
         {open && (
           <div style={{paddingLeft: 33}}>
-            <div>{gettext('This podcast may have audio files as big as %s.').replace(/%s/, prettyBytes(limit))}</div>
+            <div>
+              {gettext('This podcast may have audio files as big as %s.').replace(
+                /%s/,
+                prettyBytes(limit),
+              )}
+            </div>
             {plan === '0' ? (
               <div>{gettext('This podcast is on a free plan, so there is no upload surge.')}</div>
             ) : (
-              <div>{gettext('This podcast has %s of upload surge available.').replace(/%s/, prettyBytes(surge))}</div>
+              <div>
+                {gettext('This podcast has %s of upload surge available.').replace(
+                  /%s/,
+                  prettyBytes(surge),
+                )}
+              </div>
             )}
             {plan !== '0' && (
               <div style={{alignItems: 'center', display: 'flex'}}>
-                <span style={{flex: '0 0', marginRight: 10, whiteSpace: 'nowrap'}}>{gettext('Surge Remaining:')}</span>
-                <ProgressBar progress={surge / limit * 100} style={{flex: '1 1', marginBottom: 0}} />
+                <span style={{flex: '0 0', marginRight: 10, whiteSpace: 'nowrap'}}>
+                  {gettext('Surge Remaining:')}
+                </span>
+                <ProgressBar
+                  progress={surge / limit * 100}
+                  style={{flex: '1 1', marginBottom: 0}}
+                />
               </div>
             )}
           </div>

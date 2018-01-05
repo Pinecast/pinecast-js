@@ -52,11 +52,15 @@ export default class ManagementComponent extends React.PureComponent {
       <Card>
         <div style={{alignItems: 'center', display: 'flex', flexDirection: 'column'}}>
           <UploadIcon height={46} width={46} />
-          <strong>{ngettext('Your file is uploading', 'Your files are uploading', orders.length)}</strong>
+          <strong>
+            {ngettext('Your file is uploading', 'Your files are uploading', orders.length)}
+          </strong>
         </div>
         {files.map((manager, i) => (
           <div key={i} style={{padding: '0 10px'}}>
-            <strong style={{display: 'block', fontSize: 13, lineHeight: '1.5em'}}>{orders[i].title}</strong>
+            <strong style={{display: 'block', fontSize: 13, lineHeight: '1.5em'}}>
+              {orders[i].title}
+            </strong>
             <ProgressBar progress={manager.progress} />
           </div>
         ))}

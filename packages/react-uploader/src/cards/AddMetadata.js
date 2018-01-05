@@ -40,7 +40,9 @@ class TitleMonitor extends React.PureComponent {
     };
     if (this.state.isValid) {
       return (
-        <div style={style}>{gettext("The title you've entered above will be written to the file's metadata.")}</div>
+        <div style={style}>
+          {gettext("The title you've entered above will be written to the file's metadata.")}
+        </div>
       );
     } else {
       return (

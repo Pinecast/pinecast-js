@@ -105,7 +105,9 @@ export default class ImageUploader extends PureComponent {
       return;
     }
     if (fileObj.size === 0) {
-      this.clearFile({error: gettext('When we tried to read the file you chose, we got back no data.')});
+      this.clearFile({
+        error: gettext('When we tried to read the file you chose, we got back no data.'),
+      });
       return;
     }
 
@@ -142,13 +144,17 @@ export default class ImageUploader extends PureComponent {
     }
 
     await this.promiseSetState({fileAsArrayBuffer: reformatted});
-    this.startUploading([this.getUploadOrder('image', reformatted, fileObj.name || getFilenameForImage(fileObj))]);
+    this.startUploading([
+      this.getUploadOrder('image', reformatted, fileObj.name || getFilenameForImage(fileObj)),
+    ]);
   };
 
   startUploading = orders => {
     this.setState({
       phase: 'uploading',
-      uploadOrders: orders ? orders.filter(x => x) : [this.getUploadOrder('image', this.state.fileObj)],
+      uploadOrders: orders
+        ? orders.filter(x => x)
+        : [this.getUploadOrder('image', this.state.fileObj)],
     });
   };
 
@@ -172,7 +178,10 @@ export default class ImageUploader extends PureComponent {
     switch (phase) {
       case 'ready':
         return (
-          <ImageFilePicker onGetFile={file => this.setState({fileObj: file, phase: 'waiting'}, this.gotFileToUpload)} />
+          <ImageFilePicker
+            onGetFile={file =>
+              this.setState({fileObj: file, phase: 'waiting'}, this.gotFileToUpload)}
+          />
         );
 
       case 'waiting':
