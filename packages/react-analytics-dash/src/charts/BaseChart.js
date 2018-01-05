@@ -299,6 +299,9 @@ export default class BaseChart extends Component {
     elem.addEventListener(
       'mouseenter',
       e => {
+        if (!this.tooltip) {
+          return;
+        }
         if (e.target.getAttribute('class') !== 'has-tooltip') {
           return;
         }
@@ -313,6 +316,9 @@ export default class BaseChart extends Component {
     elem.addEventListener(
       'mouseout',
       e => {
+        if (!this.tooltip) {
+          return;
+        }
         let node = e.target;
         do {
           if (node === document.body) {
@@ -323,6 +329,9 @@ export default class BaseChart extends Component {
           }
           node = node.parentNode;
         } while (node);
+        if (!node) {
+          return;
+        }
         this.tooltip.style.display = 'none';
         shown = false;
       },
@@ -332,7 +341,7 @@ export default class BaseChart extends Component {
     elem.addEventListener(
       'mousemove',
       e => {
-        if (!shown) {
+        if (!shown || !this.tooltip) {
           return;
         }
         if (e.clientX + this.tooltip.clientWidth + 16 > document.body.clientWidth) {
