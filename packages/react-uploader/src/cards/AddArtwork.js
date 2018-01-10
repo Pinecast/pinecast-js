@@ -19,6 +19,52 @@ export default class AddArtwork extends React.PureComponent {
     };
   }
 
+  async useExisting() {
+    const {existingSource, onGotFile, onReject, onRequestWaiting} = this.props;
+
+    await onRequestWaiting();
+    // TODO: add guards and stuff and show progress
+    let content;
+    try {
+      content = await downloadAsArrayBuffer(existingSource);
+    } catch (e) {
+      console.error(e);
+      onReject();
+      return;
+    }
+    onGotFile(content, true);
+  }
+  handleClickUseExisting = () => {
+    this.useExisting();
+  };
+
+  async onFileDropped(fileObj) {
+    // TODO: this could probably use guards
+    const decoded = await decodeImage(fileObj);
+    const reformatted = await reformatImage(decoded);
+
+    if (reformatted.byteLength > sizeLimit) {
+      this.setState({
+        error: gettext('That file works, but it will make your MP3 file too big to upload.'),
+      });
+      return;
+    }
+
+    reformatted.name = fileObj.name;
+    if (!reformatted.type) {
+      reformatted.type = 'image/jpeg';
+    }
+    this.setState({error: null}, () => onGotFile(reformatted));
+  }
+  handleFileDropped = fileObj => {
+    if (fileObj.size > 1024 * 1024 * 2) {
+      this.setState({error: gettext('That file is too big. Images may be up to 2MB.')});
+      return;
+    }
+
+    this.onFileDropped(fileObj);
+  };
+
   render() {
     const {
       props: {existingSource, onGotFile, onReject, onRequestWaiting, sizeLimit},
@@ -41,31 +87,7 @@ export default class AddArtwork extends React.PureComponent {
           <Dropzone
             accept="image/jpg, image/jpeg, image/png"
             label="Drop a PNG or JPG file here"
-            onDrop={async fileObj => {
-              if (fileObj.size > 1024 * 1024 * 2) {
-                this.setState({error: gettext('That file is too big. Images may be up to 2MB.')});
-                return;
-              }
-
-              // TODO: this could probably use guards
-              const decoded = await decodeImage(fileObj);
-              const reformatted = await reformatImage(decoded);
-
-              if (reformatted.byteLength > sizeLimit) {
-                this.setState({
-                  error: gettext(
-                    'That file works, but it will make your MP3 file too big to upload.',
-                  ),
-                });
-                return;
-              }
-
-              reformatted.name = fileObj.name;
-              if (!reformatted.type) {
-                reformatted.type = 'image/jpeg';
-              }
-              this.setState({error: null}, () => onGotFile(reformatted));
-            }}
+            onDrop={this.handleFileDropped}
             style={{marginBottom: 10}}
           />
           {existingSource && (
@@ -80,22 +102,7 @@ export default class AddArtwork extends React.PureComponent {
                 <b style={{display: 'block', lineHeight: '1em', marginBottom: '0.25em'}}>
                   {gettext('...or use the artwork we have on file.')}
                 </b>
-                <Button
-                  onClick={async () => {
-                    await onRequestWaiting();
-                    // TODO: add guards and stuff and show progress
-                    let content;
-                    try {
-                      content = await downloadAsArrayBuffer(existingSource);
-                    } catch (e) {
-                      console.error(e);
-                      onReject();
-                      return;
-                    }
-                    onGotFile(content, true);
-                  }}
-                  primary
-                >
+                <Button onClick={this.handleClickUseExisting} primary>
                   {gettext('Use Existing')}
                 </Button>
               </div>

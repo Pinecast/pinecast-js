@@ -55,11 +55,7 @@ export default class BankForm extends React.Component {
     this.updateExtAcct = el;
   };
 
-  handleUpdateExtAcctSubmit = async e => {
-    e.preventDefault();
-    if (!this.updateExtAcct || this.state.savingExtAcct) {
-      return;
-    }
+  async extAcctSubmit() {
     this.setState({updateExtAcctError: null, savingExtAcct: true, extAccountSuccess: false});
 
     let token;
@@ -106,6 +102,14 @@ export default class BankForm extends React.Component {
         });
       },
     );
+  }
+
+  handleUpdateExtAcctSubmit = e => {
+    e.preventDefault();
+    if (!this.updateExtAcct || this.state.savingExtAcct) {
+      return;
+    }
+    this.extAcctSubmit();
   };
 
   renderSpinner() {

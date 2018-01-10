@@ -146,7 +146,7 @@ export default class AudioUploader extends PureComponent {
     return imgBuffer;
   }
 
-  gotFileToUpload = async () => {
+  async gotFileToUpload() {
     const {props: {defImageURL, podcastAuthor, uploadLimit, uploadSurge}, state: {fileObj}} = this;
 
     if (fileObj.size > uploadLimit + uploadSurge) {
@@ -252,9 +252,9 @@ export default class AudioUploader extends PureComponent {
       // -> start uploading
       this.startUploading([this.getUploadOrder('audio', fileObj)]);
     }
-  };
+  }
 
-  replacePicWithExisting = async () => {
+  async replacePicWithExisting() {
     await this.promiseSetState({phase: 'waiting'});
 
     const {props: {defImageURL}, state: {fileObj, imageAsArrayBuffer, metadataScratch}} = this;
@@ -283,9 +283,9 @@ export default class AudioUploader extends PureComponent {
     });
 
     return this.addMetadata(true);
-  };
+  }
 
-  addMetadata = async (noImageUpload = false) => {
+  async addMetadata(noImageUpload = false) {
     const {state: {fileObj, fileAsArrayBuffer, metadataScratch}} = this;
     let blob;
     try {
@@ -307,7 +307,7 @@ export default class AudioUploader extends PureComponent {
         !noImageUpload &&
         this.getUploadOrder('image', metadataScratch.artwork),
     ]);
-  };
+  }
 
   startUploading = orders => {
     this.setState({
@@ -351,6 +351,32 @@ export default class AudioUploader extends PureComponent {
     );
   }
 
+  handleGotFileToUpload = () => {
+    this.gotFileToUpload();
+  };
+
+  handleSetMetadata = () => {
+    this.setState({
+      phase: 'missing pic',
+      metadataScratch: {
+        ...this.state.metadataScratch,
+        title: document.querySelector('input[name=title]').value,
+        artist: this.props.podcastAuthor,
+        album: this.props.podcastName,
+      },
+    });
+  };
+  handleSkipMetadata = () => {
+    this.startUploading();
+  };
+
+  handleUseExistingPic = () => {
+    this.replacePicWithExisting();
+  };
+  handleAddMetadata = () => {
+    this.addMetadata();
+  };
+
   renderBody() {
     const {
       props,
@@ -362,7 +388,7 @@ export default class AudioUploader extends PureComponent {
           <div>
             <AudioFilePicker
               onGetFile={file =>
-                this.setState({fileObj: file, phase: 'waiting'}, this.gotFileToUpload)}
+                this.setState({fileObj: file, phase: 'waiting'}, this.handleGotFileToUpload)}
             />
             <CardStorage limit={props.uploadLimit} plan={props.plan} surge={props.uploadSurge} />
           </div>
@@ -375,20 +401,7 @@ export default class AudioUploader extends PureComponent {
         return (
           <div>
             {this.renderAudioPreview()}
-            <CardAddMetadata
-              onAccept={() => {
-                this.setState({
-                  phase: 'missing pic',
-                  metadataScratch: {
-                    ...this.state.metadataScratch,
-                    title: document.querySelector('input[name=title]').value,
-                    artist: props.podcastAuthor,
-                    album: props.podcastName,
-                  },
-                });
-              }}
-              onReject={() => this.startUploading()}
-            />
+            <CardAddMetadata onAccept={this.handleSetMetadata} onReject={this.handleSkipMetadata} />
           </div>
         );
 
@@ -411,7 +424,7 @@ export default class AudioUploader extends PureComponent {
               }}
               onReject={() => {
                 if (metadataScratch) {
-                  this.setState({phase: 'waiting'}, this.addMetadata);
+                  this.setState({phase: 'waiting'}, this.handleAddMetadata);
                   return;
                 }
                 this.startUploading();
@@ -429,7 +442,7 @@ export default class AudioUploader extends PureComponent {
             <CardReplaceArtwork
               existingSource={unsign(props.defImageURL)}
               newSource={imageAsArrayBuffer}
-              onChooseExisting={this.replacePicWithExisting}
+              onChooseExisting={this.handleUseExistingPic}
               onChooseNew={() => {
                 this.setState({metadataScratch: null}, () => {
                   this.startUploading([

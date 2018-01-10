@@ -97,7 +97,7 @@ export default class ImageUploader extends PureComponent {
     return order;
   }
 
-  gotFileToUpload = async () => {
+  async gotFileToUpload() {
     const {props: {noiTunesSizeCheck}, state: {fileObj}} = this;
 
     if (fileObj.size > 1024 * 1024 * 2) {
@@ -126,27 +126,9 @@ export default class ImageUploader extends PureComponent {
       phase: 'problems',
       problems,
     });
-  };
-
-  fixImageProblems = async () => {
-    const {state: {fileObj}} = this;
-
-    await this.promiseSetState({phase: 'waiting'});
-
-    const decoded = await guardCallback(this, decodeImage(fileObj));
-    let reformatted;
-    try {
-      reformatted = await guardCallback(this, reformatImage(decoded, 0.8, 1400, 3000));
-    } catch (e) {
-      console.error(e);
-      this.startUploading();
-      return;
-    }
-
-    await this.promiseSetState({fileAsArrayBuffer: reformatted});
-    this.startUploading([
-      this.getUploadOrder('image', reformatted, fileObj.name || getFilenameForImage(fileObj)),
-    ]);
+  }
+  handleGotFileToUpload = () => {
+    this.gotFileToUpload();
   };
 
   startUploading = orders => {
@@ -173,6 +155,40 @@ export default class ImageUploader extends PureComponent {
     );
   }
 
+  async fixImageProblems() {
+    const {state: {fileObj}} = this;
+
+    await this.promiseSetState({phase: 'waiting'});
+
+    const decoded = await guardCallback(this, decodeImage(fileObj));
+    let reformatted;
+    try {
+      reformatted = await guardCallback(this, reformatImage(decoded, 0.8, 1400, 3000));
+    } catch (e) {
+      console.error(e);
+      this.startUploading();
+      return;
+    }
+
+    await this.promiseSetState({fileAsArrayBuffer: reformatted});
+    this.startUploading([
+      this.getUploadOrder('image', reformatted, fileObj.name || getFilenameForImage(fileObj)),
+    ]);
+  }
+  handleFixImageProblems = () => {
+    this.fixImageProblems();
+  };
+  handleIgnoreImageProblems = () => {
+    this.startUploading();
+  };
+
+  handleCancelUpload = () => {
+    this.clearFile();
+  };
+  handleUploadComplete = () => {
+    this.setState({phase: 'uploaded'});
+  };
+
   renderBody() {
     const {state: {phase, problems, uploadOrders}} = this;
     switch (phase) {
@@ -180,7 +196,7 @@ export default class ImageUploader extends PureComponent {
         return (
           <ImageFilePicker
             onGetFile={file =>
-              this.setState({fileObj: file, phase: 'waiting'}, this.gotFileToUpload)}
+              this.setState({fileObj: file, phase: 'waiting'}, this.handleGotFileToUpload)}
           />
         );
 
@@ -192,8 +208,8 @@ export default class ImageUploader extends PureComponent {
           <div>
             {this.renderImagePreview()}
             <CardFixImageProblems
-              onAccept={this.fixImageProblems}
-              onIgnore={() => this.startUploading()}
+              onAccept={this.handleFixImageProblems}
+              onIgnore={this.handleIgnoreImageProblems}
               problems={problems}
             />
           </div>
@@ -202,8 +218,8 @@ export default class ImageUploader extends PureComponent {
       case 'uploading':
         return (
           <UploadManager
-            onCancel={() => this.clearFile()}
-            onComplete={() => this.setState({phase: 'uploaded'})}
+            onCancel={this.handleCancelUpload}
+            onComplete={this.handleUploadComplete}
             orders={uploadOrders}
           />
         );
