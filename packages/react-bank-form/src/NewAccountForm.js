@@ -22,7 +22,7 @@ export default class NewAccountForm extends React.Component {
     super(props);
     this.state = {
       country: 'us',
-      legalEntity: {},
+      legalEntity: {type: 'individual'},
 
       error: null,
       saving: false,
