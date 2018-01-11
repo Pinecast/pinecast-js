@@ -7,7 +7,8 @@
     "es6": true
   },
   "globals": {
-    "stripe": true
+    "stripe": true,
+    "Rollbar": true
   },
   "parser": "babel-eslint",
   "plugins": [

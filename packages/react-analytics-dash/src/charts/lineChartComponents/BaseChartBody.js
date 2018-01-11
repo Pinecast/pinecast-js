@@ -181,7 +181,7 @@ export default class BaseChartBody extends React.Component {
         {this.renderLines(data, xRange, yRange)}
         {data.labels.map((label, idx) => {
           return (
-            <g class="tooltip-group" key={idx}>
+            <g className="tooltip-group" key={idx}>
               <line
                 className="tooltip-marker"
                 x1={xRange(idx)}

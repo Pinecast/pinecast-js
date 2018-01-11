@@ -39,6 +39,8 @@ export default class AddArtwork extends React.PureComponent {
   };
 
   async onFileDropped(fileObj) {
+    const {props: {onGotFile, sizeLimit}} = this;
+
     // TODO: this could probably use guards
     const decoded = await decodeImage(fileObj);
     const reformatted = await reformatImage(decoded);
@@ -66,10 +68,7 @@ export default class AddArtwork extends React.PureComponent {
   };
 
   render() {
-    const {
-      props: {existingSource, onGotFile, onReject, onRequestWaiting, sizeLimit},
-      state: {error},
-    } = this;
+    const {props: {existingSource, onReject}, state: {error}} = this;
 
     return (
       <Card style={{flexDirection: 'row'}}>
