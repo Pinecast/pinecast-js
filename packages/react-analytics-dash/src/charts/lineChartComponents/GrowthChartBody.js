@@ -32,7 +32,7 @@ export default class GrowthChartBody extends BaseChartBody {
                   .map(
                     (_, i) =>
                       `${xRange(i)},${yRange(
-                        dataset.data[i - (data.labels.length - dataset.data.length)] || 0,
+                        dataset.data[i] || 0,
                       )}`,
                   )
                   .join(' ')}
