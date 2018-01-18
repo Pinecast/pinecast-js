@@ -74,8 +74,8 @@ export default class NewAccountForm extends React.Component {
 
     const formData = {
       country: this.state.country,
-      account_token: acctToken,
-      bank_token: bankToken,
+      account_token: acctToken.id,
+      bank_token: bankToken.id,
     };
     xhr(
       {

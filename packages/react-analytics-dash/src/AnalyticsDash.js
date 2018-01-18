@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import * as constants from './constants';
+import ErrorState from './ErrorState';
 import render from './charts';
 import TypePicker from './TypePicker';
 import VisibilityWrapper from './VisibilityWrapper';
@@ -21,11 +22,12 @@ export default class AnalyticsDash extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      error: null,
       type: constants.TYPE_LISTENS,
     };
   }
 
-  get typeType() {
+  getType() {
     if (this.props.network) {
       return 'network';
     }
@@ -35,10 +37,14 @@ export default class AnalyticsDash extends Component {
     return 'podcast';
   }
 
+  handleError = err => {
+    this.setState({error: err || true});
+  };
+
   renderBody() {
     const {
       props: {episode, isOwner, isPro, isStarter, network, podcast, upgradeURL},
-      state: {type},
+      state: {error, type},
     } = this;
 
     const requires = constants.TYPES_CHART_REQUIRES[type];
@@ -47,7 +53,7 @@ export default class AnalyticsDash extends Component {
       (requires === 'starter' && (isPro || isStarter)) ||
       !requires;
 
-    const typeType = this.typeType;
+    const typeType = this.getType();
     const commonProps = {
       endpoint: constants.TYPES_ENDPOINTS[typeType][type],
       episode,
@@ -55,6 +61,8 @@ export default class AnalyticsDash extends Component {
       podcast,
       type,
       typeType,
+
+      onError: this.handleError,
     };
 
     if (type === constants.TYPE_SUBS) {
@@ -66,17 +74,21 @@ export default class AnalyticsDash extends Component {
       <VisibilityWrapper
         {...{...commonProps, isOwner, meetsRequirement, requirement: requires, upgradeURL}}
       >
-        {render(constants.TYPES_CHART_TYPES[type], commonProps)}
+        {error ? <ErrorState /> : render(constants.TYPES_CHART_TYPES[type], commonProps)}
       </VisibilityWrapper>
     );
   }
+
+  handleChangeType = type => {
+    this.setState({type, error: null});
+  };
 
   render() {
     const {state: {type}} = this;
 
     return (
       <div>
-        <TypePicker onChange={type => this.setState({type})} type={type} typeType={this.typeType} />
+        <TypePicker onChange={this.handleChangeType} type={type} typeType={this.getType()} />
         {this.renderBody()}
       </div>
     );

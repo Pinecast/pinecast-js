@@ -68,7 +68,16 @@ class UploadManager {
           return;
         }
 
-        const {fields, destination_url: finalContentURL, headers, method, url} = JSON.parse(body);
+        let parsed;
+        try {
+          parsed = JSON.parse(body);
+        } catch (e) {
+          this.error = gettext('Encountered trouble contacting Pinecast');
+          this.update();
+          return;
+        }
+
+        const {fields, destination_url: finalContentURL, headers, method, url} = parsed;
         this.finalContentURL = finalContentURL;
 
         const xhr = new XMLHttpRequest();

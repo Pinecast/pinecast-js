@@ -135,14 +135,22 @@ export default class BaseChart extends Component {
         url: this.getLoadURL(timeframe, granularity),
       },
       (err, res, body) => {
-        const data = JSON.parse(body);
-        this.setState({
-          data,
-          granularity,
-          timeframe,
-          xhr: null,
-          ...this.gotData(data),
-        });
+        if (err) {
+          this.props.onError(err);
+          return;
+        }
+        try {
+          const data = JSON.parse(body);
+          this.setState({
+            data,
+            granularity,
+            timeframe,
+            xhr: null,
+            ...this.gotData(data),
+          });
+        } catch (e) {
+          this.props.onError(e);
+        }
       },
     );
     this.setState({xhr: req});

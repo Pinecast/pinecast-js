@@ -111,8 +111,15 @@ export default class TimeSeriesChart extends LineChart {
             : ''),
       },
       (err, res, body) => {
-        const episodeList = JSON.parse(body);
-        this.setState({episodeListXHR: null, episodeList});
+        if (err) {
+          return;
+        }
+        try {
+          const episodeList = JSON.parse(body);
+          this.setState({episodeListXHR: null, episodeList});
+        } catch (e) {
+          this.setState({episodeListXHR: null, episodeList: null});
+        }
       },
     );
 
