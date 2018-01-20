@@ -61,6 +61,10 @@ export default class BankForm extends React.Component {
     let token;
     try {
       token = await this.updateExtAcct.getToken();
+      if (!token || !token.token) {
+        Rollbar.error('No success response from Stripe token API', token);
+        throw new Error();
+      }
     } catch (e) {
       console.error(e);
       this.setState({
