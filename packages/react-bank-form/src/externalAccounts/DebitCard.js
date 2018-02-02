@@ -59,7 +59,11 @@ export default class DebitCard extends React.Component {
               'We can send tips as credit to your debit card, arriving faster than bank transfers.',
             )}
           </p>
-          <p>{gettext('Credit cards are not supported.')}</p>
+          <p>
+            {gettext(
+              'Visa and MasterCard debit cards are accepted. Credit cards are not supported.',
+            )}
+          </p>
         </aside>
         <label>
           <span>{gettext('Card details')}</span>
