@@ -8,7 +8,7 @@ import * as constants from './constants';
 const TypePicker = ({onChange, type, typeType}) => (
   <Select
     clearable={false}
-    onChange={({value}) => onChange(value)}
+    onChange={option => option && onChange(option.value)}
     optionRenderer={({showProTag, label}) => (
       <span>
         {showProTag && (

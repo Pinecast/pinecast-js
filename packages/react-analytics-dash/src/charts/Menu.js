@@ -58,7 +58,7 @@ export default class Menu extends BaseChart {
           </strong>
           <Select
             clearable={false}
-            onChange={({value}) => this.setState({choice: value})}
+            onChange={option => option && this.setState({choice: option.value})}
             options={data}
             wrapperStyle={{flex: '1 1', zIndex: 9}}
             value={choice}

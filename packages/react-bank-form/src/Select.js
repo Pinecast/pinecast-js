@@ -5,7 +5,7 @@ import 'react-select/dist/react-select.css';
 const Select = ({onChange, options, value}) => (
   <ReactSelect
     clearable={false}
-    onChange={({value}) => onChange(value)}
+    onChange={option => option && onChange(option.value)}
     options={options}
     value={value}
   />
