@@ -90,7 +90,12 @@ export default class NewAccountForm extends React.Component {
             try {
               error = JSON.parse(body).error;
             } catch (e) {
-              Rollbar.error('Invalid response returned from tip jar API', {formData, error: e});
+              error = body;
+              Rollbar.error('Invalid response returned from tip jar API', {
+                formData,
+                error: e,
+                body,
+              });
             }
           }
           this.setState({

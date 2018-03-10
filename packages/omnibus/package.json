@@ -19,7 +19,7 @@
   "homepage": "https://github.com/Pinecast/omnibus#readme",
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.36",
-    "moment": "^2.18.1",
+    "moment": "^2.21.0",
     "pinecast-analytics-dash": "^2.1.2",
     "pinecast-bank-form": "^1.1.0",
     "pinecast-importer": "^1.1.2",

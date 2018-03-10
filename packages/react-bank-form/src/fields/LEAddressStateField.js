@@ -12,21 +12,35 @@ export default class LEAddressStateField extends FieldComponent {
     }
   };
   getLabel() {
-    switch (this.props.entityCountry) {
-      case 'au':
+    switch ((this.props.country || '').toUpperCase()) {
+      case 'AU':
         return gettext('Territory');
-      case 'ca':
+      case 'CA':
         return gettext('Province');
-      case 'us':
+      case 'US':
         return gettext('State');
       default:
         return gettext('State/Province');
     }
   }
+  isRequired() {
+    switch ((this.props.country || '').toUpperCase()) {
+      case 'AU':
+      case 'CA':
+      case 'US':
+        return true;
+      default:
+        return false;
+    }
+  }
   render() {
+    const isRequired = this.isRequired();
     return (
-      <label className={`leaddressstate-label`} style={{flex: '1 1 100%'}}>
-        <span>{this.props.entityCountry === 'ca' ? gettext('Province') : gettext('State')}</span>
+      <label
+        className={`leaddressstate-label ${!isRequired ? 'is-optional' : ''}`}
+        style={{flex: '1 1 100%'}}
+      >
+        <span>{this.getLabel()}</span>
         <input
           type="text"
           className={`leaddressstate-field is-empty`}
@@ -35,7 +49,7 @@ export default class LEAddressStateField extends FieldComponent {
           onInput={this.handleInput}
           pattern="[a-zA-Z][a-zA-Z][a-zA-Z]?"
           ref="field"
-          required={true}
+          required={isRequired}
           style={{flex: '0 0 70px', textAlign: 'center'}}
         />
       </label>

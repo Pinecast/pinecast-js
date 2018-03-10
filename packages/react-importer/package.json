@@ -7,7 +7,7 @@
   "author": "Matt Basta <me@mattbasta.com>",
   "license": "MIT",
   "dependencies": {
-    "moment": "^2.18.1",
+    "moment": "^2.21.0",
     "pinecast-i18n": "^1.0.0",
     "pinecast-spinner": "^1.2.0",
     "pinecast-xhr": "^1.0.4",
