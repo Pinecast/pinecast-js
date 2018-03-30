@@ -27,6 +27,7 @@ export const TYPES = {
     TYPE_LISTENS,
     TYPE_SUBS,
     TYPE_GROWTH,
+    TYPE_BY_SOURCE,
     TYPE_GEO_LISTENS,
     TYPE_GEO_GRAN_LISTENS,
     TYPE_GEO_SUBS,
@@ -77,6 +78,7 @@ export const TYPES_ENDPOINTS = {
   },
   network: {
     [TYPE_LISTENS]: 'network/listens',
+    [TYPE_BY_SOURCE]: 'network/listens/breakdown',
     [TYPE_GROWTH]: 'network/growth',
     [TYPE_GEO_LISTENS]: 'network/listens/location',
     [TYPE_GEO_GRAN_LISTENS]: 'network/listens/location/options',
