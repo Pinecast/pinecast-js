@@ -4,8 +4,8 @@
   "description": "A master JS bundle for Pinecast",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config=webpack.config.js --progress",
-    "dev": "webpack --config=webpack.config.js --progress --watch --colors"
+    "build": "webpack --config=webpack.config.js --progress --env=prod",
+    "dev": "webpack --config=webpack.config.js --progress --watch --env=dev"
   },
   "repository": {
     "type": "git",
