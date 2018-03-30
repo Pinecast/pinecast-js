@@ -52,9 +52,15 @@ export default class AddArtwork extends React.PureComponent {
       return;
     }
 
-    reformatted.name = fileObj.name;
     if (!reformatted.type) {
       reformatted.type = 'image/jpeg';
+    }
+    if (fileObj.name) {
+      if (!fileObj.name.toLowerCase().endsWith('.jpg')) {
+        reformatted.name = fileObj.name + '.jpg';
+      } else {
+        reformatted.name = fileObj.name;
+      }
     }
     this.setState({error: null}, () => onGotFile(reformatted));
   }

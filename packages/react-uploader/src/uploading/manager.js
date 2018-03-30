@@ -44,7 +44,18 @@ class UploadManager {
   }
 
   getType() {
-    return this.order.blob.type || this.defaultMIME;
+    const type = (this.order.blob.type || '').toLowerCase();
+    switch (type) {
+      case '':
+        return this.defaultMIME;
+      case 'jpg':
+      case 'jpeg':
+        return 'image/jpeg';
+      case 'png':
+        return 'image/png';
+      default:
+        return type;
+    }
   }
 
   getSize() {
@@ -59,7 +70,7 @@ class UploadManager {
         url:
           `/dashboard/services/getUploadURL/${encodeURIComponent(this.order.podcast)}/${this.order
             .type}?` +
-          `type=${encodeURIComponent(this.order.blob.type)}&name=${encodeURIComponent(safeName)}`,
+          `type=${encodeURIComponent(this.getType())}&name=${encodeURIComponent(safeName)}`,
       },
       (err, res, body) => {
         if (err || res.statusCode !== 200) {

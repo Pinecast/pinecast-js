@@ -49,11 +49,6 @@ export function reformatImage(img, quality = 0.6, minWidth = 0, maxWidth = Infin
         fr.onload = e => {
           const result = e.target.result;
           result.type = 'image/jpeg';
-          if (img.name && !img.name.toLowerCase().endsWith('.jpg')) {
-            result.name = img.name + '.jpg';
-          } else {
-            result.name = img.name;
-          }
           resolve(result);
         };
         fr.onerror = reject;

@@ -131,7 +131,18 @@ export default class AudioUploader extends PureComponent {
   }
 
   async decodeImageFromID3(imgBuffer, type) {
-    imgBuffer.type = type;
+    switch (type.toLowerCase()) {
+      case 'jpg':
+      case 'jpeg':
+        imgBuffer.type = 'image/jpeg';
+        break;
+      case 'png':
+        imgBuffer.type = 'image/png';
+        break;
+      default:
+        imgBuffer.type = 'image/jpeg';
+      // TODO: report this?
+    }
     if (imgBuffer.byteLength < 1024 * 1024) {
       return imgBuffer;
     }
