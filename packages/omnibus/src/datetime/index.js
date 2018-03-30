@@ -71,6 +71,7 @@ export default class DateTime extends Component {
           <div className="omnibus-date-picker">
             <DateTimePicker
               inputProps={{
+                className: 'form-control input',
                 style: {
                   border: '2px solid #222',
                   borderColor: invalidState ? '#b00' : null,
