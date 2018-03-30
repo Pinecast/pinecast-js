@@ -9,11 +9,17 @@ export default class ExternalAccount extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: 'debit_card',
+      type: props.country.toUpperCase() === 'US' ? 'debit_card' : 'bank_account',
       error: null,
     };
     this.debitForm = null;
     this.bankForm = null;
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.country.toUpperCase() !== 'US') {
+      this.setState({type: 'bank_account'});
+    }
   }
 
   isReady() {
@@ -43,6 +49,17 @@ export default class ExternalAccount extends React.Component {
 
   render() {
     const {props: {country, isUpdate}, state: {error, type}} = this;
+
+    if (country.toUpperCase() !== 'US') {
+      return (
+        <React.Fragment>
+          <strong>{gettext('Bank details')}</strong>
+          {error && <div className="error">{error}</div>}
+          <BankAccount country={country} ref={this.handleRefBank} />
+        </React.Fragment>
+      );
+    }
+
     return (
       <React.Fragment>
         {isUpdate ? (

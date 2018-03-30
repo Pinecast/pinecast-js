@@ -51,11 +51,14 @@ export default class NewAccountForm extends React.Component {
     ]);
 
     if (bankError) {
-      Rollbar.warning('Error during tip jar signup', bankError);
+      this.setState({saving: false});
+
+      if (bankError.type !== 'invalid_request_error') {
+        Rollbar.warning('Error during tip jar signup', bankError);
+      }
       this.externalAccount.setError(
         bankError.message || gettext('There was a problem submitting your payout account details.'),
       );
-      this.setState({saving: false});
       return;
     }
 

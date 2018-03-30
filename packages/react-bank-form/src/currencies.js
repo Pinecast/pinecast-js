@@ -1,19 +1,19 @@
 import {gettext} from 'pinecast-i18n';
 
 export const names = {
-  aud: gettext('Australian Dollar'),
-  cad: gettext('Canadian Dollar'),
-  dkk: gettext('Danish Krone'),
-  eur: gettext('Euro'),
-  gbp: gettext('Pound Sterling'),
-  nok: gettext('Norwegian Krone'),
-  sek: gettext('Swedish Krone'),
-  usd: gettext('US Dollar'),
+  aud: gettext('AUD - Australian Dollar'),
+  cad: gettext('CAD - Canadian Dollar'),
+  dkk: gettext('DKK - Danish Krone'),
+  eur: gettext('EUR - Euro'),
+  gbp: gettext('GBP - Pound Sterling'),
+  nok: gettext('NOK - Norwegian Krone'),
+  sek: gettext('SEK - Swedish Krone'),
+  usd: gettext('USD - US Dollar'),
 };
 
 export const countriesToCurrencies = {
   us: ['usd'],
   au: ['aud'],
   ca: ['cad', 'usd'],
-  gb: ['gbp', 'eur', 'usd', 'dkk', 'nok', 'sek'],
+  gb: ['gbp', 'eur'],
 };

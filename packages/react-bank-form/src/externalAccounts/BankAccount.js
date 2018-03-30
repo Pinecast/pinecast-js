@@ -44,9 +44,22 @@ export default class BankAccount extends React.Component {
   }
 
   updateValue(key, value) {
+    const updatedValues = {...this.state.values, [key]: value || undefined};
+    if (key === 'currency' && value && value.toUpperCase() === 'EUR') {
+      delete updatedValues.routing_number;
+    }
     this.setState({
-      values: {...this.state.values, [key]: value || undefined},
+      values: updatedValues,
     });
+  }
+
+  getRoutingNumberLabel() {
+    switch (this.state.values.currency.toUpperCase()) {
+      case 'GBP':
+        return gettext('Sort code');
+      default:
+        return gettext('Routing number');
+    }
   }
 
   handleChangeCurrency = value => this.updateValue('currency', value);
@@ -72,6 +85,7 @@ export default class BankAccount extends React.Component {
   render() {
     const {props: {country}, state: {selected, values}} = this;
     const availableCurrencies = currencies.countriesToCurrencies[country];
+    const isEuro = values.currency.toUpperCase() === 'EUR';
     return (
       <React.Fragment>
         <label>
@@ -92,14 +106,16 @@ export default class BankAccount extends React.Component {
             />
           </label>
         )}
-        <div>
-          <CheckImage
-            highlightAcctNum={selected === 'acct'}
-            highlightRoutingNum={selected === 'routing'}
-          />
-        </div>
+        {values.currency.toUpperCase() === 'USD' && (
+          <div>
+            <CheckImage
+              highlightAcctNum={selected === 'acct'}
+              highlightRoutingNum={selected === 'routing'}
+            />
+          </div>
+        )}
         <label>
-          <span>{gettext('Account number')}</span>
+          <span>{isEuro ? gettext('IBAN') : gettext('Account number')}</span>
           <input
             type="text"
             onBlur={this.handleBlurAcctNum}
@@ -108,16 +124,18 @@ export default class BankAccount extends React.Component {
             value={values.account_number || ''}
           />
         </label>
-        <label>
-          <span>{gettext('Routing number')}</span>
-          <input
-            type="text"
-            onBlur={this.handleBlurRoutingNum}
-            onChange={this.handleRoutingNumChange}
-            onFocus={this.handleFocusRoutingNum}
-            value={values.routing_number || ''}
-          />
-        </label>
+        {!isEuro && (
+          <label>
+            <span>{this.getRoutingNumberLabel()}</span>
+            <input
+              type="text"
+              onBlur={this.handleBlurRoutingNum}
+              onChange={this.handleRoutingNumChange}
+              onFocus={this.handleFocusRoutingNum}
+              value={values.routing_number || ''}
+            />
+          </label>
+        )}
       </React.Fragment>
     );
   }
