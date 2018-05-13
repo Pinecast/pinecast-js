@@ -14,7 +14,7 @@ const ProgressBar = ({progress, style}) => (
   >
     <i
       style={{
-        background: '#52d1c7',
+        background: '#1fd2c4',
         borderRadius: 3,
         display: 'block',
         height: 5,

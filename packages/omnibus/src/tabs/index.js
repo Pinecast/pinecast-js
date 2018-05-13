@@ -3,12 +3,12 @@ Array.from(document.querySelectorAll('.tabs.dynamic')).forEach(buildTabs);
 function hide(elem) {
   elem.style.visibility = 'hidden';
   elem.style.position = 'absolute';
-  elem.style.top = '-10000px';
+  elem.style.bottom = '1000%';
 }
 function show(elem) {
   elem.style.visibility = 'visible';
   elem.style.position = 'relative';
-  elem.style.top = 'inherit';
+  elem.style.bottom = 'initial';
   Array.from(elem.querySelectorAll('.CodeMirror')).forEach(cm => {
     if (!cm.CodeMirror) {
       return;
