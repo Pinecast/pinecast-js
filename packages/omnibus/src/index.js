@@ -1,7 +1,6 @@
 import {createElement} from 'react';
 import {render} from 'react-dom';
 
-import AnalyticsDash from 'pinecast-analytics-dash';
 import BankForm from 'pinecast-bank-form';
 
 import AudioUploader from 'pinecast-uploader';
@@ -13,7 +12,7 @@ import DateTime from './datetime';
 
 import './reactDatesStyles.css';
 
-const components = [AnalyticsDash, BankForm, Categories, DateTime, AudioUploader, ImageUploader];
+const components = [BankForm, Categories, DateTime, AudioUploader, ImageUploader];
 
 components.forEach(component => {
   const elements = document.querySelectorAll(component.selector);
